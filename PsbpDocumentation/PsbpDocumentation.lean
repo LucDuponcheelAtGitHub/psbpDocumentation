@@ -9,7 +9,6 @@ open PsbpDocumentation
 
 set_option pp.rawOnError true
 
-
 #doc (Manual) "PSBP Documentation" =>
 
 %%%
@@ -55,18 +54,15 @@ matter of taste. I hope to convince you that pointfree is more elegant than poin
 By the way, it is alse possible, and sometimes necessary, to program positional using `PSBP`. Positional programming is
 similar to pointful programming. It is is useful for writing recipe-like programs, where, starting from an initial
 value, intermediate values are constructed, and. together with the initial value, are passed to the next step, until a
-final value is produced. The initial value and intermediate values are accessed positionally.
-
-By the way, a value can repesent one or more values as a (nested) product. Such a value is called a multi-value.
-More about this later.
+final value is produced. The initial value and intermediate values are accessed positionally. More about this later.
 
 # The `PSBP` Library type classes
 
 ## `class Functional`
 
-Functions can, somehow, be used as programs. Well, functions what pure functional programming is all about. Functions
-that are used as programs are effectless. We can define functions as programs in a formal way by defining a type class.
-This is what we do with the `Functional` type class.
+Functions can, somehow, be used as programs. Well, functions are what pure functional programming is all about.
+Functions that are used as programs are effectless. We can define functions as programs in a formal way by defining a
+type class. This is what we do with the `Functional` type class.
 
 ```savedLean
 class Functional (program : Type → Type → Type) where
@@ -75,6 +71,9 @@ class Functional (program : Type → Type → Type) where
 
 export Functional (asProgram)
 ```
+
+A program, just like a function, transforms an initial value, its argument, to a final one, its result. By the way, a
+value can repesent many values as a (nested) product. Such a value is called a multi-value. More about this later.
 
 ## `class Functorial`
 
@@ -91,7 +90,7 @@ export Functorial (andThenF)
 infixl:50 " >-> " => andThenF
 ```
 
-`andThenF` also has an infix notation `>->`.
+`andThenF` also has infix notation `>->`.
 
 We have, and will continue to, use suffux `F` to distinguish functions from corresponding programs.
 
@@ -110,15 +109,17 @@ export Creational (product)
 infixl:60 " &&& " => product
 ```
 
-`product` also has an infix notation `&&&`.
+`product` also has infix notation `&&&`.
+
+Nested product values are called multi-values.
 
 ## `class Sequential`
 
-Programs can act upon themselves, a.k.a. be sequentially composed. Their effects are accumulated from left to right.
-Sequentially composing programs can be seen as a second program acting upon a first. The result with `Functorial` is
-that the second program may be effectful. Furtermore, it's effects can make use of the result value of the first
-program. We can define programs that are sequentially composed in a formal way by defining a type class. This is what we
-do with the `Sequential` type class.
+Programs can be sequentially composed. Their effects are accumulated from left to right. Sequentially composing programs
+can be seen as a second program acting upon a first program. The difference with `Functorial` is that the second program
+may be effectful. Effects of the second program can depend on the final value of the first program. We can define
+programs that are sequentially composed in a formal way by defining a type class. This is what we do with the
+`Sequential` type class.
 
 ```savedLean
 class Sequential (program : Type → Type → Type) where
@@ -130,7 +131,7 @@ export Sequential (andThen)
 infixl:50 " >=> " => andThen
 ```
 
-`andThen` also has an infix notation `>=>`.
+`andThen` also has infix notation `>=>`.
 
 ## `class Conditional`
 
@@ -146,7 +147,7 @@ export Conditional (sum)
 infixl:55 " ||| " => sum
 ```
 
-`sum` also has an infix notation `|||`.
+`sum` also has infix notation `|||`.
 
 
 ## Capability combinations
@@ -154,8 +155,8 @@ infixl:55 " ||| " => sum
 The idea behind writing programs in terms of the type classes like the ones defined so far is to use exactly those
 capabilities that are really needed to write the programs. Some combinations of type classes are more expressive than
 other combinations. This implies that what you can do with them is more than what you can do the less expressive ones.
-But this comes with a price. They allow for less implementation and corresponding materialization flexibility than the
-less expressive ones.
+But this comes with a price. They are less flexible as far as implementation and corresponding materialization is
+concerned than the less expressive ones.
 
 ## Programs and program combinators defined in terms of the basic ones
 
@@ -172,7 +173,7 @@ def identity
 
 ### `def let_`
 
-Using the `let_` combinator an intermediate value is constructed that is available for later use.
+Using the `let_` combinator an intermediate value can be constructed that is available for later use.
 
 ```savedLean
 def let_
@@ -191,7 +192,7 @@ readable.
 
 ### `def if_`
 
-Using the `if_` combinator conditional Boolean logic can be expressed. A helper function and corresponding program is
+Using the `if_` combinator conditional boolean logic can be expressed. A helper function and corresponding program is
 needed to define it.
 
 ```savedLean
@@ -227,7 +228,7 @@ The `b` in `αpb` stands for `Bool`.
 
 It turns out that we ready now for defining `fibonacci` and `factorial`.
 
-For readability and reusability reasons it is useful to first define some auxiliary primitive functions
+For readability and reusability reasons it is useful to first define some primitive functions
 
 ```savedLean
 def isZeroF: Nat → Bool :=
@@ -252,38 +253,39 @@ def multiplyF : Nat × Nat → Nat :=
   λ ⟨ν, μ⟩ => ν * μ
 ```
 
-and some corresponding auxiliary primitive programs
+and corresponding primitive programs
 
 ```savedLean
 def isZero [Functional program] :
-    program Nat Bool :=
-  asProgram isZeroF
+  program Nat Bool :=
+    asProgram isZeroF
 
 def isOne [Functional program] :
-    program Nat Bool :=
-  asProgram isOneF
+  program Nat Bool :=
+    asProgram isOneF
 
 def one [Functional program] :
-    program Nat Nat := asProgram oneF
+  program Nat Nat :=
+    asProgram oneF
 
 def minusOne [Functional program] :
-    program Nat Nat :=
-  asProgram minusOneF
+  program Nat Nat :=
+    asProgram minusOneF
 
 def minusTwo [Functional program] :
-    program Nat Nat :=
-  asProgram minusTwoF
+  program Nat Nat :=
+    asProgram minusTwoF
 
 def add [Functional program] :
-    program (Nat × Nat) Nat :=
-  asProgram addF
+  program (Nat × Nat) Nat :=
+    asProgram addF
 
 def multiply [Functional program] :
-    program (Nat × Nat) Nat :=
-  asProgram multiplyF
+  program (Nat × Nat) Nat :=
+    asProgram multiplyF
 ```
 
-Program `fibonacci` is now defined as follows
+Program `fibonacci` is defined as follows
 
 ```savedLean
 unsafe def fibonacci
@@ -291,17 +293,17 @@ unsafe def fibonacci
     [Creational program]
     [Sequential program]
     [Conditional program] :
-    program Nat Nat :=
-  if_ isZero one $
-    else_ $
-      if_ isOne one $
-        else_ $
-          (minusOne >=> fibonacci) &&&
-          (minusTwo >=> fibonacci) >=>
-          add
+  program Nat Nat :=
+    if_ isZero one $
+      else_ $
+        if_ isOne one $
+          else_ $
+            (minusOne >=> fibonacci) &&&
+            (minusTwo >=> fibonacci) >=>
+            add
 ```
 
-Program `factorial` is now defined as follows
+Program `factorial` is defined as follows
 
 ```savedLean
 unsafe def factorial
@@ -309,12 +311,12 @@ unsafe def factorial
     [Creational program]
     [Sequential program]
     [Conditional program] :
-    program Nat Nat :=
-  if_ isZero one $
-    else_ $
-      let_ (minusOne >=> factorial) $
-        in_ $
-          multiply
+  program Nat Nat :=
+    if_ isZero one $
+      else_ $
+        let_ (minusOne >=> factorial) $
+          in_ $
+            multiply
 ```
 
 The `unsafe` keyword is used because the definitions above do not type check without them. `fibonacci` and `factorial`
@@ -342,8 +344,8 @@ instance
 The `f` in `βfγ` stands for "function".
 
 So why introducing `Functorial` in the first place? Well, the combination of `Functorial` with `Functional`, and
-`Creational` is sufficiently expressive to write interesting programs and allows for more implementation and corresponding
-materialization flexibility.
+`Creational` is sufficiently expressive to write interesting programs and that are more flexible as far as
+implementation and corresponding materialization is concerned than the ones using `Sequential`.
 
 Below are two programs, `twiceMinusOne01` and `twiceMinusOne02`.
 
@@ -364,18 +366,19 @@ def twiceMinusOne02
 
 ```
 
-`twiceMinusOne02` uses the full power of `Sequential` while `twiceMinusOne01` uses the less expressive `Functorial` and,
-therefore, allows for more implementation and corresponding materialization flexibility. Using `Sequential` is, in this
-case, an unnecessary overkill.
+`twiceMinusOne02` uses the full power of `Sequential` while `twiceMinusOne01` uses the less expressive `Functorial`.
+Using `Sequential` is, in this case, an unnecessary overkill because the addition that is used in both cases is
+effectfree.
 
 That being said, you may argue that what you have read so far is also an unnecessary overkill because, after all, I only
-showed (effectfree) functions. But think of replacing `minusOne` by an effectful program. Having more implementation and
-corresponding materialization flexibility when dealing with effects can really be useful. A standard example is more
-flexible error handling when processing a submitted web form or when parsing a document.
+showed (effectfree) functions. But think of replacing `minusOne` and/ or `minusTwO` by an effectful program. Having more
+implementation and corresponding materialization flexibility when dealing with effects can really be useful. A standard
+example is more flexible error handling when processing a submitted web form and even error correction when parsing a
+document.
 
 # Computation Valued Functions
 
-Using computation valued functions is a general way to implement the program related type classes in terms of the
+Using computation valued functions is a generic way to implement the program related type classes in terms of the
 computation related type classes
 
 ```savedLean
@@ -385,7 +388,7 @@ structure FromComputationValuedFunction
 
 instance [Applicative computation] :
     Functional
-    (FromComputationValuedFunction computation) where
+      (FromComputationValuedFunction computation) where
   asProgram :=
     λ αfβ => ⟨λ α => pure $ αfβ α⟩
 
@@ -492,7 +495,7 @@ instance {ρ: Type} :
       ReactiveT.mk (λ γ => rpa.runReactiveT (γ ∘ αfβ))
 
 instance {ρ: Type} :
-  Applicative (ReactiveT ρ computation) where
+    Applicative (ReactiveT ρ computation) where
   pure := λ α => ReactiveT.mk (λ afcr => afcr α)
   seq: {α β : Type} →
       (ReactiveT ρ computation (α → β)) →
@@ -505,7 +508,7 @@ instance {ρ: Type} :
             (ufrpa ()).runReactiveT (bfcr ∘ αfβ)))
 
 instance {ρ: Type} :
-  Monad (ReactiveT ρ computation) where
+    Monad (ReactiveT ρ computation) where
   bind: {α β : Type} →
       (ReactiveT ρ computation α) →
       (α → ReactiveT ρ computation β) →
@@ -563,7 +566,7 @@ We did not change the definition of our programs, we only materialized them in a
 
 ## Using `Functorial`
 
-Pointfree programming, like is done for `fibonacci` and `factorial` may be a elegant, but `PSBP` also enables,
+Pointfree programming, like is done for `fibonacci` and `factorial` may be a elegant, but `PSBP` also enables, and,
 for reasons of elegance, sometimes needs, positional programming. Let's first start with `Functorial` based positional
 programming. Suppose we want to run the function that transforms an argument value `ν` of type `Nat` to result value
 `(((ν-1, ν-2), 2), 3) => (ν-2) + 2 * (ν-1) + 3`. The `someProgram01` below could be a solution. `someProgram01` makes
@@ -608,8 +611,8 @@ def someProgram01
 
 You may argue that, as for as the acting function involved is concerned, we are back to pointful programming. Well,
 somehow you are right, but notice that all `ν`'s involved have indices (`1`, `2`, `3` and `4`). They can be thought of
-as positions on a runtime stack. For this example it is a homogeneous stack but it might as well be a heterogeneous one.
-So we are essentially accessing values at positions on a runtime stack. More about this later.
+as positions. So we are essentially accessing values at positions of multi-values. For this example the multi-value
+involved is homogeneous but it might as well be a heterogeneous one. More about this later.
 
 ## Using `Sequential`
 
@@ -652,8 +655,7 @@ infixl:45 " @ " => at_
 
 The `σ` stands for (runtime) "stack", and `σ × β` stands for `β` pushed onto `σ`. More about this later.
 
-The `at_` library level keyword of `Positional` can be defined in terms of `Functional`, `Creational` and
-`Sequential`.
+The `at_` library level keyword of `Positional` can be defined in terms of `Functional`, `Creational` and `Sequential`.
 
 ## `instance Positional`
 
@@ -672,10 +674,10 @@ instance
         let_ (σpα >=> αpβ)
 ```
 
-Think of `σpα` as accessing values, `α` , of `σ`. Think of `αpβ` as transforming those values to `β`. `let_` then
-pushes `β` on `σ` obtaining `σ × β`. So, if it possible to transform  `α` to an intermediate value `β`, to transform the
-runtime stack `σ` to `α`, and to transform the runtime stack `σ × β` to `γ`, then it is possible to transform the
-runtime stack `σ` to `γ`.
+Think of `σpα` as accessing a (multi-)value, `α`, on the runtime stack, `σ`. Think of `αpβ` as transforming that
+(multi-)value to `β`. `let_` then pushes `β` on `σ` obtaining `σ × β`. So, if it possible to transform `α` to an
+intermediate value `β`, to transform the runtime stack `σ` to `α`, and to transform `σ × β` to `γ`, then it is possible
+to transform `σ` to `γ`.
 
 ## Some positions
 
@@ -705,7 +707,7 @@ def positionOneAndTwo
 ## `positionalFactorialOfFibonacci` and `positionalSumOfFibonacciAndFactorial`
 
 Below are two positional programs. The first one, `positionalFactorialOfFibonacci` uses only uses `positionOne`. The
-second one `positionalSumOfFibonacciAndFactorial` uses three positions.
+second one `positionalSumOfFibonacciAndFactorial` uses three positions. Positions go up starting from their use site.
 
 ```savedLean
 unsafe def positionalFactorialOfFibonacci
@@ -729,7 +731,7 @@ unsafe def positionalSumOfFibonacciAndFactorial
     fibonacci @ positionOne $
       factorial @ positionTwo $
         add @ positionOneAndTwo $
-        positionOne
+          positionOne
 ```
 
 `Positional` is not part of the list of required type class instances because it can be inferred.
@@ -780,7 +782,7 @@ unsafe def positionalSumOfFibonacciAndFactorial'
     fibonacci @ positionOne $
       factorial @ positionTwo $
         add @ positionOneAndTwo $
-        identity
+          identity
 ```
 
 ```savedLean (name := activePositionalFactorialOfFibonacci')
