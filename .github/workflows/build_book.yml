@@ -1,0 +1,68 @@
+name: Build Psbp Documentation
+
+on:
+  push:
+    branches:
+    - master
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.ref }}  # Group runs by the ref (branch or PR)
+  cancel-in-progress: true  # Cancel any ongoing runs in the same group
+
+defaults:
+  run:
+    working-directory: .
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install elan
+        run: curl https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -sSf | sh -s -- -y
+      - name: Restore cache if available
+        uses: actions/cache/restore@v4
+        with:
+          path: |
+            .lake
+          key: lake-${{ runner.os }}-${{ runner.arch}}-${{ hashFiles('lean-toolchain') }}-${{ hashFiles('lake-manifest.json') }}-${{ github.sha }}
+          restore-keys: lake-${{ runner.os }}-${{ runner.arch}}-${{ hashFiles('lean-toolchain') }}-${{ hashFiles('lake-manifest.json') }}
+      - name: Build metadata of project
+        run: ~/.elan/bin/lake build
+        working-directory: .
+      - name: Build book
+        run: |
+          ~/.elan/bin/lake exe psbpDocumentation --output _out/html --depth 2
+      - name: Save cache
+        uses: actions/cache/save@v4
+        with:
+          path: |
+            .lake
+          key: lake-${{ runner.os }}-${{ runner.arch}}-${{ hashFiles('lean-toolchain') }}-${{ hashFiles('lake-manifest.json') }}-${{ github.sha }}
+      - name: Upload website
+        uses: actions/upload-pages-artifact@v3
+        with: 
+          path: '_out/html/html-single'
+  deploy:
+    # Add a dependency to the build job
+    needs: build
+
+    # Grant GITHUB_TOKEN the permissions required to make a Pages deployment
+    permissions:
+      pages: write      # to deploy to Pages
+      id-token: write   # to verify the deployment originates from an appropriate source
+
+    # Deploy to the github-pages environment
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    # Specify runner + deployment step
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

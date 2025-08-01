@@ -1,0 +1,15 @@
+name = "psbpDocumentation"
+defaultTargets = ["psbpDocumentation"]
+
+[[require]]
+name = "verso"
+git = "https://github.com/leanprover/verso"
+rev = "main"
+
+[[lean_lib]]
+name = "PsbpDocumentation"
+
+[[lean_exe]]
+name = "psbpDocumentation"
+root = "PsbpDocumentationMain"
+
