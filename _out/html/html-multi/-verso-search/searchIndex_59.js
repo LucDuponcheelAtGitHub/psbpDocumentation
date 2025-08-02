@@ -1,0 +1,1 @@
+window.docContents[59].resolve({"/Positional-Programming/#PSBP-Documentation--Positional-Programming":{"id":"/Positional-Programming/#PSBP-Documentation--Positional-Programming","header":"9. Positional Programming","context":"PSBP Documentation","contents":"\n\n\n\n\n\n\n\n\n\n\n\n\n\n"}});

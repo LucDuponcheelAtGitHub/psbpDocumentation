@@ -1,0 +1,1 @@
+window.docContents[96].resolve({"/#PSBP-Documentation--Stateful-Programming":{"id":"/#PSBP-Documentation--Stateful-Programming","header":"10. Stateful Programming","context":"PSBP Documentation","contents":"\n\n\n\n\n\n\n\n"}});

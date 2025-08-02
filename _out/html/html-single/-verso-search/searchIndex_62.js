@@ -1,0 +1,1 @@
+window.docContents[62].resolve({"/#PSBP-Documentation--Warning":{"id":"/#PSBP-Documentation--Warning","header":"1. Warning","context":"PSBP Documentation","contents":"This is work in progress.\n\nThe book and it's code is far from complete and may change.\n\nFor now I do not use the universe capabilities of Lean.\n\nI (try to) format code is a consistent way.\n\n"}});

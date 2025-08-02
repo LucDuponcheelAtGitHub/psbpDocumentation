@@ -1,0 +1,657 @@
+{"Verso.Genre.Manual.section":
+ {"title": "Sections or chapters of the manual",
+  "description": null,
+  "contents": {}},
+ "Verso.Genre.Manual.example":
+ {"title": "Verso.Genre.Manual.example",
+  "description": null,
+  "contents":
+  {"usingAndModifyingStateAsArgumentWith":
+   [{"id": "usingAndModifyingStateAsArgumentWith",
+     "data":
+     {"/Stateful-Programming/class-Stateful-___/#usingAndModifyingStateAsArgumentWith":
+      {"display": "usingAndModifyingStateAsArgumentWith",
+       "context":
+       ["PSBP Documentation",
+        "Stateful Programming",
+        "class Stateful σ",
+        "def modifyStateWith"]}},
+     "address": "/Stateful-Programming/class-Stateful-___/"}],
+   "twoF":
+   [{"id": "twoF",
+     "data":
+     {"/Positional-Programming/Using--Functorial/#twoF":
+      {"display": "twoF",
+       "context":
+       ["PSBP Documentation", "Positional Programming", "Using  Functorial"]}},
+     "address": "/Positional-Programming/Using--Functorial/"}],
+   "two":
+   [{"id": "two",
+     "data":
+     {"/Positional-Programming/Using--Functorial/#two":
+      {"display": "two",
+       "context":
+       ["PSBP Documentation", "Positional Programming", "Using  Functorial"]}},
+     "address": "/Positional-Programming/Using--Functorial/"}],
+   "twiceMinusOne02":
+   [{"id": "twiceMinusOne02",
+     "data":
+     {"/What-about--Functorial-___/#twiceMinusOne02":
+      {"display": "twiceMinusOne02",
+       "context": ["PSBP Documentation", "What about  Functorial ?"]}},
+     "address": "/What-about--Functorial-___/"}],
+   "twiceMinusOne01":
+   [{"id": "twiceMinusOne01",
+     "data":
+     {"/What-about--Functorial-___/#twiceMinusOne01":
+      {"display": "twiceMinusOne01",
+       "context": ["PSBP Documentation", "What about  Functorial ?"]}},
+     "address": "/What-about--Functorial-___/"}],
+   "trueToLeftFalseToRightF":
+   [{"id": "trueToLeftFalseToRightF",
+     "data":
+     {"/The--PSBP--Library-type-classes/Programs-and-program-combinators-defined-in-terms-of-the-basic-ones/#trueToLeftFalseToRightF":
+      {"display": "trueToLeftFalseToRightF",
+       "context":
+       ["PSBP Documentation",
+        "The  PSBP  Library type classes",
+        "Programs and program combinators defined in terms of the basic ones",
+        "def if_"]}},
+     "address":
+     "/The--PSBP--Library-type-classes/Programs-and-program-combinators-defined-in-terms-of-the-basic-ones/"}],
+   "trueToLeftFalseToRight":
+   [{"id": "trueToLeftFalseToRight",
+     "data":
+     {"/The--PSBP--Library-type-classes/Programs-and-program-combinators-defined-in-terms-of-the-basic-ones/#trueToLeftFalseToRight":
+      {"display": "trueToLeftFalseToRight",
+       "context":
+       ["PSBP Documentation",
+        "The  PSBP  Library type classes",
+        "Programs and program combinators defined in terms of the basic ones",
+        "def if_"]}},
+     "address":
+     "/The--PSBP--Library-type-classes/Programs-and-program-combinators-defined-in-terms-of-the-basic-ones/"}],
+   "threeF":
+   [{"id": "threeF",
+     "data":
+     {"/Positional-Programming/Using--Functorial/#threeF":
+      {"display": "threeF",
+       "context":
+       ["PSBP Documentation", "Positional Programming", "Using  Functorial"]}},
+     "address": "/Positional-Programming/Using--Functorial/"}],
+   "three":
+   [{"id": "three",
+     "data":
+     {"/Positional-Programming/Using--Functorial/#three":
+      {"display": "three",
+       "context":
+       ["PSBP Documentation", "Positional Programming", "Using  Functorial"]}},
+     "address": "/Positional-Programming/Using--Functorial/"}],
+   "someProgram02":
+   [{"id": "someProgram02",
+     "data":
+     {"/Positional-Programming/Using--Sequential/#someProgram02":
+      {"display": "someProgram02",
+       "context":
+       ["PSBP Documentation", "Positional Programming", "Using  Sequential"]}},
+     "address": "/Positional-Programming/Using--Sequential/"}],
+   "someProgram01":
+   [{"id": "someProgram01",
+     "data":
+     {"/Positional-Programming/Using--Functorial/#someProgram01":
+      {"display": "someProgram01",
+       "context":
+       ["PSBP Documentation", "Positional Programming", "Using  Functorial"]}},
+     "address": "/Positional-Programming/Using--Functorial/"}],
+   "second":
+   [{"id": "second",
+     "data":
+     {"/Stateful-Programming/class-Stateful-___/#second":
+      {"display": "second",
+       "context":
+       ["PSBP Documentation",
+        "Stateful Programming",
+        "class Stateful σ",
+        "def modifyStateWith"]}},
+     "address": "/Stateful-Programming/class-Stateful-___/"}],
+   "positionalSumOfFibonacciAndFactorial'":
+   [{"id": "positionalSumOfFibonacciAndFactorial___",
+     "data":
+     {"/Positional-Programming/positionalFactorialOfFibonacci___--and--positionalSumOfFibonacciAndFactorial___/#positionalSumOfFibonacciAndFactorial___":
+      {"display": "positionalSumOfFibonacciAndFactorial'",
+       "context":
+       ["PSBP Documentation",
+        "Positional Programming",
+        "positionalFactorialOfFibonacci'  and  positionalSumOfFibonacciAndFactorial'"]}},
+     "address":
+     "/Positional-Programming/positionalFactorialOfFibonacci___--and--positionalSumOfFibonacciAndFactorial___/"}],
+   "positionalSumOfFibonacciAndFactorial":
+   [{"id": "positionalSumOfFibonacciAndFactorial",
+     "data":
+     {"/Positional-Programming/positionalFactorialOfFibonacci--and--positionalSumOfFibonacciAndFactorial/#positionalSumOfFibonacciAndFactorial":
+      {"display": "positionalSumOfFibonacciAndFactorial",
+       "context":
+       ["PSBP Documentation",
+        "Positional Programming",
+        "positionalFactorialOfFibonacci  and  positionalSumOfFibonacciAndFactorial"]}},
+     "address":
+     "/Positional-Programming/positionalFactorialOfFibonacci--and--positionalSumOfFibonacciAndFactorial/"}],
+   "positionalFactorialOfFibonacci'":
+   [{"id": "positionalFactorialOfFibonacci___",
+     "data":
+     {"/Positional-Programming/positionalFactorialOfFibonacci___--and--positionalSumOfFibonacciAndFactorial___/#positionalFactorialOfFibonacci___":
+      {"display": "positionalFactorialOfFibonacci'",
+       "context":
+       ["PSBP Documentation",
+        "Positional Programming",
+        "positionalFactorialOfFibonacci'  and  positionalSumOfFibonacciAndFactorial'"]}},
+     "address":
+     "/Positional-Programming/positionalFactorialOfFibonacci___--and--positionalSumOfFibonacciAndFactorial___/"}],
+   "positionalFactorialOfFibonacci":
+   [{"id": "positionalFactorialOfFibonacci",
+     "data":
+     {"/Positional-Programming/positionalFactorialOfFibonacci--and--positionalSumOfFibonacciAndFactorial/#positionalFactorialOfFibonacci":
+      {"display": "positionalFactorialOfFibonacci",
+       "context":
+       ["PSBP Documentation",
+        "Positional Programming",
+        "positionalFactorialOfFibonacci  and  positionalSumOfFibonacciAndFactorial"]}},
+     "address":
+     "/Positional-Programming/positionalFactorialOfFibonacci--and--positionalSumOfFibonacciAndFactorial/"}],
+   "positionTwo":
+   [{"id": "positionTwo",
+     "data":
+     {"/Positional-Programming/Some-positions/#positionTwo":
+      {"display": "positionTwo",
+       "context":
+       ["PSBP Documentation", "Positional Programming", "Some positions"]}},
+     "address": "/Positional-Programming/Some-positions/"}],
+   "positionOneAndTwo":
+   [{"id": "positionOneAndTwo",
+     "data":
+     {"/Positional-Programming/Some-positions/#positionOneAndTwo":
+      {"display": "positionOneAndTwo",
+       "context":
+       ["PSBP Documentation", "Positional Programming", "Some positions"]}},
+     "address": "/Positional-Programming/Some-positions/"}],
+   "positionOne":
+   [{"id": "positionOne",
+     "data":
+     {"/Positional-Programming/Some-positions/#positionOne":
+      {"display": "positionOne",
+       "context":
+       ["PSBP Documentation", "Positional Programming", "Some positions"]}},
+     "address": "/Positional-Programming/Some-positions/"}],
+   "oneF":
+   [{"id": "oneF",
+     "data":
+     {"/fibonacci--and--factorial/#oneF":
+      {"display": "oneF",
+       "context": ["PSBP Documentation", "fibonacci  and  factorial"]}},
+     "address": "/fibonacci--and--factorial/"}],
+   "one":
+   [{"id": "one",
+     "data":
+     {"/fibonacci--and--factorial/#one":
+      {"display": "one",
+       "context": ["PSBP Documentation", "fibonacci  and  factorial"]}},
+     "address": "/fibonacci--and--factorial/"}],
+   "multiplyF":
+   [{"id": "multiplyF",
+     "data":
+     {"/fibonacci--and--factorial/#multiplyF":
+      {"display": "multiplyF",
+       "context": ["PSBP Documentation", "fibonacci  and  factorial"]}},
+     "address": "/fibonacci--and--factorial/"}],
+   "multiply":
+   [{"id": "multiply",
+     "data":
+     {"/fibonacci--and--factorial/#multiply":
+      {"display": "multiply",
+       "context": ["PSBP Documentation", "fibonacci  and  factorial"]}},
+     "address": "/fibonacci--and--factorial/"}],
+   "modifyStateWith":
+   [{"id": "modifyStateWith",
+     "data":
+     {"/Stateful-Programming/class-Stateful-___/#modifyStateWith":
+      {"display": "modifyStateWith",
+       "context":
+       ["PSBP Documentation",
+        "Stateful Programming",
+        "class Stateful σ",
+        "def modifyStateWith"]}},
+     "address": "/Stateful-Programming/class-Stateful-___/"}],
+   "minusTwoF":
+   [{"id": "minusTwoF",
+     "data":
+     {"/fibonacci--and--factorial/#minusTwoF":
+      {"display": "minusTwoF",
+       "context": ["PSBP Documentation", "fibonacci  and  factorial"]}},
+     "address": "/fibonacci--and--factorial/"}],
+   "minusTwo":
+   [{"id": "minusTwo",
+     "data":
+     {"/fibonacci--and--factorial/#minusTwo":
+      {"display": "minusTwo",
+       "context": ["PSBP Documentation", "fibonacci  and  factorial"]}},
+     "address": "/fibonacci--and--factorial/"}],
+   "minusOneF":
+   [{"id": "minusOneF",
+     "data":
+     {"/fibonacci--and--factorial/#minusOneF":
+      {"display": "minusOneF",
+       "context": ["PSBP Documentation", "fibonacci  and  factorial"]}},
+     "address": "/fibonacci--and--factorial/"}],
+   "minusOne":
+   [{"id": "minusOne",
+     "data":
+     {"/fibonacci--and--factorial/#minusOne":
+      {"display": "minusOne",
+       "context": ["PSBP Documentation", "fibonacci  and  factorial"]}},
+     "address": "/fibonacci--and--factorial/"}],
+   "materializeStateful":
+   [{"id": "materializeStateful",
+     "data":
+     {"/Stateful-Programming/StatefulProgram/#materializeStateful":
+      {"display": "materializeStateful",
+       "context":
+       ["PSBP Documentation", "Stateful Programming", "StatefulProgram"]}},
+     "address": "/Stateful-Programming/StatefulProgram/"}],
+   "materializeReactive":
+   [{"id": "materializeReactive",
+     "data":
+     {"/ReactiveProgram/#materializeReactive":
+      {"display": "materializeReactive",
+       "context": ["PSBP Documentation", "ReactiveProgram"]}},
+     "address": "/ReactiveProgram/"}],
+   "materializeActiveStateful":
+   [{"id": "materializeActiveStateful",
+     "data":
+     {"/Stateful-Programming/StatefulProgram/#materializeActiveStateful":
+      {"display": "materializeActiveStateful",
+       "context":
+       ["PSBP Documentation", "Stateful Programming", "StatefulProgram"]}},
+     "address": "/Stateful-Programming/StatefulProgram/"}],
+   "materializeActive":
+   [{"id": "materializeActive",
+     "data":
+     {"/ActiveProgram/#materializeActive":
+      {"display": "materializeActive",
+       "context": ["PSBP Documentation", "ActiveProgram"]}},
+     "address": "/ActiveProgram/"}],
+   "let_":
+   [{"id": "let_",
+     "data":
+     {"/The--PSBP--Library-type-classes/Programs-and-program-combinators-defined-in-terms-of-the-basic-ones/#let_":
+      {"display": "let_",
+       "context":
+       ["PSBP Documentation",
+        "The  PSBP  Library type classes",
+        "Programs and program combinators defined in terms of the basic ones",
+        "def let_"]}},
+     "address":
+     "/The--PSBP--Library-type-classes/Programs-and-program-combinators-defined-in-terms-of-the-basic-ones/"}],
+   "isZeroF":
+   [{"id": "isZeroF",
+     "data":
+     {"/fibonacci--and--factorial/#isZeroF":
+      {"display": "isZeroF",
+       "context": ["PSBP Documentation", "fibonacci  and  factorial"]}},
+     "address": "/fibonacci--and--factorial/"}],
+   "isZero":
+   [{"id": "isZero",
+     "data":
+     {"/fibonacci--and--factorial/#isZero":
+      {"display": "isZero",
+       "context": ["PSBP Documentation", "fibonacci  and  factorial"]}},
+     "address": "/fibonacci--and--factorial/"}],
+   "isOneF":
+   [{"id": "isOneF",
+     "data":
+     {"/fibonacci--and--factorial/#isOneF":
+      {"display": "isOneF",
+       "context": ["PSBP Documentation", "fibonacci  and  factorial"]}},
+     "address": "/fibonacci--and--factorial/"}],
+   "isOne":
+   [{"id": "isOne",
+     "data":
+     {"/fibonacci--and--factorial/#isOne":
+      {"display": "isOne",
+       "context": ["PSBP Documentation", "fibonacci  and  factorial"]}},
+     "address": "/fibonacci--and--factorial/"}],
+   "in_":
+   [{"id": "in_",
+     "data":
+     {"/The--PSBP--Library-type-classes/Programs-and-program-combinators-defined-in-terms-of-the-basic-ones/#in_":
+      {"display": "in_",
+       "context":
+       ["PSBP Documentation",
+        "The  PSBP  Library type classes",
+        "Programs and program combinators defined in terms of the basic ones",
+        "def let_"]}},
+     "address":
+     "/The--PSBP--Library-type-classes/Programs-and-program-combinators-defined-in-terms-of-the-basic-ones/"}],
+   "if_":
+   [{"id": "if_",
+     "data":
+     {"/The--PSBP--Library-type-classes/Programs-and-program-combinators-defined-in-terms-of-the-basic-ones/#if_":
+      {"display": "if_",
+       "context":
+       ["PSBP Documentation",
+        "The  PSBP  Library type classes",
+        "Programs and program combinators defined in terms of the basic ones",
+        "def if_"]}},
+     "address":
+     "/The--PSBP--Library-type-classes/Programs-and-program-combinators-defined-in-terms-of-the-basic-ones/"}],
+   "identity":
+   [{"id": "identity",
+     "data":
+     {"/The--PSBP--Library-type-classes/Programs-and-program-combinators-defined-in-terms-of-the-basic-ones/#identity":
+      {"display": "identity",
+       "context":
+       ["PSBP Documentation",
+        "The  PSBP  Library type classes",
+        "Programs and program combinators defined in terms of the basic ones",
+        "def identity"]}},
+     "address":
+     "/The--PSBP--Library-type-classes/Programs-and-program-combinators-defined-in-terms-of-the-basic-ones/"}],
+   "foldSum":
+   [{"id": "foldSum",
+     "data":
+     {"/Computation-Valued-Functions/#foldSum":
+      {"display": "foldSum",
+       "context": ["PSBP Documentation", "Computation Valued Functions"]}},
+     "address": "/Computation-Valued-Functions/"}],
+   "first":
+   [{"id": "first",
+     "data":
+     {"/Stateful-Programming/class-Stateful-___/#first":
+      {"display": "first",
+       "context":
+       ["PSBP Documentation",
+        "Stateful Programming",
+        "class Stateful σ",
+        "def modifyStateWith"]}},
+     "address": "/Stateful-Programming/class-Stateful-___/"}],
+   "fibonacciIncrementingArgumentPair":
+   [{"id": "fibonacciIncrementingArgumentPair",
+     "data":
+     {"/Stateful-Programming/fibonacciIncrementingArgumentPair/#fibonacciIncrementingArgumentPair":
+      {"display": "fibonacciIncrementingArgumentPair",
+       "context":
+       ["PSBP Documentation",
+        "Stateful Programming",
+        "fibonacciIncrementingArgumentPair"]}},
+     "address": "/Stateful-Programming/fibonacciIncrementingArgumentPair/"}],
+   "fibonacciIncrementingArgument":
+   [{"id": "fibonacciIncrementingArgument",
+     "data":
+     {"/Stateful-Programming/fibonacciIncrementingArgumentPair/#fibonacciIncrementingArgument":
+      {"display": "fibonacciIncrementingArgument",
+       "context":
+       ["PSBP Documentation",
+        "Stateful Programming",
+        "fibonacciIncrementingArgumentPair"]}},
+     "address": "/Stateful-Programming/fibonacciIncrementingArgumentPair/"}],
+   "fibonacci":
+   [{"id": "fibonacci",
+     "data":
+     {"/fibonacci--and--factorial/#fibonacci":
+      {"display": "fibonacci",
+       "context": ["PSBP Documentation", "fibonacci  and  factorial"]}},
+     "address": "/fibonacci--and--factorial/"}],
+   "factorial":
+   [{"id": "factorial",
+     "data":
+     {"/fibonacci--and--factorial/#factorial":
+      {"display": "factorial",
+       "context": ["PSBP Documentation", "fibonacci  and  factorial"]}},
+     "address": "/fibonacci--and--factorial/"}],
+   "else_":
+   [{"id": "else_",
+     "data":
+     {"/The--PSBP--Library-type-classes/Programs-and-program-combinators-defined-in-terms-of-the-basic-ones/#else_":
+      {"display": "else_",
+       "context":
+       ["PSBP Documentation",
+        "The  PSBP  Library type classes",
+        "Programs and program combinators defined in terms of the basic ones",
+        "def if_"]}},
+     "address":
+     "/The--PSBP--Library-type-classes/Programs-and-program-combinators-defined-in-terms-of-the-basic-ones/"}],
+   "addF":
+   [{"id": "addF",
+     "data":
+     {"/fibonacci--and--factorial/#addF":
+      {"display": "addF",
+       "context": ["PSBP Documentation", "fibonacci  and  factorial"]}},
+     "address": "/fibonacci--and--factorial/"}],
+   "add":
+   [{"id": "add",
+     "data":
+     {"/fibonacci--and--factorial/#add":
+      {"display": "add",
+       "context": ["PSBP Documentation", "fibonacci  and  factorial"]}},
+     "address": "/fibonacci--and--factorial/"}],
+   "StatefulProgram":
+   [{"id": "StatefulProgram",
+     "data":
+     {"/Stateful-Programming/StatefulProgram/#StatefulProgram":
+      {"display": "StatefulProgram",
+       "context":
+       ["PSBP Documentation", "Stateful Programming", "StatefulProgram"]}},
+     "address": "/Stateful-Programming/StatefulProgram/"}],
+   "Stateful.writeState":
+   [{"id": "Stateful___writeState",
+     "data":
+     {"/Stateful-Programming/class-Stateful-___/#Stateful___writeState":
+      {"display": "writeState",
+       "context":
+       ["PSBP Documentation", "Stateful Programming", "class Stateful σ"]}},
+     "address": "/Stateful-Programming/class-Stateful-___/"}],
+   "Stateful.readState":
+   [{"id": "Stateful___readState",
+     "data":
+     {"/Stateful-Programming/class-Stateful-___/#Stateful___readState":
+      {"display": "readState",
+       "context":
+       ["PSBP Documentation", "Stateful Programming", "class Stateful σ"]}},
+     "address": "/Stateful-Programming/class-Stateful-___/"}],
+   "Stateful":
+   [{"id": "Stateful",
+     "data":
+     {"/Stateful-Programming/class-Stateful-___/#Stateful":
+      {"display": "Stateful",
+       "context":
+       ["PSBP Documentation", "Stateful Programming", "class Stateful σ"]}},
+     "address": "/Stateful-Programming/class-Stateful-___/"}],
+   "Sequential.andThen":
+   [{"id": "Sequential___andThen",
+     "data":
+     {"/The--PSBP--Library-type-classes/class-Sequential/#Sequential___andThen":
+      {"display": "andThen",
+       "context":
+       ["PSBP Documentation",
+        "The  PSBP  Library type classes",
+        "class Sequential"]}},
+     "address": "/The--PSBP--Library-type-classes/class-Sequential/"}],
+   "Sequential":
+   [{"id": "Sequential",
+     "data":
+     {"/The--PSBP--Library-type-classes/class-Sequential/#Sequential":
+      {"display": "Sequential",
+       "context":
+       ["PSBP Documentation",
+        "The  PSBP  Library type classes",
+        "class Sequential"]}},
+     "address": "/The--PSBP--Library-type-classes/class-Sequential/"}],
+   "ReactiveT.runReactiveT":
+   [{"id": "ReactiveT___runReactiveT",
+     "data":
+     {"/ReactiveProgram/#ReactiveT___runReactiveT":
+      {"display": "runReactiveT",
+       "context": ["PSBP Documentation", "ReactiveProgram"]}},
+     "address": "/ReactiveProgram/"}],
+   "ReactiveT":
+   [{"id": "ReactiveT",
+     "data":
+     {"/ReactiveProgram/#ReactiveT":
+      {"display": "ReactiveT",
+       "context": ["PSBP Documentation", "ReactiveProgram"]}},
+     "address": "/ReactiveProgram/"}],
+   "ReactiveProgram":
+   [{"id": "ReactiveProgram",
+     "data":
+     {"/ReactiveProgram/#ReactiveProgram":
+      {"display": "ReactiveProgram",
+       "context": ["PSBP Documentation", "ReactiveProgram"]}},
+     "address": "/ReactiveProgram/"}],
+   "Reactive":
+   [{"id": "Reactive",
+     "data":
+     {"/ReactiveProgram/#Reactive":
+      {"display": "Reactive",
+       "context": ["PSBP Documentation", "ReactiveProgram"]}},
+     "address": "/ReactiveProgram/"}],
+   "Positional.at_":
+   [{"id": "Positional___at_",
+     "data":
+     {"/Positional-Programming/class-Positional/#Positional___at_":
+      {"display": "at_",
+       "context":
+       ["PSBP Documentation", "Positional Programming", "class Positional"]}},
+     "address": "/Positional-Programming/class-Positional/"}],
+   "Positional":
+   [{"id": "Positional",
+     "data":
+     {"/Positional-Programming/class-Positional/#Positional":
+      {"display": "Positional",
+       "context":
+       ["PSBP Documentation", "Positional Programming", "class Positional"]}},
+     "address": "/Positional-Programming/class-Positional/"}],
+   "Functorial.andThenF":
+   [{"id": "Functorial___andThenF",
+     "data":
+     {"/The--PSBP--Library-type-classes/class-Functorial/#Functorial___andThenF":
+      {"display": "andThenF",
+       "context":
+       ["PSBP Documentation",
+        "The  PSBP  Library type classes",
+        "class Functorial"]}},
+     "address": "/The--PSBP--Library-type-classes/class-Functorial/"}],
+   "Functorial":
+   [{"id": "Functorial",
+     "data":
+     {"/The--PSBP--Library-type-classes/class-Functorial/#Functorial":
+      {"display": "Functorial",
+       "context":
+       ["PSBP Documentation",
+        "The  PSBP  Library type classes",
+        "class Functorial"]}},
+     "address": "/The--PSBP--Library-type-classes/class-Functorial/"}],
+   "Functional.asProgram":
+   [{"id": "Functional___asProgram",
+     "data":
+     {"/The--PSBP--Library-type-classes/class-Functional/#Functional___asProgram":
+      {"display": "asProgram",
+       "context":
+       ["PSBP Documentation",
+        "The  PSBP  Library type classes",
+        "class Functional"]}},
+     "address": "/The--PSBP--Library-type-classes/class-Functional/"}],
+   "Functional":
+   [{"id": "Functional",
+     "data":
+     {"/The--PSBP--Library-type-classes/class-Functional/#Functional":
+      {"display": "Functional",
+       "context":
+       ["PSBP Documentation",
+        "The  PSBP  Library type classes",
+        "class Functional"]}},
+     "address": "/The--PSBP--Library-type-classes/class-Functional/"}],
+   "FromComputationValuedFunction.toComputationValuedFunction":
+   [{"id": "FromComputationValuedFunction___toComputationValuedFunction",
+     "data":
+     {"/Computation-Valued-Functions/#FromComputationValuedFunction___toComputationValuedFunction":
+      {"display": "toComputationValuedFunction",
+       "context": ["PSBP Documentation", "Computation Valued Functions"]}},
+     "address": "/Computation-Valued-Functions/"}],
+   "FromComputationValuedFunction":
+   [{"id": "FromComputationValuedFunction",
+     "data":
+     {"/Computation-Valued-Functions/#FromComputationValuedFunction":
+      {"display": "FromComputationValuedFunction",
+       "context": ["PSBP Documentation", "Computation Valued Functions"]}},
+     "address": "/Computation-Valued-Functions/"}],
+   "Creational.product":
+   [{"id": "Creational___product",
+     "data":
+     {"/The--PSBP--Library-type-classes/class-Creational/#Creational___product":
+      {"display": "product",
+       "context":
+       ["PSBP Documentation",
+        "The  PSBP  Library type classes",
+        "class Creational"]}},
+     "address": "/The--PSBP--Library-type-classes/class-Creational/"}],
+   "Creational":
+   [{"id": "Creational",
+     "data":
+     {"/The--PSBP--Library-type-classes/class-Creational/#Creational":
+      {"display": "Creational",
+       "context":
+       ["PSBP Documentation",
+        "The  PSBP  Library type classes",
+        "class Creational"]}},
+     "address": "/The--PSBP--Library-type-classes/class-Creational/"}],
+   "Conditional.sum":
+   [{"id": "Conditional___sum",
+     "data":
+     {"/The--PSBP--Library-type-classes/class-Conditional/#Conditional___sum":
+      {"display": "sum",
+       "context":
+       ["PSBP Documentation",
+        "The  PSBP  Library type classes",
+        "class Conditional"]}},
+     "address": "/The--PSBP--Library-type-classes/class-Conditional/"}],
+   "Conditional":
+   [{"id": "Conditional",
+     "data":
+     {"/The--PSBP--Library-type-classes/class-Conditional/#Conditional":
+      {"display": "Conditional",
+       "context":
+       ["PSBP Documentation",
+        "The  PSBP  Library type classes",
+        "class Conditional"]}},
+     "address": "/The--PSBP--Library-type-classes/class-Conditional/"}],
+   "ActiveProgram":
+   [{"id": "ActiveProgram",
+     "data":
+     {"/ActiveProgram/#ActiveProgram":
+      {"display": "ActiveProgram",
+       "context": ["PSBP Documentation", "ActiveProgram"]}},
+     "address": "/ActiveProgram/"}],
+   "Active":
+   [{"id": "Active",
+     "data":
+     {"/ActiveProgram/#Active":
+      {"display": "Active",
+       "context": ["PSBP Documentation", "ActiveProgram"]}},
+     "address": "/ActiveProgram/"}]}},
+ "Verso.Genre.Manual.doc.tech":
+ {"title": "Terminology",
+  "description": "Definitions of technical terms",
+  "contents": {}},
+ "Verso.Genre.Manual.doc.tactic.conv":
+ {"title": "Conversion Tactics",
+  "description": "Tactics for performing targeted rewriting of subterms",
+  "contents": {}},
+ "Verso.Genre.Manual.doc.tactic":
+ {"title": "Tactic Documentation",
+  "description": "Detailed descriptions of tactics",
+  "contents": {}},
+ "Verso.Genre.Manual.doc.option":
+ {"title": "Compiler options", "description": null, "contents": {}},
+ "Verso.Genre.Manual.doc":
+ {"title": "Lean constant reference",
+  "description": "Documentation for Lean constants",
+  "contents": {}}}

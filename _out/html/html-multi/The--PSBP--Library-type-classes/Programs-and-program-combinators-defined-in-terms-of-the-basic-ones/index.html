@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script>
+      (function(){
+  const {protocol:proto, host:hostName, pathname:path, search:srch, hash:hsh} = window.location;
+  if (!(path.endsWith("/") || path.endsWith(".html"))) {
+    window.location.replace(`${proto}//${hostName}${path}/${srch}${hsh}`);
+  }
+})()</script>
+    <base href="./../../"><meta charset="utf-8">
+    <meta name="viewport" content="height=device-height, width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+    <title>Programs and program combinators defined in terms of the basic ones</title><link rel="stylesheet" href="book.css">
+    <script>
+      const __versoSiteRoot = document.baseURI;</script>
+    <script src="https://cdn.jsdelivr.net/npm/marked@11.1.1/marked.min.js" integrity="sha384-zbcZAIxlvJtNE3Dp5nxLXdXtXyxwOdnILY1TDPVmKFhl4r4nSUG1r8bcFXGVa4Te" crossorigin="anonymous"></script>
+    <script src="-verso-search/elasticlunr.min.js"></script>
+    <script src="-verso-search/fuzzysort.js"></script>
+    <script src="-verso-search/searchIndex.js"></script>
+    <script type="module" src="-verso-search/search-init.js"></script>
+    <link rel="stylesheet" href="-verso-search/search-box.css">
+    <link rel="stylesheet" href="-verso-search/search-highlight.css">
+    <link rel="stylesheet" href="-verso-search/domain-display.css">
+    <script src="-verso-data/popper.js"></script>
+    <script src="-verso-data/tippy.js"></script>
+    <link rel="stylesheet" href="-verso-data/tippy-border.css">
+    <style>
+
+.hl.lean {
+  white-space: pre;
+  font-weight: normal;
+  font-style: normal;
+}
+
+.hl.lean .keyword {
+  font-weight : bold;
+}
+
+.hl.lean .var {
+  font-style: italic;
+  position: relative;
+}
+
+.hover-container {
+  width: 0;
+  height: 0;
+  position: relative;
+  display: inline;
+}
+
+.hl.lean a {
+  color: inherit;
+  text-decoration: currentcolor underline dotted;
+}
+
+.hl.lean a:hover {
+  text-decoration: currentcolor underline solid;
+}
+
+.hl.lean .hover-info {
+  white-space: normal;
+}
+
+.hl.lean .token .hover-info {
+  display: none;
+  position: absolute;
+  background-color: #e5e5e5;
+  border: 1px solid black;
+  padding: 0.5rem;
+  z-index: 300;
+  font-size: inherit;
+}
+
+.hl.lean .hover-info.messages {
+  max-height: 10rem;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-gutter: stable;
+  padding: 0 0.5rem 0 0;
+  display: block;
+}
+
+.hl.lean .hover-info code {
+  white-space: pre-wrap;
+}
+
+.hl.lean .hover-info.messages > code {
+  padding: 0.5rem;
+  display: block;
+  width: fit-content;
+}
+
+.hl.lean .hover-info.messages > code:only-child {
+  margin: 0;
+}
+
+.hl.lean .hover-info.messages > code {
+  margin: 0.1rem;
+}
+
+.hl.lean .hover-info.messages > code:not(:first-child) {
+  margin-top: 0rem;
+}
+
+.hl.lean.block {
+  display: block;
+}
+
+.hl.lean.inline {
+  display: inline;
+  white-space: pre-wrap;
+}
+
+.hl.lean .token {
+  transition: all 0.25s; /* Slight fade for highlights */
+}
+
+@media (hover: hover) {
+  .hl.lean .token.binding-hl, .hl.lean .literal.string:hover, .hl.lean .token.typed:hover {
+    background-color: #eee;
+    border-radius: 2px;
+    transition: none;
+  }
+}
+
+
+.hl.lean .has-info .token:not(.tactic-state):not(.tactic-state *), .hl.lean .has-info .inter-text:not(.tactic-state):not(.tactic-state *) {
+  text-decoration-style: wavy;
+  text-decoration-line: underline;
+  text-decoration-thickness: from-font;
+  text-decoration-skip-ink: none;
+}
+
+.hl.lean .has-info .hover-info {
+  display: none;
+  position: absolute;
+  transform: translate(0.25rem, 0.3rem);
+  border: 1px solid black;
+  padding: 0.5rem;
+  z-index: 400;
+  text-align: left;
+}
+
+.hl.lean .has-info.error :not(.tactic-state):not(.tactic-state *){
+  text-decoration-color: red;
+}
+
+@media (hover: hover) {
+  .hl.lean .has-info.error:hover {
+    background-color: #ffb3b3;
+  }
+}
+
+.hl.lean .hover-info.messages > code.error {
+  background-color: #e5e5e5;
+  border-left: 0.2rem solid #ffb3b3;
+}
+
+.tippy-box[data-theme~='error'] .hl.lean .hover-info.messages > code.error {
+  background: none;
+  border: none;
+}
+
+.error .verso-message {
+    color: red;
+}
+
+.hl.lean .has-info.warning :not(.tactic-state):not(.tactic-state *) {
+  text-decoration-color: var(--verso-warning-color);
+}
+
+@media (hover: hover) {
+  .hl.lean .has-info.warning:hover {
+    background-color:var(--verso-warning-color);
+  }
+}
+
+.hl.lean .hover-info.messages > code.warning {
+  background-color: var(--verso-warning-color);
+}
+
+.hl.lean .hover-info.messages > code.error {
+  background-color: #e5e5e5;
+  border-left: 0.2rem solid var(--verso-warning-color);
+}
+
+.tippy-box[data-theme~='warning'] .hl.lean .hover-info.messages > code.warning {
+  background: none;
+  border: none;
+}
+
+
+.hl.lean .has-info.information :not(.tactic-state):not(.tactic-state *) {
+  text-decoration-color: blue;
+}
+
+@media (hover: hover) {
+  .hl.lean .has-info.information:hover {
+    background-color: #4777ff;
+  }
+}
+
+
+.hl.lean .hover-info.messages > code.info {
+  background-color: #e5e5e5;
+  border-left: 0.2rem solid #4777ff;
+}
+
+.tippy-box[data-theme~='info'] .hl.lean .hover-info.messages > code.info {
+  background: none;
+  border: none;
+}
+
+.hl.lean div.docstring {
+  font-family: sans-serif;
+  white-space: normal;
+  max-width: 40rem;
+  width: max-content;
+}
+
+.hl.lean div.docstring > :last-child {
+  margin-bottom: 0;
+}
+
+.hl.lean div.docstring > :first-child {
+  margin-top: 0;
+}
+
+.hl.lean .hover-info .sep {
+  display: block;
+  width: auto;
+  margin-left: 1rem;
+  margin-right: 1rem;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+  padding: 0;
+  height: 1px;
+  border-top: 1px solid #ccc;
+}
+
+.hl.lean code {
+  font-family: var(--verso-code-font-family);
+}
+
+.hl.lean .tactic-state {
+  display: none;
+  position: relative;
+  width: fit-content;
+  border: 1px solid #888888;
+  border-radius: 0.1rem;
+  padding: 0.5rem;
+  font-family: sans-serif;
+  background-color: #ffffff;
+}
+
+.hl.lean.popup .tactic-state {
+  position: static;
+  display: block;
+  width: auto;
+  border: none;
+  padding: 0.5rem;
+  font-family: sans-serif;
+  background-color: #ffffff;
+}
+
+
+.hl.lean .tactic {
+  position: relative;
+  display: inline-grid;
+  grid-template-columns: 1fr;
+  vertical-align: top;
+  /* Without these, mobile Safari will start making font sizes inconsistent when its text size adjustment feature is triggered.*/
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+.hl.lean .tactic-toggle:checked ~ .tactic-state {
+  display: inline-block;
+  vertical-align: top;
+  grid-row: 2;
+  justify-self: start;
+}
+
+.hl.lean .tactic > label {
+  position: relative;
+  grid-row: 1;
+}
+
+@media (hover: hover) {
+  .hl.lean .tactic:has(.tactic-toggle:not(:checked)) > label:hover {
+    background-color: #eeeeee;
+  }
+}
+
+.hl.lean .tactic-toggle {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  height: 0;
+  width: 0;
+  z-index: -10;
+}
+
+.hl.lean .tactic > label::after {
+  content: "";
+  border: 1px solid #bbbbbb;
+  border-radius: 1rem;
+  height: 0.25rem;
+  vertical-align: middle;
+  width: 0.6rem;
+  margin-left: 0.1rem;
+  margin-right: 0.1rem;
+  display: inline-block;
+  transition: all 0.5s;
+}
+
+/*
+@media (hover: hover) {
+  .hl.lean .tactic > label:hover::after {
+    border: 1px solid #aaaaaa;
+    background-color: #aaaaaa;
+    transition: all 0.5s;
+  }
+}
+*/
+
+.hl.lean .tactic > label:has(+ .tactic-toggle:checked)::after {
+  border: 1px solid #999999;
+  background-color: #999999;
+  transition: all 0.5s;
+}
+
+.hl.lean .tactic-state .goal + .goal {
+  margin-top: 1.5rem;
+}
+
+.hl.lean .tactic-state summary {
+  margin-left: -0.5rem;
+}
+
+.hl.lean .tactic-state details {
+  padding-left: 0.5rem;
+}
+
+.hl.lean .case-label {
+  display: block;
+  position: relative;
+}
+
+.hl.lean .case-label input[type="checkbox"] {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  height: 0;
+  width: 0;
+  z-index: -10;
+}
+
+.hl.lean .case-label:has(input[type="checkbox"])::before {
+  display: inline-block;
+  background-color: black;
+  content: ' ';
+  transition: ease 0.2s;
+  margin-right: 0.7em;
+  clip-path: polygon(100% 0, 0 0, 50% 100%);
+  width: 0.6em;
+  height: 0.6em;
+  vertical-align: middle;
+}
+
+.hl.lean .case-label:has(input[type="checkbox"]:not(:checked))::before {
+  transform: rotate(-90deg);
+}
+
+.hl.lean .case-label:has(input[type="checkbox"]) {
+
+}
+
+.hl.lean .case-label:has(input[type="checkbox"]:checked) {
+
+}
+
+
+.hl.lean .labeled-case > :not(:first-child) {
+  max-height: 0px;
+  display: block;
+  overflow: hidden;
+  transition: max-height 0.1s ease-in;
+  margin-left: 0.5rem;
+  margin-top: 0.1rem;
+}
+
+.hl.lean .labeled-case:has(.case-label input[type="checkbox"]:checked) > :not(:first-child) {
+  max-height: 100%;
+}
+
+
+.hl.lean .goal-name::before {
+  font-style: normal;
+  content: "case ";
+}
+
+.hl.lean .goal-name {
+  font-style: italic;
+  font-family: var(--verso-code-font-family);
+}
+
+.hl.lean .hypotheses {
+  display: table;
+}
+
+.hl.lean .hypothesis {
+  display: table-row;
+}
+
+.hl.lean .hypothesis > * {
+  display: table-cell;
+}
+
+
+.hl.lean .hypotheses .colon {
+  text-align: center;
+  min-width: 1rem;
+}
+
+.hl.lean .hypotheses .name {
+  text-align: right;
+}
+
+.hl.lean .hypotheses .name,
+.hl.lean .hypotheses .type,
+.hl.lean .conclusion .type {
+  font-family: var(--verso-code-font-family);
+}
+
+.tippy-box[data-theme~='lean'] {
+  background-color: #e5e5e5;
+  color: black;
+  border: 1px solid black;
+}
+.tippy-box[data-theme~='lean'][data-placement^='top'] > .tippy-arrow::before {
+  border-top-color: #e5e5e5;
+}
+.tippy-box[data-theme~='lean'][data-placement^='bottom'] > .tippy-arrow::before {
+  border-bottom-color: #e5e5e5;
+}
+.tippy-box[data-theme~='lean'][data-placement^='left'] > .tippy-arrow::before {
+  border-left-color: #e5e5e5;
+}
+.tippy-box[data-theme~='lean'][data-placement^='right'] > .tippy-arrow::before {
+  border-right-color: #e5e5e5;
+}
+
+.tippy-box[data-theme~='message'][data-placement^='top'] > .tippy-arrow::before {
+  border-top-color: #e5e5e5;
+  border-width: 11px 11px 0;
+}
+.tippy-box[data-theme~='message'][data-placement^='top'] > .tippy-arrow::after {
+  bottom: -11px;
+  border-width: 11px 11px 0;
+}
+.tippy-box[data-theme~='message'][data-placement^='bottom'] > .tippy-arrow::before {
+  border-width: 0 11px 11px;
+}
+.tippy-box[data-theme~='message'][data-placement^='bottom'] > .tippy-arrow::after {
+  top: -11px;
+  border-width: 0 11px 11px;
+}
+.tippy-box[data-theme~='message'][data-placement^='left'] > .tippy-arrow::before {
+  border-left-color: #e5e5e5;
+  border-width: 11px 0 11px 11px;
+}
+.tippy-box[data-theme~='message'][data-placement^='left'] > .tippy-arrow::after {
+  right: -11px;
+  border-width: 11px 0 11px 11px;
+}
+
+.tippy-box[data-theme~='message'][data-placement^='right'] > .tippy-arrow::before {
+  border-right-color: #e5e5e5;
+  border-width: 11px 11px 11px 0;
+}
+.tippy-box[data-theme~='message'][data-placement^='right'] > .tippy-arrow::after {
+  left: -11px;
+  border-width: 11px 11px 11px 0;
+}
+
+
+
+.tippy-box[data-theme~='warning'] {
+  background-color: #e5e5e5;
+  color: black;
+  border: 3px solid var(--verso-warning-color);
+}
+
+.tippy-box[data-theme~='error'] {
+  background-color: #e5e5e5;
+  color: black;
+  border: 3px solid #f7a7af;
+}
+
+.tippy-box[data-theme~='info'] {
+  background-color: #e5e5e5;
+  color: black;
+  border: 3px solid #99b3c2;
+}
+
+.tippy-box[data-theme~='tactic'] {
+  background-color: white;
+  color: black;
+  border: 1px solid black;
+}
+.tippy-box[data-theme~='tactic'][data-placement^='top'] > .tippy-arrow::before {
+  border-top-color: white;
+}
+.tippy-box[data-theme~='tactic'][data-placement^='bottom'] > .tippy-arrow::before {
+  border-bottom-color: white;
+}
+.tippy-box[data-theme~='tactic'][data-placement^='left'] > .tippy-arrow::before {
+  border-left-color: white;
+}
+.tippy-box[data-theme~='tactic'][data-placement^='right'] > .tippy-arrow::before {
+  border-right-color: white;
+}
+
+.extra-doc-links {
+  list-style-type: none;
+  margin-left: 0;
+  padding: 0;
+}
+
+.extra-doc-links > li {
+  display: inline-block;
+}
+
+.extra-doc-links > li:not(:last-child)::after {
+  content: '|';
+  display: inline-block;
+  margin: 0 0.25em;
+}
+
+.verso-message .trace > summary::marker {
+  color: var(--verso-text-color);
+}
+
+.verso-message .trace-children {
+  margin: 0;
+  padding: 0;
+}
+
+.verso-message .trace-children > li {
+  list-style-type: none;
+  margin-left: 1.5em;
+}
+
+.verso-message .trace-children > li:not(:has(.trace)) {
+  margin-left: 0;
+}
+
+.verso-message .trace-class {
+  color: color-mix(in srgb, currentColor 70%, transparent);
+  font-weight: bold;
+  margin: 0;
+  padding: 0;
+}
+
+.verso-message .text {
+  white-space: pre-wrap;
+}
+
+</style><script>
+      
+window.onload = () => {
+
+    // Don't show hovers inside of closed tactic states
+    function blockedByTactic(elem) {
+      let parent = elem.parentNode;
+      while (parent && "classList" in parent) {
+        if (parent.classList.contains("tactic")) {
+          const toggle = parent.querySelector("input.tactic-toggle");
+          if (toggle) {
+            return !toggle.checked;
+          }
+        }
+        parent = parent.parentNode;
+      }
+      return false;
+    }
+
+    function blockedByTippy(elem) {
+      // Don't show a new hover until the old ones are all closed.
+      // Scoped to the nearest "top-level block" to avoid being O(n) in the size of the document.
+      var block = elem;
+      const topLevel = new Set(["section", "body", "html", "nav", "header"]);
+      while (block.parentNode && !topLevel.has(block.parentNode.nodeName.toLowerCase())) {
+        block = block.parentNode;
+      }
+      for (const child of block.querySelectorAll(".token, .has-info")) {
+        if (child._tippy && child._tippy.state.isVisible) { return true };
+      }
+      return false;
+    }
+
+    for (const c of document.querySelectorAll(".hl.lean .token")) {
+        if (c.dataset.binding != "") {
+            c.addEventListener("mouseover", (event) => {
+                if (blockedByTactic(c)) {return;}
+                const context = c.closest(".hl.lean").dataset.leanContext;
+                for (const example of document.querySelectorAll(".hl.lean")) {
+                    if (example.dataset.leanContext == context) {
+                        for (const tok of example.querySelectorAll(".token")) {
+                            if (c.dataset.binding == tok.dataset.binding) {
+                                tok.classList.add("binding-hl");
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        c.addEventListener("mouseout", (event) => {
+            for (const tok of document.querySelectorAll(".hl.lean .token")) {
+                tok.classList.remove("binding-hl");
+            }
+        });
+    }
+    /* Render docstrings */
+    if ('undefined' !== typeof marked) {
+        for (const d of document.querySelectorAll("code.docstring, pre.docstring")) {
+            const str = d.innerText;
+            const html = marked.parse(str);
+            const rendered = document.createElement("div");
+            rendered.classList.add("docstring");
+            rendered.innerHTML = html;
+            d.parentNode.replaceChild(rendered, d);
+        }
+    }
+    // Add hovers
+    let siteRoot = typeof __versoSiteRoot !== 'undefined' ? __versoSiteRoot : "/";
+    let docsJson = siteRoot + "-verso-docs.json";
+    fetch(docsJson).then((resp) => resp.json()).then((versoDocData) => {
+
+      function hideParentTooltips(element) {
+        let parent = element.parentElement;
+        while (parent) {
+          const tippyInstance = parent._tippy;
+          if (tippyInstance) {
+            tippyInstance.hide();
+          }
+          parent = parent.parentElement;
+        }
+      }
+
+
+
+      const defaultTippyProps = {
+        /* DEBUG -- remove the space: * /
+        onHide(any) { return false; },
+        trigger: "click",
+        // */
+        /* theme: "lean", */
+        maxWidth: "none",
+        appendTo: () => document.body,
+        interactive: true,
+        delay: [100, null],
+        /* ignoreAttributes: true, */
+        followCursor: 'initial',
+        onShow(inst) {
+          if (inst.reference.className == 'tactic') {
+
+            const toggle = inst.reference.querySelector("input.tactic-toggle");
+            if (toggle && toggle.checked) {
+              return false;
+            }
+            hideParentTooltips(inst.reference);
+            //if (blockedByTippy(inst.reference)) { return false; }
+
+          } else if (inst.reference.querySelector(".hover-info") || "versoHover" in inst.reference.dataset) {
+            if (blockedByTactic(inst.reference)) { return false };
+            if (blockedByTippy(inst.reference)) { return false; }
+          } else { // Nothing to show here!
+            return false;
+          }
+        },
+        content (tgt) {
+          const content = document.createElement("span");
+          if (tgt.className == 'tactic') {
+            const state = tgt.querySelector(".tactic-state").cloneNode(true);
+            state.style.display = "block";
+            content.appendChild(state);
+            content.style.display = "block";
+            content.className = "hl lean popup";
+          } else {
+            content.className = "hl lean";
+            content.style.display = "block";
+            content.style.maxHeight = "300px";
+            content.style.overflowY = "auto";
+            content.style.overflowX = "hidden";
+            const hoverId = tgt.dataset.versoHover;
+            const hoverInfo = tgt.querySelector(".hover-info");
+            if (hoverId) { // Docstrings from the table
+              // TODO stop doing an implicit conversion from string to number here
+              let data = versoDocData[hoverId];
+              if (data) {
+                const info = document.createElement("span");
+                info.className = "hover-info";
+                info.style.display = "block";
+                info.innerHTML = data;
+                content.appendChild(info);
+                /* Render docstrings - TODO server-side */
+                if ('undefined' !== typeof marked) {
+                    for (const d of content.querySelectorAll("code.docstring, pre.docstring")) {
+                        const str = d.innerText;
+                        const html = marked.parse(str);
+                        const rendered = document.createElement("div");
+                        rendered.classList.add("docstring");
+                        rendered.innerHTML = html;
+                        d.parentNode.replaceChild(rendered, d);
+                    }
+                }
+              } else {
+                content.innerHTML = "Failed to load doc ID: " + hoverId;
+              }
+            } else if (hoverInfo) { // The inline info, still used for compiler messages
+              content.appendChild(hoverInfo.cloneNode(true));
+            }
+            const extraLinks = tgt.parentElement.dataset['versoLinks'];
+            if (extraLinks) {
+              try {
+                const extras = JSON.parse(extraLinks);
+                const links = document.createElement('ul');
+                links.className = 'extra-doc-links';
+                extras.forEach((l) => {
+                  const li = document.createElement('li');
+                  li.innerHTML = "<a href=\"" + l['href'] + "\" title=\"" + l.long + "\">" + l.short + "</a>";
+                  links.appendChild(li);
+                });
+                content.appendChild(links);
+              } catch (error) {
+                console.error(error);
+              }
+            }
+          }
+          return content;
+        }
+      };
+
+
+      document.querySelectorAll('.hl.lean .const.token, .hl.lean .keyword.token, .hl.lean .literal.token, .hl.lean .option.token, .hl.lean .var.token, .hl.lean .typed.token, .hl.lean .level-var, .hl.lean .level-const, .hl.lean .level-op, .hl.lean .sort').forEach(element => {
+        element.setAttribute('data-tippy-theme', 'lean');
+      });
+      document.querySelectorAll('.hl.lean .has-info.warning').forEach(element => {
+        element.setAttribute('data-tippy-theme', 'warning message');
+      });
+      document.querySelectorAll('.hl.lean .has-info.information').forEach(element => {
+        element.setAttribute('data-tippy-theme', 'info message');
+      });
+      document.querySelectorAll('.hl.lean .has-info.error').forEach(element => {
+        element.setAttribute('data-tippy-theme', 'error message');
+      });
+      document.querySelectorAll('.hl.lean .tactic').forEach(element => {
+        element.setAttribute('data-tippy-theme', 'tactic');
+      });
+      let insts = tippy('.hl.lean .const.token, .hl.lean .keyword.token, .hl.lean .literal.token, .hl.lean .option.token, .hl.lean .var.token, .hl.lean .typed.token, .hl.lean .has-info, .hl.lean .tactic, .hl.lean .level-var, .hl.lean .level-const, .hl.lean .level-op, .hl.lean .sort', defaultTippyProps);
+  });
+}
+</script>
+    <script src="-verso-search/search-highlight.js" defer="defer"></script>
+    </head>
+  <body>
+    <header>
+      <div class="header-logo-wrapper"></div>
+      <div class="header-title-wrapper">
+        <a href="" class="header-title"><h1>
+            PSBP Documentation</h1>
+          </a></div>
+      </header>
+    <label for="toggle-toc" id="toggle-toc-click"><span class="line line1"></span><span class="line line2"></span><span class="line line3"></span></label><div class="with-toc">
+      <div class="toc-backdrop" onclick="document.getElementById('toggle-toc-click')?.click()"></div>
+      <nav id="toc">
+        <input type="checkbox" id="toggle-toc"><div class="first">
+          <a href="" class="toc-title"><h1>
+              PSBP Documentation</h1>
+            </a><div class="split-tocs">
+            <div class="split-toc book">
+              <div class="title">
+                <label for="--verso-manual-toc-----bookRoot" class="toggle-split-toc"><input type="checkbox" class="toggle-split-toc" id="--verso-manual-toc-----bookRoot"></label><span class="">Table of Contents</span></div>
+              <table><tr class="numbered"><td class="num">1.</td><td><a href="Warning/#PSBP-Documentation--Warning">Warning</a></td></tr><tr class="numbered"><td class="num">2.</td><td><a href="Introduction/#PSBP-Documentation--Introduction">Introduction</a></td></tr><tr class="current numbered"><td class="num">3.</td><td><a href="The--PSBP--Library-type-classes/#PSBP-Documentation--The--PSBP--Library-type-classes">The <code>PSBP</code> Library type classes</a></td></tr><tr class="numbered"><td class="num">4.</td><td><a href="fibonacci--and--factorial/#PSBP-Documentation--fibonacci--and--factorial"><code>fibonacci</code> and <code>factorial</code></a></td></tr><tr class="numbered"><td class="num">5.</td><td><a href="What-about--Functorial-___/#PSBP-Documentation--What-about--Functorial-___">What about <code>Functorial</code>?</a></td></tr><tr class="numbered"><td class="num">6.</td><td><a href="Computation-Valued-Functions/#PSBP-Documentation--Computation-Valued-Functions">Computation Valued Functions</a></td></tr><tr class="numbered"><td class="num">7.</td><td><a href="ActiveProgram/#PSBP-Documentation--ActiveProgram"><code>ActiveProgram</code></a></td></tr><tr class="numbered"><td class="num">8.</td><td><a href="ReactiveProgram/#PSBP-Documentation--ReactiveProgram"><code>ReactiveProgram</code></a></td></tr><tr class="numbered"><td class="num">9.</td><td><a href="Positional-Programming/#PSBP-Documentation--Positional-Programming">Positional Programming</a></td></tr><tr class="numbered"><td class="num">10.</td><td><a href="Stateful-Programming/#PSBP-Documentation--Stateful-Programming">Stateful Programming</a></td></tr></table></div>
+            <div class="split-toc">
+              <div class="title">
+                <label for="--verso-manual-toc-PSBP-Documentation--The--PSBP--Library-type-classes" class="toggle-split-toc"><input type="checkbox" class="toggle-split-toc" id="--verso-manual-toc-PSBP-Documentation--The--PSBP--Library-type-classes" checked="checked"></label><span class="number">3.</span> <span class=""><a href="The--PSBP--Library-type-classes/#PSBP-Documentation--The--PSBP--Library-type-classes">The <code>PSBP</code> Library type classes</a></span></div>
+              <table><tr class="numbered"><td class="num">3.1.</td><td><a href="The--PSBP--Library-type-classes/class-Functional/#PSBP-Documentation--The--PSBP--Library-type-classes--class-Functional"><code>class Functional</code></a></td></tr><tr class="numbered"><td class="num">3.2.</td><td><a href="The--PSBP--Library-type-classes/class-Functorial/#PSBP-Documentation--The--PSBP--Library-type-classes--class-Functorial"><code>class Functorial</code></a></td></tr><tr class="numbered"><td class="num">3.3.</td><td><a href="The--PSBP--Library-type-classes/class-Creational/#PSBP-Documentation--The--PSBP--Library-type-classes--class-Creational"><code>class Creational</code></a></td></tr><tr class="numbered"><td class="num">3.4.</td><td><a href="The--PSBP--Library-type-classes/class-Sequential/#PSBP-Documentation--The--PSBP--Library-type-classes--class-Sequential"><code>class Sequential</code></a></td></tr><tr class="numbered"><td class="num">3.5.</td><td><a href="The--PSBP--Library-type-classes/class-Conditional/#PSBP-Documentation--The--PSBP--Library-type-classes--class-Conditional"><code>class Conditional</code></a></td></tr><tr class="numbered"><td class="num">3.6.</td><td><a href="The--PSBP--Library-type-classes/Capability-combinations/#PSBP-Documentation--The--PSBP--Library-type-classes--Capability-combinations">Capability combinations</a></td></tr><tr class="current numbered"><td class="num">3.7.</td><td><a href="The--PSBP--Library-type-classes/Programs-and-program-combinators-defined-in-terms-of-the-basic-ones/#PSBP-Documentation--The--PSBP--Library-type-classes--Programs-and-program-combinators-defined-in-terms-of-the-basic-ones">Programs and program combinators defined in terms of the basic ones</a></td></tr></table></div>
+            <div class="split-toc">
+              <div class="title">
+                <label for="--verso-manual-toc-PSBP-Documentation--The--PSBP--Library-type-classes--Programs-and-program-combinators-defined-in-terms-of-the-basic-ones" class="toggle-split-toc"><input type="checkbox" class="toggle-split-toc" id="--verso-manual-toc-PSBP-Documentation--The--PSBP--Library-type-classes--Programs-and-program-combinators-defined-in-terms-of-the-basic-ones" checked="checked"></label><span class="number">3.7.</span> <span class="current"><a href="The--PSBP--Library-type-classes/Programs-and-program-combinators-defined-in-terms-of-the-basic-ones/#PSBP-Documentation--The--PSBP--Library-type-classes--Programs-and-program-combinators-defined-in-terms-of-the-basic-ones">Programs and program combinators defined in terms of the basic ones</a></span></div>
+              <table><tr class="numbered"><td class="num">3.7.1.</td><td><a href="The--PSBP--Library-type-classes/Programs-and-program-combinators-defined-in-terms-of-the-basic-ones/#PSBP-Documentation--The--PSBP--Library-type-classes--Programs-and-program-combinators-defined-in-terms-of-the-basic-ones--def-identity"><code>def identity</code></a></td></tr><tr class="numbered"><td class="num">3.7.2.</td><td><a href="The--PSBP--Library-type-classes/Programs-and-program-combinators-defined-in-terms-of-the-basic-ones/#PSBP-Documentation--The--PSBP--Library-type-classes--Programs-and-program-combinators-defined-in-terms-of-the-basic-ones--def-let_"><code>def let_</code></a></td></tr><tr class="numbered"><td class="num">3.7.3.</td><td><a href="The--PSBP--Library-type-classes/Programs-and-program-combinators-defined-in-terms-of-the-basic-ones/#PSBP-Documentation--The--PSBP--Library-type-classes--Programs-and-program-combinators-defined-in-terms-of-the-basic-ones--def-if_"><code>def if_</code></a></td></tr></table></div>
+            </div>
+          </div>
+        <div class="last"></div>
+        </nav>
+      <main><div class="content-wrapper">
+          <nav class="prev-next-buttons">
+            <a class="local-button active" href="The--PSBP--Library-type-classes/Capability-combinations/#PSBP-Documentation--The--PSBP--Library-type-classes--Capability-combinations" rel="prev" title="3.6. Capability combinations"><span class="arrow">←</span><span class="where">3.6. Capability combinations</span></a><a class="local-button active" href="fibonacci--and--factorial/#PSBP-Documentation--fibonacci--and--factorial" rel="next" title="4. fibonacci and factorial"><span class="where">4. fibonacci and factorial</span><span class="arrow">→</span></a></nav>
+          <section>
+            <h1>
+              3.7. Programs and program combinators defined in terms of the basic ones</h1>
+            <section>
+              <h2 id="PSBP-Documentation--The--PSBP--Library-type-classes--Programs-and-program-combinators-defined-in-terms-of-the-basic-ones--def-identity">
+                3.7.1. <code>def identity</code></h2>
+              <p>
+                Below is a simple, but extremely useful function as a program, the <code>identity</code> program.</p>
+              <code class="hl lean block" data-lean-context="examples"><span class="keyword token" data-binding="kw-occ-Lean.Parser.Command.definition-6708">def</span><span class="inter-text"> </span><span class="const token" data-binding="const-identity" data-verso-hover="18" id="identity">identity</span><span class="inter-text">
+    </span><span class="unknown token" data-binding="">[</span><a href="The--PSBP--Library-type-classes/class-Functional/#Functional" title="Definition of example"><span class="const token" data-binding="const-Functional" data-verso-hover="0">Functional</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.4" data-verso-hover="1">program</span><span class="unknown token" data-binding="">]</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text">
+  </span><span class="var token" data-binding="var-_uniq.4" data-verso-hover="1">program</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.12" data-verso-hover="4">α</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.12" data-verso-hover="4">α</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:=</span><span class="inter-text">
+    </span><a href="The--PSBP--Library-type-classes/class-Functional/#Functional___asProgram" title="Definition of example"><span class="const token" data-binding="const-Functional.asProgram" data-verso-hover="3">asProgram</span></a><span class="inter-text"> </span><span class="const token" data-binding="const-id" data-verso-hover="19">id</span><span class="inter-text">
+</span><span class="unknown token" data-binding=""></span></code></section>
+            <section>
+              <h2 id="PSBP-Documentation--The--PSBP--Library-type-classes--Programs-and-program-combinators-defined-in-terms-of-the-basic-ones--def-let_">
+                3.7.2. <code>def let_</code></h2>
+              <p>
+                Using the <code>let_</code> combinator an intermediate value can be constructed that is available for later use.</p>
+              <code class="hl lean block" data-lean-context="examples"><span class="keyword token" data-binding="kw-occ-Lean.Parser.Command.definition-6921">def</span><span class="inter-text"> </span><span class="const token" data-binding="const-let_" data-verso-hover="20" id="let_">let_</span><span class="inter-text">
+    </span><span class="unknown token" data-binding="">[</span><a href="The--PSBP--Library-type-classes/class-Functional/#Functional" title="Definition of example"><span class="const token" data-binding="const-Functional" data-verso-hover="0">Functional</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.4" data-verso-hover="1">program</span><span class="unknown token" data-binding="">]</span><span class="inter-text">
+    </span><span class="unknown token" data-binding="">[</span><a href="The--PSBP--Library-type-classes/class-Sequential/#Sequential" title="Definition of example"><span class="const token" data-binding="const-Sequential" data-verso-hover="12">Sequential</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.4" data-verso-hover="1">program</span><span class="unknown token" data-binding="">]</span><span class="inter-text">
+    </span><span class="unknown token" data-binding="">[</span><a href="The--PSBP--Library-type-classes/class-Creational/#Creational" title="Definition of example"><span class="const token" data-binding="const-Creational" data-verso-hover="9">Creational</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.4" data-verso-hover="1">program</span><span class="unknown token" data-binding="">]</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text">
+  </span><span class="var token" data-binding="var-_uniq.4" data-verso-hover="1">program</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.21" data-verso-hover="4">α</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.36" data-verso-hover="4">β</span><span class="inter-text"> </span><span class="unknown token" data-binding="">→</span><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><span class="var token" data-binding="var-_uniq.4" data-verso-hover="1">program</span><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><span class="var token" data-binding="var-_uniq.21" data-verso-hover="4">α</span><span class="inter-text"> </span><span class="unknown token" data-binding="">×</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.36" data-verso-hover="4">β</span><span class="unknown token" data-binding="">)</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.55" data-verso-hover="4">γ</span><span class="inter-text"> </span><span class="unknown token" data-binding="">→</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.4" data-verso-hover="1">program</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.21" data-verso-hover="4">α</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.55" data-verso-hover="4">γ</span><span class="unknown token" data-binding="">)</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:=</span><span class="inter-text">
+    </span><span class="unknown token" data-binding="">λ</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.92" data-verso-hover="21">αpβ</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.95" data-verso-hover="22">αaβpγ</span><span class="inter-text"> </span><span class="unknown token" data-binding="">=&gt;</span><span class="inter-text"> </span><a href="The--PSBP--Library-type-classes/Programs-and-program-combinators-defined-in-terms-of-the-basic-ones/#identity" title="Definition of example"><span class="const token" data-binding="const-identity" data-verso-hover="18">identity</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">&&&</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.92" data-verso-hover="21">αpβ</span><span class="inter-text"> </span><span class="unknown token" data-binding="">&gt;=&gt;</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.95" data-verso-hover="22">αaβpγ</span><span class="inter-text">
+
+ </span><span class="keyword token" data-binding="kw-occ-Lean.Parser.Command.definition-7131">def</span><span class="inter-text"> </span><span class="const token" data-binding="const-in_" data-verso-hover="23" id="in_">in_</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.1102" data-verso-hover="24">α</span><span class="inter-text"> </span><span class="unknown token" data-binding="">→</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.1102" data-verso-hover="24">α</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:=</span><span class="inter-text"> </span><span class="const token" data-binding="const-id" data-verso-hover="19">id</span><span class="inter-text">
+</span><span class="unknown token" data-binding=""></span></code><p>
+                The <code>p</code> in <code>αpβ</code> and <code>αaβpγ</code> stands for "program", and that the <code>a</code> in <code>αaβpγ</code> stands for "and". Think of <code>let_</code> as a
+library level keyword. <code>in_</code> is also a library level keyword that, depending on your taste, may make programs more
+readable.</p>
+              </section>
+            <section>
+              <h2 id="PSBP-Documentation--The--PSBP--Library-type-classes--Programs-and-program-combinators-defined-in-terms-of-the-basic-ones--def-if_">
+                3.7.3. <code>def if_</code></h2>
+              <p>
+                Using the <code>if_</code> combinator conditional boolean logic can be expressed. A helper function and corresponding program is
+needed to define it.</p>
+              <code class="hl lean block" data-lean-context="examples"><span class="keyword token" data-binding="kw-occ-Lean.Parser.Command.definition-7582">def</span><span class="inter-text"> </span><span class="const token" data-binding="const-trueToLeftFalseToRightF" data-verso-hover="25" id="trueToLeftFalseToRightF">trueToLeftFalseToRightF</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.7" data-verso-hover="26">α</span><span class="inter-text"> </span><span class="unknown token" data-binding="">×</span><span class="inter-text"> </span><span class="const token" data-binding="const-Bool" data-verso-hover="27">Bool</span><span class="inter-text"> </span><span class="unknown token" data-binding="">→</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.7" data-verso-hover="26">α</span><span class="inter-text"> </span><span class="unknown token" data-binding="">⊕</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.7" data-verso-hover="26">α</span><span class="inter-text">
+  </span><span class="unknown token" data-binding="">|</span><span class="inter-text"> </span><span class="unknown token" data-binding="">⟨</span><span class="var token" data-binding="var-_uniq.40" data-verso-hover="28">α</span><span class="unknown token" data-binding="">,</span><span class="inter-text"> </span><span class="const token" data-binding="const-Bool.true" data-verso-hover="29">true</span><span class="unknown token" data-binding="">⟩</span><span class="inter-text"> </span><span class="unknown token" data-binding="">=&gt;</span><span class="inter-text"> </span><span class="const token" data-binding="const-Sum.inl" data-verso-hover="30">.inl</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.40" data-verso-hover="28">α</span><span class="inter-text">
+  </span><span class="unknown token" data-binding="">|</span><span class="inter-text"> </span><span class="unknown token" data-binding="">⟨</span><span class="var token" data-binding="var-_uniq.63" data-verso-hover="28">α</span><span class="unknown token" data-binding="">,</span><span class="inter-text"> </span><span class="const token" data-binding="const-Bool.false" data-verso-hover="31">false</span><span class="unknown token" data-binding="">⟩</span><span class="inter-text"> </span><span class="unknown token" data-binding="">=&gt;</span><span class="inter-text"> </span><span class="const token" data-binding="const-Sum.inr" data-verso-hover="32">.inr</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.63" data-verso-hover="28">α</span><span class="inter-text">
+
+</span><span class="keyword token" data-binding="kw-occ-Lean.Parser.Command.definition-7699">def</span><span class="inter-text"> </span><span class="const token" data-binding="const-trueToLeftFalseToRight" data-verso-hover="33" id="trueToLeftFalseToRight">trueToLeftFalseToRight</span><span class="inter-text">
+    </span><span class="unknown token" data-binding="">[</span><a href="The--PSBP--Library-type-classes/class-Functional/#Functional" title="Definition of example"><span class="const token" data-binding="const-Functional" data-verso-hover="0">Functional</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.237" data-verso-hover="1">program</span><span class="unknown token" data-binding="">]</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text">
+  </span><span class="var token" data-binding="var-_uniq.237" data-verso-hover="1">program</span><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><span class="var token" data-binding="var-_uniq.247" data-verso-hover="4">α</span><span class="inter-text"> </span><span class="unknown token" data-binding="">×</span><span class="inter-text"> </span><span class="const token" data-binding="const-Bool" data-verso-hover="27">Bool</span><span class="unknown token" data-binding="">)</span><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><span class="var token" data-binding="var-_uniq.247" data-verso-hover="4">α</span><span class="inter-text"> </span><span class="unknown token" data-binding="">⊕</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.247" data-verso-hover="4">α</span><span class="unknown token" data-binding="">)</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:=</span><span class="inter-text">
+    </span><a href="The--PSBP--Library-type-classes/class-Functional/#Functional___asProgram" title="Definition of example"><span class="const token" data-binding="const-Functional.asProgram" data-verso-hover="3">asProgram</span></a><span class="inter-text"> </span><a href="The--PSBP--Library-type-classes/Programs-and-program-combinators-defined-in-terms-of-the-basic-ones/#trueToLeftFalseToRightF" title="Definition of example"><span class="const token" data-binding="const-trueToLeftFalseToRightF" data-verso-hover="25">trueToLeftFalseToRightF</span></a><span class="inter-text">
+
+</span><span class="keyword token" data-binding="kw-occ-Lean.Parser.Command.definition-7830">def</span><span class="inter-text"> </span><span class="const token" data-binding="const-if_" data-verso-hover="34" id="if_">if_</span><span class="inter-text">
+    </span><span class="unknown token" data-binding="">[</span><a href="The--PSBP--Library-type-classes/class-Functional/#Functional" title="Definition of example"><span class="const token" data-binding="const-Functional" data-verso-hover="0">Functional</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.367" data-verso-hover="1">program</span><span class="unknown token" data-binding="">]</span><span class="inter-text">
+    </span><span class="unknown token" data-binding="">[</span><a href="The--PSBP--Library-type-classes/class-Sequential/#Sequential" title="Definition of example"><span class="const token" data-binding="const-Sequential" data-verso-hover="12">Sequential</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.367" data-verso-hover="1">program</span><span class="unknown token" data-binding="">]</span><span class="inter-text">
+    </span><span class="unknown token" data-binding="">[</span><a href="The--PSBP--Library-type-classes/class-Creational/#Creational" title="Definition of example"><span class="const token" data-binding="const-Creational" data-verso-hover="9">Creational</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.367" data-verso-hover="1">program</span><span class="unknown token" data-binding="">]</span><span class="inter-text">
+    </span><span class="unknown token" data-binding="">[</span><a href="The--PSBP--Library-type-classes/class-Conditional/#Conditional" title="Definition of example"><span class="const token" data-binding="const-Conditional" data-verso-hover="15">Conditional</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.367" data-verso-hover="1">program</span><span class="unknown token" data-binding="">]</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text">
+  </span><span class="var token" data-binding="var-_uniq.367" data-verso-hover="1">program</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.388" data-verso-hover="4">α</span><span class="inter-text"> </span><span class="const token" data-binding="const-Bool" data-verso-hover="27">Bool</span><span class="inter-text"> </span><span class="unknown token" data-binding="">→</span><span class="inter-text">
+  </span><span class="var token" data-binding="var-_uniq.367" data-verso-hover="1">program</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.388" data-verso-hover="4">α</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.409" data-verso-hover="4">β</span><span class="inter-text"> </span><span class="unknown token" data-binding="">→</span><span class="inter-text">
+  </span><span class="var token" data-binding="var-_uniq.367" data-verso-hover="1">program</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.388" data-verso-hover="4">α</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.409" data-verso-hover="4">β</span><span class="inter-text"> </span><span class="unknown token" data-binding="">→</span><span class="inter-text">
+  </span><span class="var token" data-binding="var-_uniq.367" data-verso-hover="1">program</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.388" data-verso-hover="4">α</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.409" data-verso-hover="4">β</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:=</span><span class="inter-text">
+    </span><span class="unknown token" data-binding="">λ</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.451" data-verso-hover="35">αpb</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.454" data-verso-hover="21">t_apβ</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.457" data-verso-hover="21">f_apβ</span><span class="inter-text"> </span><span class="unknown token" data-binding="">=&gt;</span><span class="inter-text">
+      </span><a href="The--PSBP--Library-type-classes/Programs-and-program-combinators-defined-in-terms-of-the-basic-ones/#let_" title="Definition of example"><span class="const token" data-binding="const-let_" data-verso-hover="20">let_</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.451" data-verso-hover="35">αpb</span><span class="inter-text"> </span><span class="unknown token" data-binding="">$</span><span class="inter-text">
+        </span><a href="The--PSBP--Library-type-classes/Programs-and-program-combinators-defined-in-terms-of-the-basic-ones/#in_" title="Definition of example"><span class="const token" data-binding="const-in_" data-verso-hover="23">in_</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">$</span><span class="inter-text">
+          </span><a href="The--PSBP--Library-type-classes/Programs-and-program-combinators-defined-in-terms-of-the-basic-ones/#trueToLeftFalseToRight" title="Definition of example"><span class="const token" data-binding="const-trueToLeftFalseToRight" data-verso-hover="33">trueToLeftFalseToRight</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">&gt;=&gt;</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.454" data-verso-hover="21">t_apβ</span><span class="inter-text"> </span><span class="unknown token" data-binding="">|||</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.457" data-verso-hover="21">f_apβ</span><span class="inter-text">
+
+</span><span class="keyword token" data-binding="kw-occ-Lean.Parser.Command.definition-8139">def</span><span class="inter-text"> </span><span class="const token" data-binding="const-else_" data-verso-hover="36" id="else_">else_</span><span class="inter-text"> </span><span class="unknown token" data-binding="">{</span><span class="var token" data-binding="var-_uniq.1536" data-verso-hover="24">α</span><span class="unknown token" data-binding="">}</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.1536" data-verso-hover="24">α</span><span class="inter-text"> </span><span class="unknown token" data-binding="">→</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.1536" data-verso-hover="24">α</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:=</span><span class="inter-text"> </span><span class="const token" data-binding="const-id" data-verso-hover="19">id</span><span class="inter-text">
+</span><span class="unknown token" data-binding=""></span></code><p>
+                The <code>b</code> in <code>αpb</code> stands for <code>Bool</code>.</p>
+              </section>
+            </section>
+          <nav class="prev-next-buttons">
+            <a class="local-button active" href="The--PSBP--Library-type-classes/Capability-combinations/#PSBP-Documentation--The--PSBP--Library-type-classes--Capability-combinations" rel="prev" title="3.6. Capability combinations"><span class="arrow">←</span><span class="where">3.6. Capability combinations</span></a><a class="local-button active" href="fibonacci--and--factorial/#PSBP-Documentation--fibonacci--and--factorial" rel="next" title="4. fibonacci and factorial"><span class="where">4. fibonacci and factorial</span><span class="arrow">→</span></a></nav>
+          </div>
+        </main></div>
+    </body>
+  </html>
+
