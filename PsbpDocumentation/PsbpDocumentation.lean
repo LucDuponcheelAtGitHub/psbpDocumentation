@@ -420,13 +420,13 @@ def foldSum {γ β α : Type}
 
 instance :
     Conditional
-    (FromComputationValuedFunction computation) where
+      (FromComputationValuedFunction computation) where
   sum := λ ⟨γfγα⟩ ⟨βfγα⟩ => ⟨foldSum γfγα βfγα⟩
 ```
 
 The the `c` in `αfcβ` stands for "computation".
 
-# Active implementation / materialization
+# `ActiveProgram`
 
 There is not a lot of work to be done for active implementations. The `Functor`, `Applicative` and `Monad`
 implementations of `Id` can be used.
@@ -445,34 +445,46 @@ def materializeActive :
 We can now run our programs in an active way.
 
 ```savedLean (name := activeFibonaccci)
-#eval (materializeActive fibonacci) 10
+#eval
+  materializeActive
+  fibonacci
+  10
 ```
 ```leanOutput activeFibonaccci
 89
 ```
 
 ```savedLean (name := activeFactorial)
-#eval (materializeActive factorial) 10
+#eval
+  materializeActive
+  factorial
+  10
 ```
 ```leanOutput activeFactorial
 3628800
 ```
 
 ```savedLean (name := activeTwiceMinusOne01)
-#eval (materializeActive twiceMinusOne01) 10
+#eval
+  materializeActive
+  twiceMinusOne01
+  10
 ```
 ```leanOutput activeTwiceMinusOne01
 18
 ```
 
 ```savedLean (name := activeTwiceMinusOne02)
-#eval (materializeActive twiceMinusOne02) 10
+#eval
+  materializeActive
+  twiceMinusOne02
+  10
 ```
 ```leanOutput activeTwiceMinusOne02
 18
 ```
 
-# Reactive implementation / materialization
+# `ReactiveProgram`
 
 There is much more work to be done for reactive implementations. They are callback handler, a.k.a. continuation based.
 
@@ -533,29 +545,45 @@ The `ρ` stands for the "result" of callback handling.
 We can now run our programs in a reactive way.
 
 ```savedLean (name := reactiveFibonaccci)
-#eval (materializeReactive fibonacci) 10
+#eval
+  materializeReactive
+  fibonacci
+  10
 ```
+
 ```leanOutput reactiveFibonaccci
 89
 ```
 
 ```savedLean (name := reactiveFactorial)
-#eval (materializeReactive factorial) 10
+#eval
+  materializeReactive
+  factorial
+  10
 ```
+
 ```leanOutput reactiveFactorial
 3628800
 ```
 
 ```savedLean (name := reactiveTwiceMinusOne01)
-#eval (materializeReactive twiceMinusOne01) 10
+#eval
+  materializeReactive
+  twiceMinusOne01
+  10
 ```
+
 ```leanOutput reactiveTwiceMinusOne01
 18
 ```
 
 ```savedLean (name := reactiveTwiceMinusOne02)
-#eval (materializeReactive twiceMinusOne02) 10
+#eval
+  materializeReactive
+  twiceMinusOne02
+  10
 ```
+
 ```leanOutput reactiveTwiceMinusOne02
 18
 ```
@@ -596,14 +624,21 @@ def someProgram01
 ```
 
 ```savedLean (name := activeSomeProgram01)
-#eval (materializeActive someProgram01) 10
+#eval
+  materializeActive
+  someProgram01
+  10
 ```
+
 ```leanOutput activeSomeProgram01
 29
 ```
 
 ```savedLean (name := reactiveSomeProgram01)
-#eval (materializeReactive someProgram01) 10
+#eval
+  materializeReactive
+  someProgram01
+  10
 ```
 ```leanOutput activeSomeProgram01
 29
@@ -630,7 +665,10 @@ def someProgram02
 ```
 
 ```savedLean (name := activeSomeProgram02)
-#eval (materializeActive someProgram02) 10
+#eval
+  materializeActive
+  someProgram02
+  10
 ```
 ```leanOutput activeSomeProgram02
 29
@@ -738,7 +776,9 @@ unsafe def positionalSumOfFibonacciAndFactorial
 
 ```savedLean (name := activePositionalFactorialOfFibonacci)
 #eval
-  (materializeActive positionalFactorialOfFibonacci) ((), 5)
+  materializeActive
+  positionalFactorialOfFibonacci
+  ((), 5)
 ```
 
 ```leanOutput activePositionalFactorialOfFibonacci
@@ -747,8 +787,9 @@ unsafe def positionalSumOfFibonacciAndFactorial
 
 ```savedLean (name := activePositionalSumOfFibonacciAndFactorial)
 #eval
-  (materializeActive positionalSumOfFibonacciAndFactorial)
-    ((), 10)
+  materializeActive
+  positionalSumOfFibonacciAndFactorial
+  ((), 10)
 ```
 
 ```leanOutput activePositionalSumOfFibonacciAndFactorial
@@ -787,8 +828,9 @@ unsafe def positionalSumOfFibonacciAndFactorial'
 
 ```savedLean (name := activePositionalFactorialOfFibonacci')
 #eval
-  (materializeActive positionalFactorialOfFibonacci')
-    ((), 5)
+  materializeActive
+  positionalFactorialOfFibonacci'
+  ((), 5)
 ```
 
 ```leanOutput activePositionalFactorialOfFibonacci'
@@ -797,10 +839,162 @@ unsafe def positionalSumOfFibonacciAndFactorial'
 
 ```savedLean (name := activePositionalSumOfFibonacciAndFactorial')
 #eval
-  (materializeActive positionalSumOfFibonacciAndFactorial')
-    ((), 10)
+  materializeActive
+  positionalSumOfFibonacciAndFactorial'
+  ((), 10)
 ```
 
 ```leanOutput activePositionalSumOfFibonacciAndFactorial'
 (((((), 10), 89), 3628800), 3628889)
 ```
+
+# Stateful Programming
+
+## `class Stateful σ`
+
+`PSBP` enables stateful programming using the `Stateful` class below.
+
+```savedLean
+class Stateful
+    (σ : Type)
+    (program : Type → Type → Type) where
+  readState {α : Type} : program α σ
+  writeState : program σ Unit
+
+export Stateful (readState writeState)
+```
+
+### `def modifyStateWith`
+
+Below is `modifyStateWith` a useful stateful programming capability.
+
+Let
+
+```savedLean
+def first
+    [Functional program] :
+  program (α × β) α :=
+    asProgram λ (α, _) => α
+
+def second
+    [Functional program] :
+  program (α × β) β :=
+    asProgram  λ (_, β) => β
+```
+
+in (only `first` above is used)
+
+```savedLean
+def modifyStateWith
+    [Functional program]
+    [Sequential program]
+    [Creational program]
+    [Stateful σ program] :
+  (σ → σ) → program α α :=
+    λ σfσ =>
+      let_ ((readState >=> asProgram σfσ) >=> writeState) $
+        in_ $
+          first
+```
+
+`modifyStateWith` modifies the state and does not transform the initial value (argument).
+
+### `def modifyStateWith`
+
+Below is `usingAndModifyingStateAsArgumentWith` a useful stateful programming capability.
+
+```savedLean
+def usingAndModifyingStateAsArgumentWith
+    [Functional program]
+    [Creational program]
+    [Sequential program]
+    [Conditional program]
+    [Stateful σ program] :
+  (σ → σ) → program σ σ → program σ σ :=
+    λ σfσ =>
+      λ σpσ =>
+        (readState >=> modifyStateWith σfσ) >=> σpσ
+```
+
+Given a program `σpσ`, `readState >=> modifyStateWith` reads the state so that it becomes the initial value
+(argument of) `σpσ`, modifies the state (not transforming the initial value (argument)), and then `σpσ`
+transforms that initial value to a final value.
+
+## `instance Stateful σ`
+
+`Stateful σ` is implemented in terms of `MonadStateOf`.
+
+```savedLean
+instance [MonadStateOf σ computation] :
+    Stateful σ
+      (FromComputationValuedFunction computation) where
+  readState := .mk λ _ => get
+  writeState := .mk set
+```
+
+## `StatefulProgram`
+
+```savedLean
+abbrev StatefulProgram σ computation :=
+  FromComputationValuedFunction (StateT σ computation)
+
+def materializeStateful
+    [Monad computation] {α β : Type} :
+      StatefulProgram σ computation α β →
+      α →
+      σ →
+      computation β :=
+  λ αpβ =>
+    λ α =>
+      λ σ =>
+        StateT.run (αpβ.toComputationValuedFunction α) σ >>=
+          λ (β, _) => pure β
+
+def materializeActiveStateful {α β : Type} :
+  StatefulProgram σ Active α β → α → σ → β :=
+    materializeStateful
+```
+
+## `fibonacciIncrementingArgumentPair`
+
+Program `fibonacciIncrementingArgumentPair` below shows the effectfulness of stateful programs.
+
+Let
+
+```savedLean
+unsafe def fibonacciIncrementingArgument
+    [Functional program]
+    [Creational program]
+    [Sequential program]
+    [Conditional program]
+    [Stateful Nat program] :
+  program Nat Nat :=
+    usingAndModifyingStateAsArgumentWith (. + 1) fibonacci
+```
+
+in
+
+```savedLean
+unsafe def fibonacciIncrementingArgumentPair
+    [Functional program]
+    [Creational program]
+    [Sequential program]
+    [Conditional program]
+    [Stateful Nat program] :
+  program Nat (Nat × Nat) :=
+    fibonacciIncrementingArgument &&&
+    fibonacciIncrementingArgument
+```
+
+```savedLean (name := activeFibonacciIncrementingArgumentPair)
+#eval
+  materializeActiveStateful
+    fibonacciIncrementingArgumentPair
+    0
+    10
+```
+
+```leanOutput activeFibonacciIncrementingArgumentPair
+(89, 144)
+```
+
