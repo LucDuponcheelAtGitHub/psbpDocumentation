@@ -897,28 +897,24 @@ def modifyStateWith
           first
 ```
 
-`modifyStateWith` modifies the state and does not transform the initial (argument) value.
+`modifyStateWith` modifies the state using a function.
 
-### `def usingAndModifyingStateAsArgumentWith`
-
-Below is `usingAndModifyingStateAsArgumentWith` a useful stateful programming capability.
+## `withInitialStateAsInitialValue`
 
 ```savedLean
-def readingInitialStateAsInitialValueAndModifyingItWith
+def withInitialStateAsInitialValue
     [Functional program]
     [Creational program]
     [Sequential program]
     [Conditional program]
     [Stateful σ program] :
-  (σ → σ) → program σ σ → program α σ :=
-    λ σfσ =>
-      λ σpσ =>
-        (readState >=> modifyStateWith σfσ) >=> σpσ
+  program σ τ → program α τ :=
+    λ σpτ =>
+      readState >=> σpτ
 ```
 
-Given a program `σpσ`, `readState >=> modifyStateWith` reads the state so that it becomes the initial value
-(argument of) `σpσ`, modifies the state (not transforming the initial (argument) value), and then `σpσ`
-transforms that initial value to a final value.
+Given a program `σpτ`, `withInitialStateAsInitialValue` transforms it to use the initial state as an initial (argument)
+value.
 
 ## `instance Stateful σ`
 
@@ -970,9 +966,8 @@ unsafe def fibonacciIncrementingArgument
     [Conditional program]
     [Stateful Nat program] :
   program Unit Nat :=
-    readingInitialStateAsInitialValueAndModifyingItWith
-    (. + 1)
-    fibonacci
+    withInitialStateAsInitialValue fibonacci >=>
+    modifyStateWith (. + 1)
 ```
 
 in
