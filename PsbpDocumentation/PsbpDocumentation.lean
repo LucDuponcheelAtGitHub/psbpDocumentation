@@ -713,9 +713,9 @@ instance
 ```
 
 Think of `σpα` as accessing a (multi-)value, `α`, on the runtime stack, `σ`. Think of `αpβ` as transforming that
-(multi-)value to `β`. `let_` then pushes `β` on `σ` obtaining `σ × β`. So, if it possible to transform `α` to an
-intermediate value `β`, to transform the runtime stack `σ` to `α`, and to transform `σ × β` to `γ`, then it is possible
-to transform `σ` to `γ`.
+(multi-)value to `β`. `let_` then pushes `β` on `σ` obtaining `σ × β`. So, if it possible to transform the runtime stack
+`σ` to `α`, to transform `α` to an intermediate value `β` and to transform `σ × β` to `γ`, then it is possible to
+transform `σ` to `γ`.
 
 ## Some positions
 
@@ -899,18 +899,18 @@ def modifyStateWith
 
 `modifyStateWith` modifies the state and does not transform the initial value (argument).
 
-### `def modifyStateWith`
+### `def usingAndModifyingStateAsArgumentWith`
 
 Below is `usingAndModifyingStateAsArgumentWith` a useful stateful programming capability.
 
 ```savedLean
-def usingAndModifyingStateAsArgumentWith
+def readingInitialStateAsInitialValueAndModifyingItWith
     [Functional program]
     [Creational program]
     [Sequential program]
     [Conditional program]
     [Stateful σ program] :
-  (σ → σ) → program σ σ → program σ σ :=
+  (σ → σ) → program σ σ → program α σ :=
     λ σfσ =>
       λ σpσ =>
         (readState >=> modifyStateWith σfσ) >=> σpσ
@@ -969,7 +969,9 @@ unsafe def fibonacciIncrementingArgument
     [Conditional program]
     [Stateful Nat program] :
   program Nat Nat :=
-    usingAndModifyingStateAsArgumentWith (. + 1) fibonacci
+    readingInitialStateAsInitialValueAndModifyingItWith
+    (. + 1)
+    fibonacci
 ```
 
 in
@@ -997,4 +999,3 @@ unsafe def fibonacciIncrementingArgumentPair
 ```leanOutput activeFibonacciIncrementingArgumentPair
 (89, 144)
 ```
-
