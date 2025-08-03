@@ -897,7 +897,7 @@ def modifyStateWith
           first
 ```
 
-`modifyStateWith` modifies the state and does not transform the initial value (argument).
+`modifyStateWith` modifies the state and does not transform the initial (argument) value.
 
 ### `def usingAndModifyingStateAsArgumentWith`
 
@@ -917,7 +917,7 @@ def readingInitialStateAsInitialValueAndModifyingItWith
 ```
 
 Given a program `σpσ`, `readState >=> modifyStateWith` reads the state so that it becomes the initial value
-(argument of) `σpσ`, modifies the state (not transforming the initial value (argument)), and then `σpσ`
+(argument of) `σpσ`, modifies the state (not transforming the initial (argument) value), and then `σpσ`
 transforms that initial value to a final value.
 
 ## `instance Stateful σ`
@@ -957,7 +957,8 @@ def materializeActiveStateful {α β : Type} :
 
 ## `fibonacciIncrementingArgumentPair`
 
-Program `fibonacciIncrementingArgumentPair` below shows the effectfulness of stateful programs.
+Program `fibonacciIncrementingArgumentPair` below shows the effectfulness of stateful programs by using an
+initial state as initial (argument) value and modifying it.
 
 Let
 
@@ -968,7 +969,7 @@ unsafe def fibonacciIncrementingArgument
     [Sequential program]
     [Conditional program]
     [Stateful Nat program] :
-  program Nat Nat :=
+  program Unit Nat :=
     readingInitialStateAsInitialValueAndModifyingItWith
     (. + 1)
     fibonacci
@@ -983,7 +984,7 @@ unsafe def fibonacciIncrementingArgumentPair
     [Sequential program]
     [Conditional program]
     [Stateful Nat program] :
-  program Nat (Nat × Nat) :=
+  program Unit (Nat × Nat) :=
     fibonacciIncrementingArgument &&&
     fibonacciIncrementingArgument
 ```
@@ -992,7 +993,7 @@ unsafe def fibonacciIncrementingArgumentPair
 #eval
   materializeActiveStateful
     fibonacciIncrementingArgumentPair
-    0
+    ()
     10
 ```
 
