@@ -232,25 +232,25 @@ For readability and reusability reasons it is useful to first define some primit
 
 ```savedLean
 def isZeroF: Nat → Bool :=
-  λ ν => ν == 0
+  λ n => n == 0
 
 def isOneF : Nat → Bool :=
-  λ ν => ν == 1
+  λ n => n == 1
 
 def oneF : Nat → Nat :=
   λ _ => 1
 
 def minusOneF : Nat → Nat :=
-  λ ν => ν - 1
+  λ n => n - 1
 
 def minusTwoF : Nat → Nat :=
-  λ ν => ν - 2
+  λ n => n - 2
 
 def addF : Nat × Nat → Nat :=
-  λ ⟨ν, μ⟩ => ν + μ
+  λ ⟨n, m⟩ => n + m
 
 def multiplyF : Nat × Nat → Nat :=
-  λ ⟨ν, μ⟩ => ν * μ
+  λ ⟨n, m⟩ => n * m
 ```
 
 and corresponding primitive programs
@@ -499,45 +499,36 @@ abbrev Reactive ρ := ReactiveT ρ Active
 
 instance {ρ: Type} :
     Functor (ReactiveT ρ computation) where
-  map : {α β : Type} →
-      (α → β) →
-      (ReactiveT ρ computation α →
-      ReactiveT ρ computation β) :=
-    λ αfβ rpa =>
-      ReactiveT.mk (λ γ => rpa.runReactiveT (γ ∘ αfβ))
+  map :=
+    λ αfβ rcα =>
+      ReactiveT.mk (λ γ => rcα.runReactiveT (γ ∘ αfβ))
 
 instance {ρ: Type} :
     Applicative (ReactiveT ρ computation) where
-  pure := λ α => ReactiveT.mk (λ afcr => afcr α)
-  seq: {α β : Type} →
-      (ReactiveT ρ computation (α → β)) →
-      (Unit → (ReactiveT ρ computation α)) →
-      (ReactiveT ρ computation β) :=
-    λ rpafc ufrpa =>
-      ReactiveT.mk (λ bfcr =>
-        rpafc.runReactiveT $
+  pure := λ α => ReactiveT.mk (λ αfcρ => αfcρ α)
+  seq :=
+    λ rcαfβ ufrcα =>
+      ReactiveT.mk (λ bβfcρ =>
+        rcαfβ.runReactiveT $
           (λ αfβ =>
-            (ufrpa ()).runReactiveT (bfcr ∘ αfβ)))
+            (ufrcα ()).runReactiveT (bβfcρ ∘ αfβ)))
 
 instance {ρ: Type} :
     Monad (ReactiveT ρ computation) where
-  bind: {α β : Type} →
-      (ReactiveT ρ computation α) →
-      (α → ReactiveT ρ computation β) →
-      (ReactiveT ρ computation β) :=
-    λ rpa afrpb =>
-      ReactiveT.mk (λ bfcr =>
-        rpa.runReactiveT (λ α =>
-        (afrpb α).runReactiveT bfcr))
+  bind :=
+    λ rcα αfrcβ =>
+      ReactiveT.mk (λ βfcρ =>
+        rcα.runReactiveT (λ α =>
+        (αfrcβ α).runReactiveT βfcρ))
 
 abbrev ReactiveProgram ρ computation :=
   FromComputationValuedFunction (ReactiveT ρ computation)
 
 def materializeReactive {α β : Type} :
     ReactiveProgram β Active α β → α → β :=
-  λ αpβ =>
+  λ ⟨αpβ⟩=>
     λ α =>
-      (αpβ.toComputationValuedFunction α).runReactiveT id
+      (αpβ α).runReactiveT id
 ```
 
 The `ρ` stands for the "result" of callback handling.
@@ -596,8 +587,8 @@ We did not change the definition of our programs, we only materialized them in a
 
 Pointfree programming, like is done for `fibonacci` and `factorial` may be a elegant, but `PSBP` also enables, and,
 for reasons of elegance, sometimes needs, positional programming. Let's first start with `Functorial` based positional
-programming. Suppose we want to run the function that transforms an argument value `ν` of type `Nat` to result value
-`(((ν-1, ν-2), 2), 3) => (ν-2) + 2 * (ν-1) + 3`. The `someProgram01` below could be a solution. `someProgram01` makes
+programming. Suppose we want to run the function that transforms an argument value `n` of type `Nat` to result value
+`(((n-1, n-2), 2), 3) => (n-2) + 2 * (n-1) + 3`. The `someProgram01` below could be a solution. `someProgram01` makes
 use of `Functorial`.
 
 ```savedLean (name := someProgram01)
@@ -645,7 +636,7 @@ def someProgram01
 ```
 
 You may argue that, as for as the acting function involved is concerned, we are back to pointful programming. Well,
-somehow you are right, but notice that all `ν`'s involved have indices (`1`, `2`, `3` and `4`). They can be thought of
+somehow you are right, but notice that all `n`'s involved have indices (`1`, `2`, `3` and `4`). They can be thought of
 as positions. So we are essentially accessing values at positions of multi-values. For this example the multi-value
 involved is homogeneous but it might as well be a heterogeneous one. More about this later.
 
@@ -848,25 +839,25 @@ unsafe def positionalSumOfFibonacciAndFactorial'
 (((((), 10), 89), 3628800), 3628889)
 ```
 
-# Stateful Programming
+# Programming With State
 
-## `class Stateful σ`
+## `class WithState σ`
 
-`PSBP` enables stateful programming using the `Stateful` class below.
+`PSBP` enables programming with state using the `WithState` class below.
 
 ```savedLean
-class Stateful
-    (σ : Type)
+class WithState
+    (σ : outParam Type)
     (program : Type → Type → Type) where
   readState {α : Type} : program α σ
   writeState : program σ Unit
 
-export Stateful (readState writeState)
+export WithState (readState writeState)
 ```
 
 ### `def modifyStateWith`
 
-Below is `modifyStateWith` a useful stateful programming capability.
+Below is `modifyStateWith` a useful programming with state capability.
 
 Let
 
@@ -889,7 +880,7 @@ def modifyStateWith
     [Functional program]
     [Sequential program]
     [Creational program]
-    [Stateful σ program] :
+    [WithState σ program] :
   (σ → σ) → program α α :=
     λ σfσ =>
       let_ ((readState >=> asProgram σfσ) >=> writeState) $
@@ -907,7 +898,7 @@ def withInitialStateAsInitialValue
     [Creational program]
     [Sequential program]
     [Conditional program]
-    [Stateful σ program] :
+    [WithState σ program] :
   program σ τ → program α τ :=
     λ σpτ =>
       readState >=> σpτ
@@ -916,39 +907,39 @@ def withInitialStateAsInitialValue
 Given a program `σpτ`, `withInitialStateAsInitialValue` transforms it to use the initial state as an initial (argument)
 value.
 
-## `instance Stateful σ`
+## `instance WithState σ`
 
-`Stateful σ` is implemented in terms of `MonadStateOf`.
+`WithState σ` is implemented in terms of `MonadStateOf`.
 
 ```savedLean
 instance [MonadStateOf σ computation] :
-    Stateful σ
+    WithState σ
       (FromComputationValuedFunction computation) where
   readState := .mk λ _ => get
   writeState := .mk set
 ```
 
-## `StatefulProgram`
+## `ProgramWithState`
 
 ```savedLean
-abbrev StatefulProgram σ computation :=
+abbrev ProgramWithState σ computation :=
   FromComputationValuedFunction (StateT σ computation)
 
-def materializeStateful
+def materializeWithState
     [Monad computation] {α β : Type} :
-      StatefulProgram σ computation α β →
+      ProgramWithState σ computation α β →
       α →
       σ →
       computation β :=
-  λ αpβ =>
+  λ ⟨αpβ⟩ =>
     λ α =>
       λ σ =>
-        StateT.run (αpβ.toComputationValuedFunction α) σ >>=
+        StateT.run (αpβ α) σ >>=
           λ (β, _) => pure β
 
-def materializeActiveStateful {α β : Type} :
-  StatefulProgram σ Active α β → α → σ → β :=
-    materializeStateful
+def materializeActiveWithState {α β : Type} :
+  ProgramWithState σ Active α β → α → σ → β :=
+    materializeWithState
 ```
 
 ## `fibonacciIncrementingArgumentPair`
@@ -964,7 +955,7 @@ unsafe def fibonacciIncrementingArgument
     [Creational program]
     [Sequential program]
     [Conditional program]
-    [Stateful Nat program] :
+    [WithState Nat program] :
   program Unit Nat :=
     withInitialStateAsInitialValue fibonacci >=>
     modifyStateWith (. + 1)
@@ -978,7 +969,7 @@ unsafe def fibonacciIncrementingArgumentPair
     [Creational program]
     [Sequential program]
     [Conditional program]
-    [Stateful Nat program] :
+    [WithState Nat program] :
   program Unit (Nat × Nat) :=
     fibonacciIncrementingArgument &&&
     fibonacciIncrementingArgument
@@ -986,7 +977,7 @@ unsafe def fibonacciIncrementingArgumentPair
 
 ```savedLean (name := activeFibonacciIncrementingArgumentPair)
 #eval
-  materializeActiveStateful
+  materializeActiveWithState
     fibonacciIncrementingArgumentPair
     ()
     10
@@ -994,4 +985,153 @@ unsafe def fibonacciIncrementingArgumentPair
 
 ```leanOutput activeFibonacciIncrementingArgumentPair
 (89, 144)
+```
+
+# Programming With Failure
+
+## `class WithFailure ε`
+
+`PSBP` enables programming with failure using the `WithState` class below.
+
+```savedLean
+class WithFailure
+    (ε : outParam Type)
+    (program : Type → Type →Type) where
+  failWith {α β : Type} : (α → ε) → program α β
+
+export WithFailure (failWith)
+```
+
+## `instance WithFailure ε`
+
+`WithFailure ε` is implemented in terms of `Monad`.
+
+```savedLean
+def FailureT
+    (ε : Type u)
+    (computation : Type u → Type v)
+    (β : Type u) : Type v :=
+  computation (ε ⊕ β)
+
+def FailureT.mk
+    {ε : Type u}
+    {computation : Type u → Type v}
+    {α : Type u}
+    (cεoα : computation (ε ⊕ α)) :
+  FailureT ε computation α := cεoα
+
+instance
+    [Monad computation] :
+  Monad (FailureT ε computation) where
+    map  :=
+    λ αfβ ftcα =>
+      FailureT.mk (ftcα >>= λ εoα => match εoα with
+        | (Sum.inr α) => pure $ Sum.inr (αfβ α)
+        | (Sum.inl ε) => pure $ Sum.inl ε)
+    pure :=
+      λ α =>
+        FailureT.mk (pure (Sum.inr α))
+    bind :=
+    λ ftcα αfftcβ =>
+      FailureT.mk (ftcα >>= λ εoα => match εoα with
+        | Sum.inr α  => αfftcβ α
+        | Sum.inl ε  => pure (Sum.inl ε))
+
+instance {ε : Type}
+    [Applicative computation] :
+  WithFailure ε
+    (FromComputationValuedFunction
+      (FailureT ε computation)) where
+  failWith :=
+    λ αfε =>
+      ⟨λ α =>
+        let cεpβ :=
+          pure  $
+            Sum.inl $
+              αfε α
+        cεpβ⟩
+```
+
+## `ProgramWithFailure`
+
+```savedLean
+abbrev ProgramWithFailure ε computation :=
+  FromComputationValuedFunction (FailureT ε computation)
+
+def materializeWithFailure
+    [Monad computation] {α β : Type} :
+      ProgramWithFailure ε computation α β →
+      α →
+      computation (ε ⊕ β) :=
+  λ ⟨αpβ⟩ =>
+   λ α =>
+    αpβ α
+
+def materializeActiveWithFailure {α β : Type} :
+ ProgramWithFailure ε Active α β → α → (ε ⊕ β) :=
+  materializeWithFailure
+```
+
+## `safeDiv`
+
+Let
+
+```savedLean
+def isNotZeroF: Nat → Bool :=
+  λ n => n != 0
+
+def unsafeDivF : Nat × Nat → Nat :=
+  λ ⟨n, m⟩ => n / m
+```
+
+and
+
+```savedLean
+def isNotZero [Functional program] :
+  program Nat Bool :=
+    asProgram isNotZeroF
+
+def unsafeDiv [Functional program] :
+  program (Nat × Nat) Nat :=
+    asProgram unsafeDivF
+```
+
+in
+
+
+```savedLean
+def safeDiv
+    [Functional program]
+    [Creational program]
+    [Sequential program]
+    [Conditional program]
+    [WithFailure String program] :
+  program (Nat × Nat) Nat :=
+    if_ (second >=> isNotZero) unsafeDiv $
+      else_ $
+        failWith (λ (n, m) =>
+          s!"tried to divide {n} by {m}")
+```
+
+
+```savedLean (name := activeSafeDiv)
+#eval
+  materializeActiveWithFailure
+    safeDiv
+    (10, 5)
+```
+
+```leanOutput activeSafeDiv
+Sum.inr 2
+```
+
+```savedLean (name := activeFailingafeDiv)
+#eval
+  materializeActiveWithFailure
+    safeDiv
+    (10, 0)
+```
+
+```leanOutput activeFailingafeDiv
+Sum.inl "tried to divide 10 by 0"
 ```
