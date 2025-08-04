@@ -1,0 +1,1 @@
+window.docContents[25].resolve({"/Programming-With-Failure/#PSBP-Documentation--Programming-With-Failure":{"id":"/Programming-With-Failure/#PSBP-Documentation--Programming-With-Failure","header":"11. Programming With Failure","context":"PSBP Documentation","contents":"\n\n\n\n\n\n\n\n"}});

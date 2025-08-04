@@ -785,7 +785,7 @@ window.onload = () => {
             <div class="split-toc book">
               <div class="title">
                 <label for="--verso-manual-toc-----bookRoot" class="toggle-split-toc"><input type="checkbox" class="toggle-split-toc" id="--verso-manual-toc-----bookRoot" checked="checked"></label><span class="">Table of Contents</span></div>
-              <table><tr class="numbered"><td class="num">1.</td><td><a href="Warning/#PSBP-Documentation--Warning">Warning</a></td></tr><tr class="current numbered"><td class="num">2.</td><td><a href="Introduction/#PSBP-Documentation--Introduction">Introduction</a></td></tr><tr class="numbered"><td class="num">3.</td><td><a href="The--PSBP--Library-type-classes/#PSBP-Documentation--The--PSBP--Library-type-classes">The <code>PSBP</code> Library type classes</a></td></tr><tr class="numbered"><td class="num">4.</td><td><a href="fibonacci--and--factorial/#PSBP-Documentation--fibonacci--and--factorial"><code>fibonacci</code> and <code>factorial</code></a></td></tr><tr class="numbered"><td class="num">5.</td><td><a href="What-about--Functorial-___/#PSBP-Documentation--What-about--Functorial-___">What about <code>Functorial</code>?</a></td></tr><tr class="numbered"><td class="num">6.</td><td><a href="Computation-Valued-Functions/#PSBP-Documentation--Computation-Valued-Functions">Computation Valued Functions</a></td></tr><tr class="numbered"><td class="num">7.</td><td><a href="ActiveProgram/#PSBP-Documentation--ActiveProgram"><code>ActiveProgram</code></a></td></tr><tr class="numbered"><td class="num">8.</td><td><a href="ReactiveProgram/#PSBP-Documentation--ReactiveProgram"><code>ReactiveProgram</code></a></td></tr><tr class="numbered"><td class="num">9.</td><td><a href="Positional-Programming/#PSBP-Documentation--Positional-Programming">Positional Programming</a></td></tr><tr class="numbered"><td class="num">10.</td><td><a href="Stateful-Programming/#PSBP-Documentation--Stateful-Programming">Stateful Programming</a></td></tr></table></div>
+              <table><tr class="numbered"><td class="num">1.</td><td><a href="Warning/#PSBP-Documentation--Warning">Warning</a></td></tr><tr class="current numbered"><td class="num">2.</td><td><a href="Introduction/#PSBP-Documentation--Introduction">Introduction</a></td></tr><tr class="numbered"><td class="num">3.</td><td><a href="The--PSBP--Library-type-classes/#PSBP-Documentation--The--PSBP--Library-type-classes">The <code>PSBP</code> Library type classes</a></td></tr><tr class="numbered"><td class="num">4.</td><td><a href="fibonacci--and--factorial/#PSBP-Documentation--fibonacci--and--factorial"><code>fibonacci</code> and <code>factorial</code></a></td></tr><tr class="numbered"><td class="num">5.</td><td><a href="What-about--Functorial-___/#PSBP-Documentation--What-about--Functorial-___">What about <code>Functorial</code>?</a></td></tr><tr class="numbered"><td class="num">6.</td><td><a href="Computation-Valued-Functions/#PSBP-Documentation--Computation-Valued-Functions">Computation Valued Functions</a></td></tr><tr class="numbered"><td class="num">7.</td><td><a href="ActiveProgram/#PSBP-Documentation--ActiveProgram"><code>ActiveProgram</code></a></td></tr><tr class="numbered"><td class="num">8.</td><td><a href="ReactiveProgram/#PSBP-Documentation--ReactiveProgram"><code>ReactiveProgram</code></a></td></tr><tr class="numbered"><td class="num">9.</td><td><a href="Positional-Programming/#PSBP-Documentation--Positional-Programming">Positional Programming</a></td></tr><tr class="numbered"><td class="num">10.</td><td><a href="Programming-With-State/#PSBP-Documentation--Programming-With-State">Programming With State</a></td></tr><tr class="numbered"><td class="num">11.</td><td><a href="Programming-With-Failure/#PSBP-Documentation--Programming-With-Failure">Programming With Failure</a></td></tr></table></div>
             <div class="split-toc">
               <div class="title">
                 <span class="no-toggle"></span><span class="number">2.</span> <span class="current"><a href="Introduction/#PSBP-Documentation--Introduction">Introduction</a></span></div>
@@ -806,16 +806,17 @@ computations as effectful expressions. They are operational artifacts. They do n
 mathematical sense. Functions, on the other hand, are denotational artifacts. They do have a meaning in the mathematical
 sense.</p>
             <p>
-              This document refers to effectful function as programs. So how to specify programs? That is what the <code>PSBP</code> library is
-all about. <code>PSPB</code> stands for "Program Specification Based Programming". <code>PSBP</code> is a library that allows you to specify
-programs, and then materialize them according to specific instances of the type classes in terms of which they are
-specified. <code>PSBP</code> can be seen as a library level programming language. In what follows we will, by abuse of language,
-often write "program" instead of "program specification" or "program (specification) materialization". Hopefully this
-will not lead to confusion.</p>
+              This document refers to effectful function as programs. So how to specify program capabilities? That is what the <code>PSBP</code>
+library is all about. <code>PSPB</code> stands for "Program Specification Based Programming". <code>PSBP</code> is a library that allows you
+to write program specifications in terms of program capabilities that are specified using type classes. You can then
+materialize those program specifications according to instances of the type classes in terms of which the program
+specifications are written. <code>PSBP</code> can be seen as a library level programming language. In what follows we will, by
+abuse of language, often write "program" instead of "program specification" or
+"program (specification) materialization". Hopefully this will not lead to confusion.</p>
             <p>
-              Just like expressions are evaluated to yield a result value, computations are executed to a result value, but, they may
-executing them may also perform side effects along the way. Just like functions, programs, by running them,transform
-argument values to result values, but, they may perform side effects along the way.</p>
+              Just like expressions are evaluated to yield a result value, computations are executed to a result value, but, executing
+them may also perform side effects along the way. Just like functions, programs, by running them, transform initial
+(argument) values to filan (result) values, but, they may perform side effects along the way.</p>
             <p>
               Why programming in terms of program specifications instead of in terms of computations? Both programs and computations
 form a component system. The difference is that programs are closed components, while computations are open components.
@@ -829,6 +830,8 @@ matter of taste. I hope to convince you that pointfree is more elegant than poin
 similar to pointful programming. It is is useful for writing recipe-like programs, where, starting from an initial
 value, intermediate values are constructed, and. together with the initial value, are passed to the next step, until a
 final value is produced. The initial value and intermediate values are accessed positionally. More about this later.</p>
+            <p>
+              By the way, a value can be a single-value or a multi-value, repesented a (nested) tuple. More about this later.</p>
             </section>
           <nav class="prev-next-buttons">
             <a class="local-button active" href="Warning/#PSBP-Documentation--Warning" rel="prev" title="1. Warning"><span class="arrow">←</span><span class="where">1. Warning</span></a><a class="local-button active" href="The--PSBP--Library-type-classes/#PSBP-Documentation--The--PSBP--Library-type-classes" rel="next" title="3. The PSBP Library type classes"><span class="where">3. The PSBP Library type classes</span><span class="arrow">→</span></a></nav>

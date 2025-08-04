@@ -32,16 +32,17 @@ computations as effectful expressions. They are operational artifacts. They do n
 mathematical sense. Functions, on the other hand, are denotational artifacts. They do have a meaning in the mathematical
 sense.
 
-This document refers to effectful function as programs. So how to specify programs? That is what the `PSBP` library is
-all about. `PSPB` stands for "Program Specification Based Programming". `PSBP` is a library that allows you to specify
-programs, and then materialize them according to specific instances of the type classes in terms of which they are
-specified. `PSBP` can be seen as a library level programming language. In what follows we will, by abuse of language,
-often write "program" instead of "program specification" or "program (specification) materialization". Hopefully this
-will not lead to confusion.
+This document refers to effectful function as programs. So how to specify program capabilities? That is what the `PSBP`
+library is all about. `PSPB` stands for "Program Specification Based Programming". `PSBP` is a library that allows you
+to write program specifications in terms of program capabilities that are specified using type classes. You can then
+materialize those program specifications according to instances of the type classes in terms of which the program
+specifications are written. `PSBP` can be seen as a library level programming language. In what follows we will, by
+abuse of language, often write "program" instead of "program specification" or
+"program (specification) materialization". Hopefully this will not lead to confusion.
 
-Just like expressions are evaluated to yield a result value, computations are executed to a result value, but, they may
-executing them may also perform side effects along the way. Just like functions, programs, by running them,transform
-argument values to result values, but, they may perform side effects along the way.
+Just like expressions are evaluated to yield a result value, computations are executed to a result value, but, executing
+them may also perform side effects along the way. Just like functions, programs, by running them, transform initial
+(argument) values to filan (result) values, but, they may perform side effects along the way.
 
 Why programming in terms of program specifications instead of in terms of computations? Both programs and computations
 form a component system. The difference is that programs are closed components, while computations are open components.
@@ -56,32 +57,35 @@ similar to pointful programming. It is is useful for writing recipe-like program
 value, intermediate values are constructed, and. together with the initial value, are passed to the next step, until a
 final value is produced. The initial value and intermediate values are accessed positionally. More about this later.
 
+By the way, a value can be a single-value or a multi-value, repesented a (nested) tuple. More about this later.
+
 # The `PSBP` Library type classes
 
 ## `class Functional`
 
 Functions can, somehow, be used as programs. Well, functions are what pure functional programming is all about.
-Functions that are used as programs are effectless. We can define functions as programs in a formal way by defining a
+Functions that are used as programs are effectfree. We can define functions as programs in a formal way by defining a
 type class. This is what we do with the `Functional` type class.
 
 ```savedLean
-class Functional (program : Type → Type → Type) where
+class Functional
+    (program : Type → Type → Type) where
   asProgram {α β : Type} :
     (α → β) → program α β
 
 export Functional (asProgram)
 ```
 
-A program, just like a function, transforms an initial value, its argument, to a final one, its result. By the way, a
-value can repesent many values as a (nested) product. Such a value is called a multi-value. More about this later.
+A program, just like a function, transforms an initial value, its argument, to a final one, its result.
 
 ## `class Functorial`
 
-Functions can act upon programs. They do that in an effectfree way. We can define functions acting upon programs in a
-formal way by defining a type class. This is what we do with the `Functorial` type class.
+Functions can act upon programs. They act in an effectfree way. We can define functions acting upon programs in a formal
+way by defining a type class. This is what we do with the `Functorial` type class.
 
 ```savedLean
-class Functorial (program : Type → Type → Type) where
+class Functorial
+    (program : Type → Type → Type) where
   andThenF {α β γ : Type} :
     program α β → (β → γ) → program α γ
 
@@ -92,15 +96,17 @@ infixl:50 " >-> " => andThenF
 
 `andThenF` also has infix notation `>->`.
 
-We have, and will continue to, use suffux `F` to distinguish functions from corresponding programs.
+We have used, and will continue to use, suffux `F` to distinguish functions from corresponding functions as programs.
 
 ## `class Creational`
 
-Programs can produce product values. Their effects are accumulated from left to right. We can define programs that
-produce product values in a formal way by defining a type class. This is what we do with the `Creational` type class.
+Programs can be combined to produce product values. Their effects are accumulated from left to right. We can define
+programs that produce product values in a formal way by defining a type class. This is what we do with the `Creational`
+type class.
 
 ```savedLean
-class Creational (program : Type → Type → Type) where
+class Creational
+    (program : Type → Type → Type) where
   product {α β γ : Type} :
     program α β → program α γ → program α (β × γ)
 
@@ -111,7 +117,6 @@ infixl:60 " &&& " => product
 
 `product` also has infix notation `&&&`.
 
-Nested product values are called multi-values.
 
 ## `class Sequential`
 
@@ -122,7 +127,8 @@ programs that are sequentially composed in a formal way by defining a type class
 `Sequential` type class.
 
 ```savedLean
-class Sequential (program : Type → Type → Type) where
+class Sequential
+    (program : Type → Type → Type) where
   andThen {α β γ : Type} :
     program α β → program β γ → program α γ
 
@@ -135,10 +141,11 @@ infixl:50 " >=> " => andThen
 
 ## `class Conditional`
 
-Programs can consume sum values. Only the effect of left or right one is performed.
+Programs can be combined to consume sum values. Only the left one or right one is used.
 
 ```savedLean
-class Conditional (program : Type → Type → Type) where
+class Conditional
+    (program : Type → Type → Type) where
   sum {α β γ : Type} :
     program γ α → program β α → program (γ ⊕ β) α
 
@@ -152,8 +159,8 @@ infixl:55 " ||| " => sum
 
 ## Capability combinations
 
-The idea behind writing programs in terms of the type classes like the ones defined so far is to use exactly those
-capabilities that are really needed to write the programs. Some combinations of type classes are more expressive than
+The idea behind writing programs in terms of type classes like the ones defined so far is to use exactly those
+capabilities that are necessary to write the programs. Some combinations of type classes are more expressive than
 other combinations. This implies that what you can do with them is more than what you can do the less expressive ones.
 But this comes with a price. They are less flexible as far as implementation and corresponding materialization is
 concerned than the less expressive ones.
@@ -217,7 +224,8 @@ def if_
     λ αpb t_apβ f_apβ =>
       let_ αpb $
         in_ $
-          trueToLeftFalseToRight >=> t_apβ ||| f_apβ
+          trueToLeftFalseToRight >=>
+          t_apβ ||| f_apβ
 
 def else_ {α} : α → α := id
 ```
@@ -256,31 +264,38 @@ def multiplyF : Nat × Nat → Nat :=
 and corresponding primitive programs
 
 ```savedLean
-def isZero [Functional program] :
+def isZero
+    [Functional program] :
   program Nat Bool :=
     asProgram isZeroF
 
-def isOne [Functional program] :
+def isOne
+    [Functional program] :
   program Nat Bool :=
     asProgram isOneF
 
-def one [Functional program] :
+def one
+    [Functional program] :
   program Nat Nat :=
     asProgram oneF
 
-def minusOne [Functional program] :
+def minusOne
+    [Functional program] :
   program Nat Nat :=
     asProgram minusOneF
 
-def minusTwo [Functional program] :
+def minusTwo
+    [Functional program] :
   program Nat Nat :=
     asProgram minusTwoF
 
-def add [Functional program] :
+def add
+    [Functional program] :
   program (Nat × Nat) Nat :=
     asProgram addF
 
-def multiply [Functional program] :
+def multiply
+    [Functional program] :
   program (Nat × Nat) Nat :=
     asProgram multiplyF
 ```
@@ -321,10 +336,10 @@ unsafe def factorial
 
 The `unsafe` keyword is used because the definitions above do not type check without them. `fibonacci` and `factorial`
 are program specifications, they need to be materialized before they can be used. It is instructive to compare this with
-the painting ["Ceci n'est pas une pipe"](https://en.wikipedia.org/wiki/The_Treachery_of_Images) of René Magritte. The
-painting is, of course, not a pipe, it is a description of a pipe. A specification is also a special kind of
-description. Much in the same way, descriptions of effects are, luckily enough, also not side effects. So it is safe to
-hang a picture of a bomb explosion on your wall.
+the painting ["Ceci n'est pas une pipe"](https://en.wikipedia.org/wiki/The_Treachery_of_Images) of René Magritte. Much
+in the same way, descriptions of effects are, luckily enough, also not side effects. So it is safe to hang a picture of
+a bomb explosion on your wall.The painting is, of course, not a pipe, it is a description of a pipe. A specification is
+also a (special kind of) description.
 
 # What about `Functorial`?
 
@@ -344,8 +359,8 @@ instance
 The `f` in `βfγ` stands for "function".
 
 So why introducing `Functorial` in the first place? Well, the combination of `Functorial` with `Functional`, and
-`Creational` is sufficiently expressive to write interesting programs and that are more flexible as far as
-implementation and corresponding materialization is concerned than the ones using `Sequential`.
+`Creational` is sufficiently expressive to write interesting programs that are more flexible as far as implementation
+and corresponding materialization is concerned than the ones using `Sequential`.
 
 Below are two programs, `twiceMinusOne01` and `twiceMinusOne02`.
 
@@ -371,7 +386,7 @@ Using `Sequential` is, in this case, an unnecessary overkill because the additio
 effectfree.
 
 That being said, you may argue that what you have read so far is also an unnecessary overkill because, after all, I only
-showed (effectfree) functions. But think of replacing `minusOne` and/ or `minusTwO` by an effectful program. Having more
+showed (effectfree) functions. But think of replacing `minusOne` and/ or `minusTwo` by an effectful program. Having more
 implementation and corresponding materialization flexibility when dealing with effects can really be useful. A standard
 example is more flexible error handling when processing a submitted web form and even error correction when parsing a
 document.
@@ -396,13 +411,13 @@ instance [Functor computation] :
     Functorial
       (FromComputationValuedFunction computation) where
   andThenF :=
-    λ ⟨αfcβ⟩ => λ βfγ => ⟨λ α => βfγ <$> αfcβ α⟩
+    λ ⟨αfcβ⟩ βfγ => ⟨λ α => βfγ <$> αfcβ α⟩
 
 instance [Applicative computation] :
     Creational
       (FromComputationValuedFunction computation) where
   product := λ ⟨αfcβ⟩ ⟨αfcγ⟩ =>
-    ⟨λ α => pure Prod.mk <*> αfcβ α <*> αfcγ α⟩
+    ⟨λ α => pure .mk <*> αfcβ α <*> αfcγ α⟩
 
 instance [Monad computation] :
     Sequential
@@ -426,6 +441,9 @@ instance :
 
 The the `c` in `αfcβ` stands for "computation".
 
+A word of warning, The code above sometimes uses `⟨` and `⟩`, different from `(` and `)`, to asemble and disassemble
+`structure`'s like `FromComputationValuedFunction`.
+
 # `ActiveProgram`
 
 There is not a lot of work to be done for active implementations. The `Functor`, `Applicative` and `Monad`
@@ -439,7 +457,7 @@ abbrev ActiveProgram α β :=
 
 def materializeActive :
     ActiveProgram α β → (α → β) :=
-  λ ⟨αpβ⟩ => λ α => (αpβ α).run
+  λ ⟨αpβ⟩ α => (αpβ α).run
 ```
 
 We can now run our programs in an active way.
@@ -500,34 +518,33 @@ abbrev Reactive ρ := ReactiveT ρ Active
 instance {ρ: Type} :
     Functor (ReactiveT ρ computation) where
   map :=
-    λ αfβ rcα =>
-      ReactiveT.mk (λ γ => rcα.runReactiveT (γ ∘ αfβ))
+    λ αfβ ⟨rcα⟩ =>
+      ⟨λ γ => rcα (γ ∘ αfβ)⟩
 
 instance {ρ: Type} :
     Applicative (ReactiveT ρ computation) where
   pure := λ α => ReactiveT.mk (λ αfcρ => αfcρ α)
   seq :=
-    λ rcαfβ ufrcα =>
-      ReactiveT.mk (λ bβfcρ =>
-        rcαfβ.runReactiveT $
+    λ ⟨rcαfβ⟩ ufrcα =>
+      ⟨λ bβfcρ =>
+        rcαfβ $
           (λ αfβ =>
-            (ufrcα ()).runReactiveT (bβfcρ ∘ αfβ)))
+            (ufrcα ()).runReactiveT (bβfcρ ∘ αfβ))⟩
 
 instance {ρ: Type} :
     Monad (ReactiveT ρ computation) where
   bind :=
-    λ rcα αfrcβ =>
-      ReactiveT.mk (λ βfcρ =>
-        rcα.runReactiveT (λ α =>
-        (αfrcβ α).runReactiveT βfcρ))
+    λ ⟨rcα⟩ αfrcβ =>
+      ⟨λ βfcρ =>
+        rcα (λ α =>
+        (αfrcβ α).runReactiveT βfcρ)⟩
 
 abbrev ReactiveProgram ρ computation :=
   FromComputationValuedFunction (ReactiveT ρ computation)
 
 def materializeReactive {α β : Type} :
     ReactiveProgram β Active α β → α → β :=
-  λ ⟨αpβ⟩=>
-    λ α =>
+  λ ⟨αpβ⟩ α =>
       (αpβ α).runReactiveT id
 ```
 
@@ -579,7 +596,7 @@ We can now run our programs in a reactive way.
 18
 ```
 
-We did not change the definition of our programs, we only materialized them in another way.
+We did not change the definition of our programs, we only materialized them in another way!
 
 # Positional Programming
 
@@ -587,15 +604,21 @@ We did not change the definition of our programs, we only materialized them in a
 
 Pointfree programming, like is done for `fibonacci` and `factorial` may be a elegant, but `PSBP` also enables, and,
 for reasons of elegance, sometimes needs, positional programming. Let's first start with `Functorial` based positional
-programming. Suppose we want to run the function that transforms an argument value `n` of type `Nat` to result value
-`(((n-1, n-2), 2), 3) => (n-2) + 2 * (n-1) + 3`. The `someProgram01` below could be a solution. `someProgram01` makes
-use of `Functorial`.
+programming. Suppose we want to run the function that transforms an initial (argument) value `n` of type `Nat` to the
+final (result) value `(((n-1, n-2), 2), 3) => (n-2) + 2 * (n-1) + 3`. `someProgram01` below could be a solution.
+`someProgram01` makes use of `Functorial`.
+
+Let
 
 ```savedLean (name := someProgram01)
 def twoF : Nat → Nat := λ _ => 2
 
 def threeF : Nat → Nat := λ _ => 3
+```
 
+and
+
+```savedLean
 def two [Functional program] :
   program Nat Nat :=
     asProgram twoF
@@ -603,15 +626,18 @@ def two [Functional program] :
 def three [Functional program] :
   program Nat Nat :=
     asProgram threeF
+```
+in
 
+```savedLean
 def someProgram01
     [Functional program]
     [Functorial program]
     [Creational program] :
   program Nat Nat :=
     minusOne &&& minusTwo &&& two &&& three >->
-      λ (((ν1, ν2), ν3), ν4) =>
-        ν2 + ν3 * ν1 + ν4
+      λ (((n1, n2), n3), n4) =>
+        n2 + n3 * n1 + n4
 ```
 
 ```savedLean (name := activeSomeProgram01)
@@ -642,7 +668,7 @@ involved is homogeneous but it might as well be a heterogeneous one. More about 
 
 ## Using `Sequential`
 
-The `someProgram02` below could also be a solution. `someProgram02` makes use of `Sequential`.
+`someProgram02` below could also be a solution. `someProgram02` makes use of `Sequential`.
 
 ```savedLean
 def someProgram02
@@ -651,8 +677,8 @@ def someProgram02
     [Creational program] :
   program Nat Nat :=
     minusOne &&& minusTwo &&& two &&& three >=>
-      asProgram (λ (((ν1, ν2), ν3), ν4) =>
-        ν2 + ν3 * ν1 + ν4)
+      asProgram (λ (((n1, n2), n3), n4) =>
+        n2 + n3 * n1 + n4)
 ```
 
 ```savedLean (name := activeSomeProgram02)
@@ -665,7 +691,7 @@ def someProgram02
 29
 ```
 
-As already mentioned before using `Sequential` is, in this case, an overkill.
+As already mentioned before, using `Sequential` is, in this case, an overkill.
 
 ## `class Positional`
 
@@ -682,11 +708,14 @@ export Positional (at_)
 infixl:45 " @ " => at_
 ```
 
+`at_` also has infix notation `@`.
+
+
 The `σ` stands for (runtime) "stack", and `σ × β` stands for `β` pushed onto `σ`. More about this later.
 
-The `at_` library level keyword of `Positional` can be defined in terms of `Functional`, `Creational` and `Sequential`.
-
 ## `instance Positional`
+
+The `at_` library level keyword of `Positional` can be defined in terms of `Functional`, `Creational` and `Sequential`.
 
 ```savedLean
 instance
@@ -789,8 +818,8 @@ unsafe def positionalSumOfFibonacciAndFactorial
 
 ## `positionalFactorialOfFibonacci'` and `positionalSumOfFibonacciAndFactorial'`
 
-It is instructive to show the runtime stack using `identity` as in `positionalFactorialOfFibonacci'` and
-`positionalSumOfFibonacciAndFactorial'`
+It is instructive to show the runtime stack using `identity`. This is done in `positionalFactorialOfFibonacci'` and
+`positionalSumOfFibonacciAndFactorial'` below.
 
 ```savedLean
 unsafe def positionalFactorialOfFibonacci'
@@ -855,9 +884,11 @@ class WithState
 export WithState (readState writeState)
 ```
 
+The `σ` above stands for "state".
+
 ### `def modifyStateWith`
 
-Below is `modifyStateWith` a useful programming with state capability.
+Below is `modifyStateWith`, a useful programming with state capability.
 
 Let
 
@@ -904,7 +935,7 @@ def withInitialStateAsInitialValue
       readState >=> σpτ
 ```
 
-Given a program `σpτ`, `withInitialStateAsInitialValue` transforms it to use the initial state as an initial (argument)
+Given a program `σpτ`, `withInitialStateAsInitialValue` transforms it to use the initial state as initial (argument)
 value.
 
 ## `instance WithState σ`
@@ -915,8 +946,8 @@ value.
 instance [MonadStateOf σ computation] :
     WithState σ
       (FromComputationValuedFunction computation) where
-  readState := .mk λ _ => get
-  writeState := .mk set
+  readState := ⟨λ _ => get⟩
+  writeState := ⟨set⟩
 ```
 
 ## `ProgramWithState`
@@ -944,7 +975,7 @@ def materializeActiveWithState {α β : Type} :
 
 ## `fibonacciIncrementingArgumentPair`
 
-Program `fibonacciIncrementingArgumentPair` below shows the effectfulness of stateful programs by using an
+Program `fibonacciIncrementingArgumentPair` below shows the effectfulness of programs with state by using the
 initial state as initial (argument) value and modifying it.
 
 Let
@@ -1004,7 +1035,9 @@ export WithFailure (failWith)
 
 ## `instance WithFailure ε`
 
-`WithFailure ε` is implemented in terms of `Monad`.
+`WithFailure ε` is implemented in terms of `FailureT`, which is defined in terms of `⊕`. Given an initial (argument)
+value, a program with failure may transform it to a final failure (result) value (at left) or a final succedd (result)
+value (at right).
 
 ```savedLean
 def FailureT
@@ -1020,28 +1053,26 @@ def FailureT.mk
     (cεoα : computation (ε ⊕ α)) :
   FailureT ε computation α := cεoα
 
-instance
-    [Monad computation] :
-  Monad (FailureT ε computation) where
-    map  :=
-    λ αfβ ftcα =>
-      FailureT.mk (ftcα >>= λ εoα => match εoα with
-        | (Sum.inr α) => pure $ Sum.inr (αfβ α)
-        | (Sum.inl ε) => pure $ Sum.inl ε)
-    pure :=
-      λ α =>
-        FailureT.mk (pure (Sum.inr α))
-    bind :=
-    λ ftcα αfftcβ =>
-      FailureT.mk (ftcα >>= λ εoα => match εoα with
-        | Sum.inr α  => αfftcβ α
-        | Sum.inl ε  => pure (Sum.inl ε))
+instance [Monad computation] :
+    Monad (FailureT ε computation) where
+  map  :=
+  λ αfβ ftcα =>
+    .mk (ftcα >>= λ εoα => match εoα with
+      | (Sum.inr α) => pure $ Sum.inr (αfβ α)
+      | (Sum.inl ε) => pure $ Sum.inl ε)
+  pure :=
+    λ α =>
+      .mk (pure (Sum.inr α))
+  bind :=
+  λ ftcα αfftcβ =>
+    .mk (ftcα >>= λ εoα => match εoα with
+      | Sum.inr α  => αfftcβ α
+      | Sum.inl ε  => pure (Sum.inl ε))
 
-instance {ε : Type}
-    [Applicative computation] :
-  WithFailure ε
-    (FromComputationValuedFunction
-      (FailureT ε computation)) where
+instance {ε : Type} [Applicative computation] :
+    WithFailure ε
+      (FromComputationValuedFunction
+        (FailureT ε computation)) where
   failWith :=
     λ αfε =>
       ⟨λ α =>
@@ -1063,8 +1094,7 @@ def materializeWithFailure
       ProgramWithFailure ε computation α β →
       α →
       computation (ε ⊕ β) :=
-  λ ⟨αpβ⟩ =>
-   λ α =>
+  λ ⟨αpβ⟩ α =>
     αpβ α
 
 def materializeActiveWithFailure {α β : Type} :

@@ -6,16 +6,31 @@
  {"title": "Verso.Genre.Manual.example",
   "description": null,
   "contents":
-  {"usingAndModifyingStateAsArgumentWith":
-   [{"id": "usingAndModifyingStateAsArgumentWith",
+  {"withInitialStateAsInitialValue":
+   [{"id": "withInitialStateAsInitialValue",
      "data":
-     {"/#usingAndModifyingStateAsArgumentWith":
-      {"display": "usingAndModifyingStateAsArgumentWith",
+     {"/#withInitialStateAsInitialValue":
+      {"display": "withInitialStateAsInitialValue",
        "context":
        ["PSBP Documentation",
-        "Stateful Programming",
-        "class Stateful σ",
-        "def modifyStateWith"]}},
+        "Programming With State",
+        "withInitialStateAsInitialValue"]}},
+     "address": "/"}],
+   "unsafeDivF":
+   [{"id": "unsafeDivF",
+     "data":
+     {"/#unsafeDivF":
+      {"display": "unsafeDivF",
+       "context":
+       ["PSBP Documentation", "Programming With Failure", "safeDiv"]}},
+     "address": "/"}],
+   "unsafeDiv":
+   [{"id": "unsafeDiv",
+     "data":
+     {"/#unsafeDiv":
+      {"display": "unsafeDiv",
+       "context":
+       ["PSBP Documentation", "Programming With Failure", "safeDiv"]}},
      "address": "/"}],
    "twoF":
    [{"id": "twoF",
@@ -108,9 +123,17 @@
       {"display": "second",
        "context":
        ["PSBP Documentation",
-        "Stateful Programming",
-        "class Stateful σ",
+        "Programming With State",
+        "class WithState σ",
         "def modifyStateWith"]}},
+     "address": "/"}],
+   "safeDiv":
+   [{"id": "safeDiv",
+     "data":
+     {"/#safeDiv":
+      {"display": "safeDiv",
+       "context":
+       ["PSBP Documentation", "Programming With Failure", "safeDiv"]}},
      "address": "/"}],
    "positionalSumOfFibonacciAndFactorial'":
    [{"id": "positionalSumOfFibonacciAndFactorial___",
@@ -211,8 +234,8 @@
       {"display": "modifyStateWith",
        "context":
        ["PSBP Documentation",
-        "Stateful Programming",
-        "class Stateful σ",
+        "Programming With State",
+        "class WithState σ",
         "def modifyStateWith"]}},
      "address": "/"}],
    "minusTwoF":
@@ -243,13 +266,23 @@
       {"display": "minusOne",
        "context": ["PSBP Documentation", "fibonacci  and  factorial"]}},
      "address": "/"}],
-   "materializeStateful":
-   [{"id": "materializeStateful",
+   "materializeWithState":
+   [{"id": "materializeWithState",
      "data":
-     {"/#materializeStateful":
-      {"display": "materializeStateful",
+     {"/#materializeWithState":
+      {"display": "materializeWithState",
        "context":
-       ["PSBP Documentation", "Stateful Programming", "StatefulProgram"]}},
+       ["PSBP Documentation", "Programming With State", "ProgramWithState"]}},
+     "address": "/"}],
+   "materializeWithFailure":
+   [{"id": "materializeWithFailure",
+     "data":
+     {"/#materializeWithFailure":
+      {"display": "materializeWithFailure",
+       "context":
+       ["PSBP Documentation",
+        "Programming With Failure",
+        "ProgramWithFailure"]}},
      "address": "/"}],
    "materializeReactive":
    [{"id": "materializeReactive",
@@ -258,13 +291,23 @@
       {"display": "materializeReactive",
        "context": ["PSBP Documentation", "ReactiveProgram"]}},
      "address": "/"}],
-   "materializeActiveStateful":
-   [{"id": "materializeActiveStateful",
+   "materializeActiveWithState":
+   [{"id": "materializeActiveWithState",
      "data":
-     {"/#materializeActiveStateful":
-      {"display": "materializeActiveStateful",
+     {"/#materializeActiveWithState":
+      {"display": "materializeActiveWithState",
        "context":
-       ["PSBP Documentation", "Stateful Programming", "StatefulProgram"]}},
+       ["PSBP Documentation", "Programming With State", "ProgramWithState"]}},
+     "address": "/"}],
+   "materializeActiveWithFailure":
+   [{"id": "materializeActiveWithFailure",
+     "data":
+     {"/#materializeActiveWithFailure":
+      {"display": "materializeActiveWithFailure",
+       "context":
+       ["PSBP Documentation",
+        "Programming With Failure",
+        "ProgramWithFailure"]}},
      "address": "/"}],
    "materializeActive":
    [{"id": "materializeActive",
@@ -311,6 +354,22 @@
      {"/#isOne":
       {"display": "isOne",
        "context": ["PSBP Documentation", "fibonacci  and  factorial"]}},
+     "address": "/"}],
+   "isNotZeroF":
+   [{"id": "isNotZeroF",
+     "data":
+     {"/#isNotZeroF":
+      {"display": "isNotZeroF",
+       "context":
+       ["PSBP Documentation", "Programming With Failure", "safeDiv"]}},
+     "address": "/"}],
+   "isNotZero":
+   [{"id": "isNotZero",
+     "data":
+     {"/#isNotZero":
+      {"display": "isNotZero",
+       "context":
+       ["PSBP Documentation", "Programming With Failure", "safeDiv"]}},
      "address": "/"}],
    "in_":
    [{"id": "in_",
@@ -359,8 +418,8 @@
       {"display": "first",
        "context":
        ["PSBP Documentation",
-        "Stateful Programming",
-        "class Stateful σ",
+        "Programming With State",
+        "class WithState σ",
         "def modifyStateWith"]}},
      "address": "/"}],
    "fibonacciIncrementingArgumentPair":
@@ -370,7 +429,7 @@
       {"display": "fibonacciIncrementingArgumentPair",
        "context":
        ["PSBP Documentation",
-        "Stateful Programming",
+        "Programming With State",
         "fibonacciIncrementingArgumentPair"]}},
      "address": "/"}],
    "fibonacciIncrementingArgument":
@@ -380,7 +439,7 @@
       {"display": "fibonacciIncrementingArgument",
        "context":
        ["PSBP Documentation",
-        "Stateful Programming",
+        "Programming With State",
         "fibonacciIncrementingArgumentPair"]}},
      "address": "/"}],
    "fibonacci":
@@ -422,37 +481,49 @@
       {"display": "add",
        "context": ["PSBP Documentation", "fibonacci  and  factorial"]}},
      "address": "/"}],
-   "StatefulProgram":
-   [{"id": "StatefulProgram",
+   "WithState.writeState":
+   [{"id": "WithState___writeState",
      "data":
-     {"/#StatefulProgram":
-      {"display": "StatefulProgram",
-       "context":
-       ["PSBP Documentation", "Stateful Programming", "StatefulProgram"]}},
-     "address": "/"}],
-   "Stateful.writeState":
-   [{"id": "Stateful___writeState",
-     "data":
-     {"/#Stateful___writeState":
+     {"/#WithState___writeState":
       {"display": "writeState",
        "context":
-       ["PSBP Documentation", "Stateful Programming", "class Stateful σ"]}},
+       ["PSBP Documentation", "Programming With State", "class WithState σ"]}},
      "address": "/"}],
-   "Stateful.readState":
-   [{"id": "Stateful___readState",
+   "WithState.readState":
+   [{"id": "WithState___readState",
      "data":
-     {"/#Stateful___readState":
+     {"/#WithState___readState":
       {"display": "readState",
        "context":
-       ["PSBP Documentation", "Stateful Programming", "class Stateful σ"]}},
+       ["PSBP Documentation", "Programming With State", "class WithState σ"]}},
      "address": "/"}],
-   "Stateful":
-   [{"id": "Stateful",
+   "WithState":
+   [{"id": "WithState",
      "data":
-     {"/#Stateful":
-      {"display": "Stateful",
+     {"/#WithState":
+      {"display": "WithState",
        "context":
-       ["PSBP Documentation", "Stateful Programming", "class Stateful σ"]}},
+       ["PSBP Documentation", "Programming With State", "class WithState σ"]}},
+     "address": "/"}],
+   "WithFailure.failWith":
+   [{"id": "WithFailure___failWith",
+     "data":
+     {"/#WithFailure___failWith":
+      {"display": "failWith",
+       "context":
+       ["PSBP Documentation",
+        "Programming With Failure",
+        "class WithFailure ε"]}},
+     "address": "/"}],
+   "WithFailure":
+   [{"id": "WithFailure",
+     "data":
+     {"/#WithFailure":
+      {"display": "WithFailure",
+       "context":
+       ["PSBP Documentation",
+        "Programming With Failure",
+        "class WithFailure ε"]}},
      "address": "/"}],
    "Sequential.andThen":
    [{"id": "Sequential___andThen",
@@ -501,6 +572,24 @@
      {"/#Reactive":
       {"display": "Reactive",
        "context": ["PSBP Documentation", "ReactiveProgram"]}},
+     "address": "/"}],
+   "ProgramWithState":
+   [{"id": "ProgramWithState",
+     "data":
+     {"/#ProgramWithState":
+      {"display": "ProgramWithState",
+       "context":
+       ["PSBP Documentation", "Programming With State", "ProgramWithState"]}},
+     "address": "/"}],
+   "ProgramWithFailure":
+   [{"id": "ProgramWithFailure",
+     "data":
+     {"/#ProgramWithFailure":
+      {"display": "ProgramWithFailure",
+       "context":
+       ["PSBP Documentation",
+        "Programming With Failure",
+        "ProgramWithFailure"]}},
      "address": "/"}],
    "Positional.at_":
    [{"id": "Positional___at_",
@@ -571,6 +660,26 @@
      {"/#FromComputationValuedFunction":
       {"display": "FromComputationValuedFunction",
        "context": ["PSBP Documentation", "Computation Valued Functions"]}},
+     "address": "/"}],
+   "FailureT.mk":
+   [{"id": "FailureT___mk",
+     "data":
+     {"/#FailureT___mk":
+      {"display": "FailureT.mk",
+       "context":
+       ["PSBP Documentation",
+        "Programming With Failure",
+        "instance WithFailure ε"]}},
+     "address": "/"}],
+   "FailureT":
+   [{"id": "FailureT",
+     "data":
+     {"/#FailureT":
+      {"display": "FailureT",
+       "context":
+       ["PSBP Documentation",
+        "Programming With Failure",
+        "instance WithFailure ε"]}},
      "address": "/"}],
    "Creational.product":
    [{"id": "Creational___product",

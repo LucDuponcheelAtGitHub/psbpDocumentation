@@ -1,17 +1,18 @@
-{"99": "<code>ReactiveT ρ computation α✝</code>",
- "98":
+{"99":
+ "<code>ReactiveT.mk {ρ : Type} {computation : Type → Type} {α : Type} (runReactiveT : (α → computation ρ) → computation ρ) :\n  ReactiveT ρ computation α</code>",
+ "98": "<code>(α✝ → computation ρ) → computation ρ</code>",
+ "97":
  "<code>{α β : Type} → (α → β) → ReactiveT ρ computation α → ReactiveT ρ computation β</code><span class=\"sep\"></span><code class=\"docstring\">Applies a function inside a functor. This is used to overload the `&lt;$&gt;` operator.\n\nWhen mapping a constant function, use `Functor.mapConst` instead, because it may be more\nefficient.\n\n\nConventions for notations in identifiers:\n\n * The recommended spelling of `&lt;$&gt;` in identifiers is `map`.</code>",
- "97": "<code>Reactive (ρ α : Type) : Type</code>",
- "96":
- "<code>ReactiveT.runReactiveT {ρ : Type} {computation : Type → Type} {α : Type} (self : ReactiveT ρ computation α) :\n  (α → computation ρ) → computation ρ</code>",
+ "96": "<code>Reactive (ρ α : Type) : Type</code>",
  "95":
- "<code>ReactiveT (ρ : Type) (computation : Type → Type) (α : Type) : Type</code>",
+ "<code>ReactiveT.runReactiveT {ρ : Type} {computation : Type → Type} {α : Type} (self : ReactiveT ρ computation α) :\n  (α → computation ρ) → computation ρ</code>",
  "94":
- "<code class=\"docstring\">`#eval e` evaluates the expression `e` by compiling and evaluating it.\n\n* The command attempts to use `ToExpr`, `Repr`, or `ToString` instances to print the result.\n* If `e` is a monadic value of type `m ty`, then the command tries to adapt the monad `m`\n  to one of the monads that `#eval` supports, which include `IO`, `CoreM`, `MetaM`, `TermElabM`, and `CommandElabM`.\n  Users can define `MonadEval` instances to extend the list of supported monads.\n\nThe `#eval` command gracefully degrades in capability depending on what is imported.\nImporting the `Lean.Elab.Command` module provides full capabilities.\n\nDue to unsoundness, `#eval` refuses to evaluate expressions that depend on `sorry`, even indirectly,\nsince the presence of `sorry` can lead to runtime instability and crashes.\nThis check can be overridden with the `#eval! e` command.\n\nOptions:\n* If `eval.pp` is true (default: true) then tries to use `ToExpr` instances to make use of the\n  usual pretty printer. Otherwise, only tries using `Repr` and `ToString` instances.\n* If `eval.type` is true (default: false) then pretty prints the type of the evaluated value.\n* If `eval.derive.repr` is true (default: true) then attempts to auto-derive a `Repr` instance\n  when there is no other way to print the result.\n\nSee also: `#reduce e` for evaluation by term reduction.\n</code>",
+ "<code>ReactiveT (ρ : Type) (computation : Type → Type) (α : Type) : Type</code>",
  "93":
+ "<code class=\"docstring\">`#eval e` evaluates the expression `e` by compiling and evaluating it.\n\n* The command attempts to use `ToExpr`, `Repr`, or `ToString` instances to print the result.\n* If `e` is a monadic value of type `m ty`, then the command tries to adapt the monad `m`\n  to one of the monads that `#eval` supports, which include `IO`, `CoreM`, `MetaM`, `TermElabM`, and `CommandElabM`.\n  Users can define `MonadEval` instances to extend the list of supported monads.\n\nThe `#eval` command gracefully degrades in capability depending on what is imported.\nImporting the `Lean.Elab.Command` module provides full capabilities.\n\nDue to unsoundness, `#eval` refuses to evaluate expressions that depend on `sorry`, even indirectly,\nsince the presence of `sorry` can lead to runtime instability and crashes.\nThis check can be overridden with the `#eval! e` command.\n\nOptions:\n* If `eval.pp` is true (default: true) then tries to use `ToExpr` instances to make use of the\n  usual pretty printer. Otherwise, only tries using `Repr` and `ToString` instances.\n* If `eval.type` is true (default: false) then pretty prints the type of the evaluated value.\n* If `eval.derive.repr` is true (default: true) then attempts to auto-derive a `Repr` instance\n  when there is no other way to print the result.\n\nSee also: `#reduce e` for evaluation by term reduction.\n</code>",
+ "92":
  "<code>Id.run.{u_1} {α : Type u_1} (x : Id α) : α</code><span class=\"sep\"></span><code class=\"docstring\">Runs a computation in the identity monad.\n\nThis function is the identity function. Because its parameter has type `Id α`, it causes\n`do`-notation in its arguments to use the `Monad Id` instance.\n</code>",
- "92": "<code>α✝ → Active β</code>",
- "91": "<code>α → Active β</code>",
+ "91": "<code>α✝ → Active β</code>",
  "90":
  "<code>materializeActive {α β : Type} : ActiveProgram α β → α → β</code>",
  "9": "<code>Creational (program : Type → Type → Type) : Type 1</code>",
@@ -136,29 +137,76 @@
  "<code class=\"docstring\">A type universe. `Type ≡ Type 0`, `Type u ≡ Sort (u + 1)`. </code>",
  "19":
  "<code>id.{u} {α : Sort u} (a : α) : α</code><span class=\"sep\"></span><code class=\"docstring\">The identity function. `id` takes an implicit argument `α : Sort u`\n(a type in any universe), and an argument `a : α`, and returns `a`.\n\nAlthough this may look like a useless function, one application of the identity\nfunction is to explicitly put a type on an expression. If `e` has type `T`,\nand `T'` is definitionally equal to `T`, then `@id T' e` typechecks, and Lean\nknows that this expression has type `T'` rather than `T`. This can make a\ndifference for typeclass inference, since `T` and `T'` may have different\ntypeclass instances on them. `show T' from e` is sugar for an `@id T' e`\nexpression.\n</code>",
+ "188":
+ "<code>String : Type</code><span class=\"sep\"></span><code class=\"docstring\">A string is a sequence of Unicode code points.\n\nAt runtime, strings are represented by [dynamic arrays](https://en.wikipedia.org/wiki/Dynamic_array)\nof bytes using the UTF-8 encoding. Both the size in bytes (`String.utf8ByteSize`) and in characters\n(`String.length`) are cached and take constant time. Many operations on strings perform in-place\nmodifications when the reference to the string is unique.\n</code>",
+ "187":
+ "<code>safeDiv {program : Type → Type → Type} [Functional program] [Creational program] [Sequential program]\n  [Conditional program] [WithFailure String program] : program (Nat × Nat) Nat</code>",
+ "186":
+ "<code>unsafeDiv {program : Type → Type → Type} [Functional program] : program (Nat × Nat) Nat</code>",
+ "185":
+ "<code>isNotZero {program : Type → Type → Type} [Functional program] : program Nat Bool</code>",
+ "184": "<code>unsafeDivF : Nat × Nat → Nat</code>",
+ "183": "<code>isNotZeroF : Nat → Bool</code>",
+ "182":
+ "<code>materializeActiveWithFailure {ε α β : Type} : ProgramWithFailure ε Active α β → α → ε ⊕ β</code>",
+ "181": "<code>α✝ → FailureT ε computation β</code>",
+ "180":
+ "<code>materializeWithFailure {computation : Type → Type} {ε : Type} [Monad computation] {α β : Type} :\n  ProgramWithFailure ε computation α β → α → computation (ε ⊕ β)</code>",
  "18":
  "<code>identity {program : Type → Type → Type} {α : Type} [Functional program] : program α α</code>",
+ "179":
+ "<code>ProgramWithFailure (ε : Type) (computation : Type → Type) (α β : Type) : Type</code>",
+ "178": "<code>computation (ε ⊕ β✝)</code>",
+ "177":
+ "<code class=\"docstring\">`let` is used to declare a local definition. Example:\n```\nlet x := 1\nlet y := x + 1\nx + y\n```\nSince functions are first class citizens in Lean, you can use `let` to declare\nlocal functions too.\n```\nlet double := fun x =&gt; 2*x\ndouble (double 3)\n```\nFor recursive definitions, you should use `let rec`.\nYou can also perform pattern matching using `let`. For example,\nassume `p` has type `Nat × Nat`, then you can write\n```\nlet (x, y) := p\nx + y\n```\n\nThe *anaphoric let* `let := v` defines a variable called `this`.\n</code>",
+ "176": "<code>α✝ → ε</code>",
+ "175":
+ "<code>{α β : Type} → (α → ε) → FromComputationValuedFunction (FailureT ε computation) α β</code>",
+ "174": "<code>α✝ → FailureT ε computation β✝</code>",
+ "173":
+ "<code>{α β : Type u_1} → FailureT ε computation α → (α → FailureT ε computation β) → FailureT ε computation β</code><span class=\"sep\"></span><code class=\"docstring\">Sequences two computations, allowing the second to depend on the value computed by the first.\n\nIf `x : m α` and `f : α → m β`, then `x &gt;&gt;= f : m β` represents the result of executing `x` to get\na value of type `α` and then passing it to `f`.\n\n\nConventions for notations in identifiers:\n\n * The recommended spelling of `&gt;&gt;=` in identifiers is `bind`.</code>",
+ "172":
+ "<code>{α : Type u_1} → α → FailureT ε computation α</code><span class=\"sep\"></span><code class=\"docstring\">Given `a : α`, then `pure a : f α` represents an action that does nothing and returns `a`.\n\nExamples:\n* `(pure \"hello\" : Option String) = some \"hello\"`\n* `(pure \"hello\" : Except (Array String) String) = Except.ok \"hello\"`\n* `(pure \"hello\" : StateM Nat String).run 105 = (\"hello\", 105)`\n</code>",
+ "171": "<code>ε✝</code>",
+ "170": "<code>ε ⊕ α✝</code>",
  "17": "<code><span class=\"literal string\">\" ||| \"</span> : String</code>",
+ "169": "<code>FailureT ε computation α✝</code>",
+ "168":
+ "<code>{α β : Type u_1} → (α → β) → FailureT ε computation α → FailureT ε computation β</code><span class=\"sep\"></span><code class=\"docstring\">Applies a function inside a functor. This is used to overload the `&lt;$&gt;` operator.\n\nWhen mapping a constant function, use `Functor.mapConst` instead, because it may be more\nefficient.\n\n\nConventions for notations in identifiers:\n\n * The recommended spelling of `&lt;$&gt;` in identifiers is `map`.</code>",
+ "167": "<code>Type u_1 → Type u_2</code>",
+ "166": "<code>computation (ε ⊕ α)</code>",
+ "165":
+ "<code>FailureT.mk.{u, v} {ε : Type u} {computation : Type u → Type v} {α : Type u} (cεoα : computation (ε ⊕ α)) :\n  FailureT ε computation α</code>",
+ "164": "<code class=\"docstring\">The universe parameter v</code>",
+ "163": "<code>Type u → Type v</code>",
+ "162": "<code class=\"docstring\">The universe parameter u</code>",
+ "161": "<code>Type u</code>",
+ "160":
+ "<code>FailureT.{u, v} (ε : Type u) (computation : Type u → Type v) (β : Type u) : Type v</code>",
  "16":
  "<code>Conditional.sum {program : Type → Type → Type} [self : Conditional program] {α β γ : Type} :\n  program γ α → program β α → program (γ ⊕ β) α</code>",
+ "159":
+ "<code>WithFailure.failWith {ε : outParam Type} {program : Type → Type → Type} [self : WithFailure ε program] {α β : Type} :\n  (α → ε) → program α β</code>",
+ "158":
+ "<code>WithFailure (ε : outParam Type) (program : Type → Type → Type) : Type 1</code>",
  "157":
- "<code>fibonacciIncrementingArgumentPair {program : Type → Type → Type} [Functional program] [Creational program]\n  [Sequential program] [Conditional program] [Stateful Nat program] : program Nat (Nat × Nat)</code>",
+ "<code>fibonacciIncrementingArgumentPair {program : Type → Type → Type} [Functional program] [Creational program]\n  [Sequential program] [Conditional program] [WithState Nat program] : program Unit (Nat × Nat)</code>",
  "156":
- "<code>fibonacciIncrementingArgument {program : Type → Type → Type} [Functional program] [Creational program]\n  [Sequential program] [Conditional program] [Stateful Nat program] : program Nat Nat</code>",
+ "<code>fibonacciIncrementingArgument {program : Type → Type → Type} [Functional program] [Creational program]\n  [Sequential program] [Conditional program] [WithState Nat program] : program Unit Nat</code>",
  "155":
- "<code>materializeActiveStateful {σ α β : Type} : StatefulProgram σ Active α β → α → σ → β</code>",
- "154": "<code>StatefulProgram σ✝ computation α✝ β</code>",
+ "<code>materializeActiveWithState {σ α β : Type} : ProgramWithState σ Active α β → α → σ → β</code>",
+ "154": "<code>α✝ → StateT σ✝ computation β</code>",
  "153":
  "<code>StateT.run.{u, v} {σ : Type u} {m : Type u → Type v} {α : Type u} (x : StateT σ m α) (s : σ) : m (α × σ)</code><span class=\"sep\"></span><code class=\"docstring\">Executes an action from a monad with added state in the underlying monad `m`. Given an initial\nstate, it returns a value paired with the final state.\n</code>",
  "152": "<code>σ✝</code>",
- "151": "<code>StatefulProgram σ computation α β</code>",
+ "151": "<code>α → StateT σ computation β</code>",
  "150":
- "<code>materializeStateful {computation : Type → Type} {σ : Type} [Monad computation] {α β : Type} :\n  StatefulProgram σ computation α β → α → σ → computation β</code>",
+ "<code>materializeWithState {computation : Type → Type} {σ : Type} [Monad computation] {α β : Type} :\n  ProgramWithState σ computation α β → α → σ → computation β</code>",
  "15": "<code>Conditional (program : Type → Type → Type) : Type 1</code>",
  "149":
  "<code>StateT.{u, v} (σ : Type u) (m : Type u → Type v) (α : Type u) : Type (max u v)</code><span class=\"sep\"></span><code class=\"docstring\">Adds a mutable state of type `σ` to a monad.\n\nActions in the resulting monad are functions that take an initial state and return, in `m`, a tuple\nof a value and a state.\n</code>",
  "148":
- "<code>StatefulProgram (σ : Type) (computation : Type → Type) (α β : Type) : Type</code>",
+ "<code>ProgramWithState (σ : Type) (computation : Type → Type) (α β : Type) : Type</code>",
  "147":
  "<code>MonadStateOf.set.{u, v} {σ : semiOutParam (Type u)} {m : Type u → Type v} [self : MonadStateOf σ m] : σ → m PUnit</code><span class=\"sep\"></span><code class=\"docstring\">Replaces the current value of the mutable state with a new one.\n</code>",
  "146": "<code>FromComputationValuedFunction computation σ Unit</code>",
@@ -168,83 +216,83 @@
  "<code>{α : Type} → FromComputationValuedFunction computation α σ</code>",
  "143":
  "<code>MonadStateOf.{u, v} (σ : semiOutParam (Type u)) (m : Type u → Type v) : Type (max (u + 1) v)</code><span class=\"sep\"></span><code class=\"docstring\">State monads provide a value of a given type (the _state_) that can be retrieved or replaced.\nInstances may implement these operations by passing state values around, by using a mutable\nreference cell (e.g. `ST.Ref σ`), or in other ways.\n\nIn this class, `σ` is a `semiOutParam`, which means that it can influence the choice of instance.\n`MonadState σ` provides the same operations, but requires that `σ` be inferable from `m`.\n\nThe mutable state of a state monad is visible between multiple `do`-blocks or functions, unlike\n[local mutable state](https://lean-lang.org/doc/reference/4.22.0-rc4/find/?domain=Verso.Genre.Manual.section&name=do-notation-let-mut) in `do`-notation.\n</code>",
- "142": "<code>program σ σ</code>",
+ "142": "<code>program σ τ</code>",
  "141":
- "<code>usingAndModifyingStateAsArgumentWith {program : Type → Type → Type} {σ : Type} [Functional program] [Creational program]\n  [Sequential program] [Conditional program] [Stateful σ program] : (σ → σ) → program σ σ → program σ σ</code>",
+ "<code>withInitialStateAsInitialValue {program : Type → Type → Type} {σ τ α : Type} [Functional program] [Creational program]\n  [Sequential program] [Conditional program] [WithState σ program] : program σ τ → program α τ</code>",
  "140": "<code>σ → σ</code>",
  "14":
  "<code><span class=\"literal string\">\" &gt;=&gt; \"</span> : String</code>",
  "139":
- "<code>modifyStateWith {program : Type → Type → Type} {σ α : Type} [Functional program] [Sequential program]\n  [Creational program] [Stateful σ program] : (σ → σ) → program α α</code>",
+ "<code>modifyStateWith {program : Type → Type → Type} {σ α : Type} [Functional program] [Sequential program]\n  [Creational program] [WithState σ program] : (σ → σ) → program α α</code>",
  "138":
  "<code>second {program : Type → Type → Type} {α β : Type} [Functional program] : program (α × β) β</code>",
  "137":
  "<code>first {program : Type → Type → Type} {α β : Type} [Functional program] : program (α × β) α</code>",
  "136":
- "<code>Stateful.writeState {σ : Type} {program : Type → Type → Type} [self : Stateful σ program] : program σ Unit</code>",
+ "<code>Unit : Type</code><span class=\"sep\"></span><code class=\"docstring\">The canonical type with one element. This element is written `()`.\n\n`Unit` has a number of uses:\n* It can be used to model control flow that returns from a function call without providing other\n  information.\n* Monadic actions that return `Unit` have side effects without computing values.\n* In polymorphic types, it can be used to indicate that no data is to be stored in a particular\n  field.\n</code>",
  "135":
- "<code>Stateful.readState {σ : Type} {program : Type → Type → Type} [self : Stateful σ program] {α : Type} : program α σ</code>",
+ "<code>WithState.writeState {σ : outParam Type} {program : Type → Type → Type} [self : WithState σ program] : program σ Unit</code>",
  "134":
- "<code>Stateful (σ : Type) (program : Type → Type → Type) : Type 1</code>",
+ "<code>WithState.readState {σ : outParam Type} {program : Type → Type → Type} [self : WithState σ program] {α : Type} :\n  program α σ</code>",
  "133":
- "<code>Unit.unit : Unit</code><span class=\"sep\"></span><code class=\"docstring\">The only element of the unit type.\n\nIt can be written as an empty tuple: `()`.\n</code>",
- "132":
- "<code>positionalSumOfFibonacciAndFactorial' {program : Type → Type → Type} {σ : Type} [Functional program]\n  [Creational program] [Sequential program] [Conditional program] : program (σ × Nat) ((((σ × Nat) × Nat) × Nat) × Nat)</code>",
+ "<code>outParam.{u} (α : Sort u) : Sort u</code><span class=\"sep\"></span><code class=\"docstring\">Gadget for marking output parameters in type classes.\n\nFor example, the `Membership` class is defined as:\n```\nclass Membership (α : outParam (Type u)) (γ : Type v)\n```\nThis means that whenever a typeclass goal of the form `Membership ?α ?γ` comes\nup, Lean will wait to solve it until `?γ` is known, but then it will run\ntypeclass inference, and take the first solution it finds, for any value of `?α`,\nwhich thereby determines what `?α` should be.\n\nThis expresses that in a term like `a ∈ s`, `s` might be a `Set α` or\n`List α` or some other type with a membership operation, and in each case\nthe \"member\" type `α` is determined by looking at the container type.\n</code>",
+ "132": "<code>outParam Type</code>",
  "131":
- "<code>positionalFactorialOfFibonacci' {program : Type → Type → Type} {σ : Type} [Functional program] [Creational program]\n  [Sequential program] [Conditional program] : program (σ × Nat) (((σ × Nat) × Nat) × Nat)</code>",
+ "<code>WithState (σ : outParam Type) (program : Type → Type → Type) : Type 1</code>",
  "130":
- "<code>positionalSumOfFibonacciAndFactorial {program : Type → Type → Type} {σ : Type} [Functional program] [Creational program]\n  [Sequential program] [Conditional program] : program (σ × Nat) Nat</code>",
+ "<code>Unit.unit : Unit</code><span class=\"sep\"></span><code class=\"docstring\">The only element of the unit type.\n\nIt can be written as an empty tuple: `()`.\n</code>",
  "13":
  "<code>Sequential.andThen {program : Type → Type → Type} [self : Sequential program] {α β γ : Type} :\n  program α β → program β γ → program α γ</code>",
  "129":
- "<code>positionalFactorialOfFibonacci {program : Type → Type → Type} {σ : Type} [Functional program] [Creational program]\n  [Sequential program] [Conditional program] : program (σ × Nat) Nat</code>",
+ "<code>positionalSumOfFibonacciAndFactorial' {program : Type → Type → Type} {σ : Type} [Functional program]\n  [Creational program] [Sequential program] [Conditional program] : program (σ × Nat) ((((σ × Nat) × Nat) × Nat) × Nat)</code>",
  "128":
- "<code>positionOneAndTwo {program : Type → Type → Type} {σ β α : Type} [Functional program] : program ((σ × β) × α) (α × β)</code>",
- "127": "<code>β✝</code>",
+ "<code>positionalFactorialOfFibonacci' {program : Type → Type → Type} {σ : Type} [Functional program] [Creational program]\n  [Sequential program] [Conditional program] : program (σ × Nat) (((σ × Nat) × Nat) × Nat)</code>",
+ "127":
+ "<code>positionalSumOfFibonacciAndFactorial {program : Type → Type → Type} {σ : Type} [Functional program] [Creational program]\n  [Sequential program] [Conditional program] : program (σ × Nat) Nat</code>",
  "126":
- "<code>positionTwo {program : Type → Type → Type} {σ β α : Type} [Functional program] : program ((σ × β) × α) β</code>",
+ "<code>positionalFactorialOfFibonacci {program : Type → Type → Type} {σ : Type} [Functional program] [Creational program]\n  [Sequential program] [Conditional program] : program (σ × Nat) Nat</code>",
  "125":
- "<code>positionOne {program : Type → Type → Type} {σ α : Type} [Functional program] : program (σ × α) α</code>",
- "124": "<code>program σ α</code>",
+ "<code>positionOneAndTwo {program : Type → Type → Type} {σ β α : Type} [Functional program] : program ((σ × β) × α) (α × β)</code>",
+ "124": "<code>β✝</code>",
  "123":
+ "<code>positionTwo {program : Type → Type → Type} {σ β α : Type} [Functional program] : program ((σ × β) × α) β</code>",
+ "122":
+ "<code>positionOne {program : Type → Type → Type} {σ α : Type} [Functional program] : program (σ × α) α</code>",
+ "121": "<code>program σ α</code>",
+ "120":
  "<code>{σ α β γ : Type} → program α β → program σ α → program (σ × β) γ → program σ γ</code>",
- "122": "<code><span class=\"literal string\">\" @ \"</span> : String</code>",
- "121":
- "<code>Positional.at_ {program : Type → Type → Type} [self : Positional program] {σ α β γ : Type} :\n  program α β → program σ α → program (σ × β) γ → program σ γ</code>",
- "120": "<code>Positional (program : Type → Type → Type) : Type 1</code>",
  "12": "<code>Sequential (program : Type → Type → Type) : Type 1</code>",
- "119":
- "<code>someProgram02 {program : Type → Type → Type} [Functional program] [Sequential program] [Creational program] :\n  program Nat Nat</code>",
+ "119": "<code><span class=\"literal string\">\" @ \"</span> : String</code>",
  "118":
- "<code>someProgram01 {program : Type → Type → Type} [Functional program] [Functorial program] [Creational program] :\n  program Nat Nat</code>",
- "117":
- "<code>three {program : Type → Type → Type} [Functional program] : program Nat Nat</code>",
+ "<code>Positional.at_ {program : Type → Type → Type} [self : Positional program] {σ α β γ : Type} :\n  program α β → program σ α → program (σ × β) γ → program σ γ</code>",
+ "117": "<code>Positional (program : Type → Type → Type) : Type 1</code>",
  "116":
+ "<code>someProgram02 {program : Type → Type → Type} [Functional program] [Sequential program] [Creational program] :\n  program Nat Nat</code>",
+ "115":
+ "<code>someProgram01 {program : Type → Type → Type} [Functional program] [Functorial program] [Creational program] :\n  program Nat Nat</code>",
+ "114":
+ "<code>three {program : Type → Type → Type} [Functional program] : program Nat Nat</code>",
+ "113":
  "<code>two {program : Type → Type → Type} [Functional program] : program Nat Nat</code>",
- "115": "<code>threeF : Nat → Nat</code>",
- "114": "<code>twoF : Nat → Nat</code>",
- "113": "<code>ReactiveProgram β Active α✝ β</code>",
- "112": "<code>ReactiveProgram β Active α β</code>",
- "111":
- "<code>materializeReactive {α β : Type} : ReactiveProgram β Active α β → α → β</code>",
- "110":
- "<code>ReactiveProgram (ρ : Type) (computation : Type → Type) (α β : Type) : Type</code>",
+ "112": "<code>threeF : Nat → Nat</code>",
+ "111": "<code>twoF : Nat → Nat</code>",
+ "110": "<code>α✝ → ReactiveT β Active β</code>",
  "11": "<code><span class=\"literal string\">\" &&& \"</span> : String</code>",
- "109": "<code>α✝ → ReactiveT ρ computation β✝</code>",
+ "109":
+ "<code>materializeReactive {α β : Type} : ReactiveProgram β Active α β → α → β</code>",
  "108":
+ "<code>ReactiveProgram (ρ : Type) (computation : Type → Type) (α β : Type) : Type</code>",
+ "107": "<code>α✝ → ReactiveT ρ computation β✝</code>",
+ "106":
  "<code>{α β : Type} → ReactiveT ρ computation α → (α → ReactiveT ρ computation β) → ReactiveT ρ computation β</code><span class=\"sep\"></span><code class=\"docstring\">Sequences two computations, allowing the second to depend on the value computed by the first.\n\nIf `x : m α` and `f : α → m β`, then `x &gt;&gt;= f : m β` represents the result of executing `x` to get\na value of type `α` and then passing it to `f`.\n\n\nConventions for notations in identifiers:\n\n * The recommended spelling of `&gt;&gt;=` in identifiers is `bind`.</code>",
- "107": "<code>Unit → ReactiveT ρ computation α✝</code>",
- "106": "<code>ReactiveT ρ computation (α✝ → β✝)</code>",
- "105":
- "<code>Unit : Type</code><span class=\"sep\"></span><code class=\"docstring\">The canonical type with one element. This element is written `()`.\n\n`Unit` has a number of uses:\n* It can be used to model control flow that returns from a function call without providing other\n  information.\n* Monadic actions that return `Unit` have side effects without computing values.\n* In polymorphic types, it can be used to indicate that no data is to be stored in a particular\n  field.\n</code>",
- "104":
+ "105": "<code>Unit → ReactiveT ρ computation α✝</code>",
+ "104": "<code>((α✝ → β✝) → computation ρ) → computation ρ</code>",
+ "103":
  "<code>{α β : Type} → ReactiveT ρ computation (α → β) → (Unit → ReactiveT ρ computation α) → ReactiveT ρ computation β</code><span class=\"sep\"></span><code class=\"docstring\">The implementation of the `&lt;*&gt;` operator.\n\nIn a monad, `mf &lt;*&gt; mx` is the same as `do let f ← mf; x ← mx; pure (f x)`: it evaluates the\nfunction first, then the argument, and applies one to the other.\n\nTo avoid surprising evaluation semantics, `mx` is taken \"lazily\", using a `Unit → f α` function.\n\n\nConventions for notations in identifiers:\n\n * The recommended spelling of `&lt;*&gt;` in identifiers is `seq`.</code>",
- "103": "<code>α✝ → computation ρ</code>",
- "102":
+ "102": "<code>α✝ → computation ρ</code>",
+ "101":
  "<code>{α : Type} → α → ReactiveT ρ computation α</code><span class=\"sep\"></span><code class=\"docstring\">Given `a : α`, then `pure a : f α` represents an action that does nothing and returns `a`.\n\nExamples:\n* `(pure \"hello\" : Option String) = some \"hello\"`\n* `(pure \"hello\" : Except (Array String) String) = Except.ok \"hello\"`\n* `(pure \"hello\" : StateM Nat String).run 105 = (\"hello\", 105)`\n</code>",
- "101": "<code>β✝ → computation ρ</code>",
- "100":
- "<code>ReactiveT.mk {ρ : Type} {computation : Type → Type} {α : Type} (runReactiveT : (α → computation ρ) → computation ρ) :\n  ReactiveT ρ computation α</code>",
+ "100": "<code>β✝ → computation ρ</code>",
  "10":
  "<code>Creational.product {program : Type → Type → Type} [self : Creational program] {α β γ : Type} :\n  program α β → program α γ → program α (β × γ)</code>",
  "1": "<code>Type → Type → Type</code>",
