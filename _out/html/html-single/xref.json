@@ -48,19 +48,33 @@
        "context":
        ["PSBP Documentation", "Positional Programming", "Using  Functorial"]}},
      "address": "/"}],
+   "twiceSafeDiv":
+   [{"id": "twiceSafeDiv",
+     "data":
+     {"/#twiceSafeDiv":
+      {"display": "twiceSafeDiv",
+       "context":
+       ["PSBP Documentation", "Programming With Failure", "twiceSafeDiv"]}},
+     "address": "/"}],
    "twiceMinusOne02":
    [{"id": "twiceMinusOne02",
      "data":
      {"/#twiceMinusOne02":
       {"display": "twiceMinusOne02",
-       "context": ["PSBP Documentation", "What about  Functorial ?"]}},
+       "context":
+       ["PSBP Documentation",
+        "fibonacci  and  factorial",
+        "What about  Functorial ?"]}},
      "address": "/"}],
    "twiceMinusOne01":
    [{"id": "twiceMinusOne01",
      "data":
      {"/#twiceMinusOne01":
       {"display": "twiceMinusOne01",
-       "context": ["PSBP Documentation", "What about  Functorial ?"]}},
+       "context":
+       ["PSBP Documentation",
+        "fibonacci  and  factorial",
+        "What about  Functorial ?"]}},
      "address": "/"}],
    "trueToLeftFalseToRightF":
    [{"id": "trueToLeftFalseToRightF",
@@ -126,6 +140,14 @@
         "Programming With State",
         "class WithState σ",
         "def modifyStateWith"]}},
+     "address": "/"}],
+   "safeDivIsOne":
+   [{"id": "safeDivIsOne",
+     "data":
+     {"/#safeDivIsOne":
+      {"display": "safeDivIsOne",
+       "context":
+       ["PSBP Documentation", "Programming With Failure", "safeDivIsOne"]}},
      "address": "/"}],
    "safeDiv":
    [{"id": "safeDiv",
@@ -505,15 +527,13 @@
        "context":
        ["PSBP Documentation", "Programming With State", "class WithState σ"]}},
      "address": "/"}],
-   "WithFailure.failWith":
-   [{"id": "WithFailure___failWith",
+   "WithFailure.failureWith":
+   [{"id": "WithFailure___failureWith",
      "data":
-     {"/#WithFailure___failWith":
-      {"display": "failWith",
+     {"/#WithFailure___failureWith":
+      {"display": "failureWith",
        "context":
-       ["PSBP Documentation",
-        "Programming With Failure",
-        "class WithFailure ε"]}},
+       ["PSBP Documentation", "Programming With Failure", "WithFailure ε"]}},
      "address": "/"}],
    "WithFailure":
    [{"id": "WithFailure",
@@ -521,9 +541,7 @@
      {"/#WithFailure":
       {"display": "WithFailure",
        "context":
-       ["PSBP Documentation",
-        "Programming With Failure",
-        "class WithFailure ε"]}},
+       ["PSBP Documentation", "Programming With Failure", "WithFailure ε"]}},
      "address": "/"}],
    "Sequential.andThen":
    [{"id": "Sequential___andThen",
@@ -661,11 +679,11 @@
       {"display": "FromComputationValuedFunction",
        "context": ["PSBP Documentation", "Computation Valued Functions"]}},
      "address": "/"}],
-   "FailureT.mk":
-   [{"id": "FailureT___mk",
+   "FailureT.toComputationOfSum":
+   [{"id": "FailureT___toComputationOfSum",
      "data":
-     {"/#FailureT___mk":
-      {"display": "FailureT.mk",
+     {"/#FailureT___toComputationOfSum":
+      {"display": "toComputationOfSum",
        "context":
        ["PSBP Documentation",
         "Programming With Failure",

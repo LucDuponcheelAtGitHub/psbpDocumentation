@@ -137,56 +137,53 @@
  "<code class=\"docstring\">A type universe. `Type ≡ Type 0`, `Type u ≡ Sort (u + 1)`. </code>",
  "19":
  "<code>id.{u} {α : Sort u} (a : α) : α</code><span class=\"sep\"></span><code class=\"docstring\">The identity function. `id` takes an implicit argument `α : Sort u`\n(a type in any universe), and an argument `a : α`, and returns `a`.\n\nAlthough this may look like a useless function, one application of the identity\nfunction is to explicitly put a type on an expression. If `e` has type `T`,\nand `T'` is definitionally equal to `T`, then `@id T' e` typechecks, and Lean\nknows that this expression has type `T'` rather than `T`. This can make a\ndifference for typeclass inference, since `T` and `T'` may have different\ntypeclass instances on them. `show T' from e` is sugar for an `@id T' e`\nexpression.\n</code>",
- "188":
- "<code>String : Type</code><span class=\"sep\"></span><code class=\"docstring\">A string is a sequence of Unicode code points.\n\nAt runtime, strings are represented by [dynamic arrays](https://en.wikipedia.org/wiki/Dynamic_array)\nof bytes using the UTF-8 encoding. Both the size in bytes (`String.utf8ByteSize`) and in characters\n(`String.length`) are cached and take constant time. Many operations on strings perform in-place\nmodifications when the reference to the string is unique.\n</code>",
- "187":
- "<code>safeDiv {program : Type → Type → Type} [Functional program] [Creational program] [Sequential program]\n  [Conditional program] [WithFailure String program] : program (Nat × Nat) Nat</code>",
- "186":
- "<code>unsafeDiv {program : Type → Type → Type} [Functional program] : program (Nat × Nat) Nat</code>",
- "185":
- "<code>isNotZero {program : Type → Type → Type} [Functional program] : program Nat Bool</code>",
- "184": "<code>unsafeDivF : Nat × Nat → Nat</code>",
- "183": "<code>isNotZeroF : Nat → Bool</code>",
+ "183":
+ "<code>twiceSafeDiv {program : Type → Type → Type} [Functional program] [Creational program] [Sequential program]\n  [Conditional program] [WithFailure String program] : program ((Nat × Nat) × Nat) Nat</code>",
  "182":
- "<code>materializeActiveWithFailure {ε α β : Type} : ProgramWithFailure ε Active α β → α → ε ⊕ β</code>",
- "181": "<code>α✝ → FailureT ε computation β</code>",
+ "<code>safeDivIsOne {program : Type → Type → Type} [Functional program] [Creational program] [Sequential program]\n  [Conditional program] [WithFailure String program] : program (Nat × Nat) Bool</code>",
+ "181":
+ "<code>String : Type</code><span class=\"sep\"></span><code class=\"docstring\">A string is a sequence of Unicode code points.\n\nAt runtime, strings are represented by [dynamic arrays](https://en.wikipedia.org/wiki/Dynamic_array)\nof bytes using the UTF-8 encoding. Both the size in bytes (`String.utf8ByteSize`) and in characters\n(`String.length`) are cached and take constant time. Many operations on strings perform in-place\nmodifications when the reference to the string is unique.\n</code>",
  "180":
- "<code>materializeWithFailure {computation : Type → Type} {ε : Type} [Monad computation] {α β : Type} :\n  ProgramWithFailure ε computation α β → α → computation (ε ⊕ β)</code>",
+ "<code>safeDiv {program : Type → Type → Type} [Functional program] [Creational program] [Sequential program]\n  [Conditional program] [WithFailure String program] : program (Nat × Nat) Nat</code>",
  "18":
  "<code>identity {program : Type → Type → Type} {α : Type} [Functional program] : program α α</code>",
  "179":
- "<code>ProgramWithFailure (ε : Type) (computation : Type → Type) (α β : Type) : Type</code>",
- "178": "<code>computation (ε ⊕ β✝)</code>",
- "177":
- "<code class=\"docstring\">`let` is used to declare a local definition. Example:\n```\nlet x := 1\nlet y := x + 1\nx + y\n```\nSince functions are first class citizens in Lean, you can use `let` to declare\nlocal functions too.\n```\nlet double := fun x =&gt; 2*x\ndouble (double 3)\n```\nFor recursive definitions, you should use `let rec`.\nYou can also perform pattern matching using `let`. For example,\nassume `p` has type `Nat × Nat`, then you can write\n```\nlet (x, y) := p\nx + y\n```\n\nThe *anaphoric let* `let := v` defines a variable called `this`.\n</code>",
- "176": "<code>α✝ → ε</code>",
+ "<code>unsafeDiv {program : Type → Type → Type} [Functional program] : program (Nat × Nat) Nat</code>",
+ "178":
+ "<code>isNotZero {program : Type → Type → Type} [Functional program] : program Nat Bool</code>",
+ "177": "<code>unsafeDivF : Nat × Nat → Nat</code>",
+ "176": "<code>isNotZeroF : Nat → Bool</code>",
  "175":
- "<code>{α β : Type} → (α → ε) → FromComputationValuedFunction (FailureT ε computation) α β</code>",
- "174": "<code>α✝ → FailureT ε computation β✝</code>",
+ "<code>materializeActiveWithFailure {ε α β : Type} : ProgramWithFailure ε Active α β → α → ε ⊕ β</code>",
+ "174": "<code>α✝ → FailureT ε computation β</code>",
  "173":
- "<code>{α β : Type u_1} → FailureT ε computation α → (α → FailureT ε computation β) → FailureT ε computation β</code><span class=\"sep\"></span><code class=\"docstring\">Sequences two computations, allowing the second to depend on the value computed by the first.\n\nIf `x : m α` and `f : α → m β`, then `x &gt;&gt;= f : m β` represents the result of executing `x` to get\na value of type `α` and then passing it to `f`.\n\n\nConventions for notations in identifiers:\n\n * The recommended spelling of `&gt;&gt;=` in identifiers is `bind`.</code>",
+ "<code>materializeWithFailure {computation : Type → Type} {ε : Type} [Monad computation] {α β : Type} :\n  ProgramWithFailure ε computation α β → α → computation (ε ⊕ β)</code>",
  "172":
- "<code>{α : Type u_1} → α → FailureT ε computation α</code><span class=\"sep\"></span><code class=\"docstring\">Given `a : α`, then `pure a : f α` represents an action that does nothing and returns `a`.\n\nExamples:\n* `(pure \"hello\" : Option String) = some \"hello\"`\n* `(pure \"hello\" : Except (Array String) String) = Except.ok \"hello\"`\n* `(pure \"hello\" : StateM Nat String).run 105 = (\"hello\", 105)`\n</code>",
- "171": "<code>ε✝</code>",
- "170": "<code>ε ⊕ α✝</code>",
+ "<code>ProgramWithFailure (ε : Type) (computation : Type → Type) (α β : Type) : Type</code>",
+ "171": "<code>α✝ → ε</code>",
+ "170":
+ "<code>{α β : Type} → (α → ε) → FromComputationValuedFunction (FailureT ε computation) α β</code>",
  "17": "<code><span class=\"literal string\">\" ||| \"</span> : String</code>",
- "169": "<code>FailureT ε computation α✝</code>",
+ "169": "<code>α✝ → FailureT ε computation β✝</code>",
  "168":
- "<code>{α β : Type u_1} → (α → β) → FailureT ε computation α → FailureT ε computation β</code><span class=\"sep\"></span><code class=\"docstring\">Applies a function inside a functor. This is used to overload the `&lt;$&gt;` operator.\n\nWhen mapping a constant function, use `Functor.mapConst` instead, because it may be more\nefficient.\n\n\nConventions for notations in identifiers:\n\n * The recommended spelling of `&lt;$&gt;` in identifiers is `map`.</code>",
- "167": "<code>Type u_1 → Type u_2</code>",
- "166": "<code>computation (ε ⊕ α)</code>",
- "165":
- "<code>FailureT.mk.{u, v} {ε : Type u} {computation : Type u → Type v} {α : Type u} (cεoα : computation (ε ⊕ α)) :\n  FailureT ε computation α</code>",
- "164": "<code class=\"docstring\">The universe parameter v</code>",
- "163": "<code>Type u → Type v</code>",
- "162": "<code class=\"docstring\">The universe parameter u</code>",
- "161": "<code>Type u</code>",
+ "<code>{α β : Type} → FailureT ε computation α → (α → FailureT ε computation β) → FailureT ε computation β</code><span class=\"sep\"></span><code class=\"docstring\">Sequences two computations, allowing the second to depend on the value computed by the first.\n\nIf `x : m α` and `f : α → m β`, then `x &gt;&gt;= f : m β` represents the result of executing `x` to get\na value of type `α` and then passing it to `f`.\n\n\nConventions for notations in identifiers:\n\n * The recommended spelling of `&gt;&gt;=` in identifiers is `bind`.</code>",
+ "167":
+ "<code>{α : Type} → α → FailureT ε computation α</code><span class=\"sep\"></span><code class=\"docstring\">Given `a : α`, then `pure a : f α` represents an action that does nothing and returns `a`.\n\nExamples:\n* `(pure \"hello\" : Option String) = some \"hello\"`\n* `(pure \"hello\" : Except (Array String) String) = Except.ok \"hello\"`\n* `(pure \"hello\" : StateM Nat String).run 105 = (\"hello\", 105)`\n</code>",
+ "166": "<code>ε✝</code>",
+ "165": "<code>ε ⊕ α✝</code>",
+ "164":
+ "<code>FailureT.mk {ε : Type} {computation : Type → Type} {β : Type} (toComputationOfSum : computation (ε ⊕ β)) :\n  FailureT ε computation β</code>",
+ "163": "<code>computation (ε ⊕ α✝)</code>",
+ "162":
+ "<code>{α β : Type} → (α → β) → FailureT ε computation α → FailureT ε computation β</code><span class=\"sep\"></span><code class=\"docstring\">Applies a function inside a functor. This is used to overload the `&lt;$&gt;` operator.\n\nWhen mapping a constant function, use `Functor.mapConst` instead, because it may be more\nefficient.\n\n\nConventions for notations in identifiers:\n\n * The recommended spelling of `&lt;$&gt;` in identifiers is `map`.</code>",
+ "161":
+ "<code>FailureT.toComputationOfSum {ε : Type} {computation : Type → Type} {β : Type} (self : FailureT ε computation β) :\n  computation (ε ⊕ β)</code>",
  "160":
- "<code>FailureT.{u, v} (ε : Type u) (computation : Type u → Type v) (β : Type u) : Type v</code>",
+ "<code>FailureT (ε : Type) (computation : Type → Type) (β : Type) : Type</code>",
  "16":
  "<code>Conditional.sum {program : Type → Type → Type} [self : Conditional program] {α β γ : Type} :\n  program γ α → program β α → program (γ ⊕ β) α</code>",
  "159":
- "<code>WithFailure.failWith {ε : outParam Type} {program : Type → Type → Type} [self : WithFailure ε program] {α β : Type} :\n  (α → ε) → program α β</code>",
+ "<code>WithFailure.failureWith {ε : outParam Type} {program : Type → Type → Type} [self : WithFailure ε program] {α β : Type} :\n  (α → ε) → program α β</code>",
  "158":
  "<code>WithFailure (ε : outParam Type) (program : Type → Type → Type) : Type 1</code>",
  "157":

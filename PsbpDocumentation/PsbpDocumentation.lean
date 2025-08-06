@@ -341,7 +341,7 @@ in the same way, descriptions of effects are, luckily enough, also not side effe
 a bomb explosion on your wall.The painting is, of course, not a pipe, it is a description of a pipe. A specification is
 also a (special kind of) description.
 
-# What about `Functorial`?
+## What about `Functorial`?
 
 You may wonder why neither `fibonacci` nor `factorial` use `Functorial`. A `Functorial` instance can be defined in terms
 of `Function` and `Sequential`.
@@ -457,7 +457,7 @@ abbrev ActiveProgram α β :=
 
 def materializeActive :
     ActiveProgram α β → (α → β) :=
-  λ ⟨αpβ⟩ α => (αpβ α).run
+  λ ⟨αfaβ⟩ α => (αfaβ α).run
 ```
 
 We can now run our programs in an active way.
@@ -525,27 +525,27 @@ instance {ρ: Type} :
     Applicative (ReactiveT ρ computation) where
   pure := λ α => ReactiveT.mk (λ αfcρ => αfcρ α)
   seq :=
-    λ ⟨rcαfβ⟩ ufrcα =>
-      ⟨λ bβfcρ =>
+    λ ⟨rcαfβ⟩ ufrtρcα =>
+      ⟨λ βfcρ =>
         rcαfβ $
           (λ αfβ =>
-            (ufrcα ()).runReactiveT (bβfcρ ∘ αfβ))⟩
+            (ufrtρcα ()).runReactiveT (βfcρ ∘ αfβ))⟩
 
 instance {ρ: Type} :
     Monad (ReactiveT ρ computation) where
   bind :=
-    λ ⟨rcα⟩ αfrcβ =>
+    λ ⟨rcα⟩ αfrtρcβ =>
       ⟨λ βfcρ =>
         rcα (λ α =>
-        (αfrcβ α).runReactiveT βfcρ)⟩
+        (αfrtρcβ α).runReactiveT βfcρ)⟩
 
 abbrev ReactiveProgram ρ computation :=
   FromComputationValuedFunction (ReactiveT ρ computation)
 
 def materializeReactive {α β : Type} :
     ReactiveProgram β Active α β → α → β :=
-  λ ⟨αpβ⟩ α =>
-      (αpβ α).runReactiveT id
+  λ ⟨αfrtaβcβ⟩ α =>
+      (αfrtaβcβ α).runReactiveT id
 ```
 
 The `ρ` stands for the "result" of callback handling.
@@ -696,7 +696,8 @@ As already mentioned before, using `Sequential` is, in this case, an overkill.
 ## `class Positional`
 
 ```savedLean
-class Positional (program : Type → Type → Type) where
+class Positional
+    (program : Type → Type → Type) where
   at_ {σ α β γ : Type} :
     program α β →
     program σ α →
@@ -958,15 +959,15 @@ abbrev ProgramWithState σ computation :=
 
 def materializeWithState
     [Monad computation] {α β : Type} :
-      ProgramWithState σ computation α β →
-      α →
-      σ →
-      computation β :=
-  λ ⟨αpβ⟩ =>
-    λ α =>
-      λ σ =>
-        StateT.run (αpβ α) σ >>=
-          λ (β, _) => pure β
+  ProgramWithState σ computation α β →
+  α →
+  σ →
+  computation β :=
+    λ ⟨αfstσcβ⟩ =>
+      λ α =>
+        λ σ =>
+          StateT.run (αfstσcβ α) σ >>=
+            λ (β, _) => pure β
 
 def materializeActiveWithState {α β : Type} :
   ProgramWithState σ Active α β → α → σ → β :=
@@ -1014,23 +1015,20 @@ unsafe def fibonacciIncrementingArgumentPair
     10
 ```
 
-```leanOutput activeFibonacciIncrementingArgumentPair
-(89, 144)
-```
-
 # Programming With Failure
 
-## `class WithFailure ε`
 
-`PSBP` enables programming with failure using the `WithState` class below.
+## `WithFailure ε`
+
+`PSBP` enables programming with failure using the `WithFailure` class below.
 
 ```savedLean
 class WithFailure
     (ε : outParam Type)
     (program : Type → Type →Type) where
-  failWith {α β : Type} : (α → ε) → program α β
+  failureWith {α β : Type} : (α → ε) → program α β
 
-export WithFailure (failWith)
+export WithFailure (failureWith)
 ```
 
 ## `instance WithFailure ε`
@@ -1040,47 +1038,37 @@ value, a program with failure may transform it to a final failure (result) value
 value (at right).
 
 ```savedLean
-def FailureT
-    (ε : Type u)
-    (computation : Type u → Type v)
-    (β : Type u) : Type v :=
-  computation (ε ⊕ β)
-
-def FailureT.mk
-    {ε : Type u}
-    {computation : Type u → Type v}
-    {α : Type u}
-    (cεoα : computation (ε ⊕ α)) :
-  FailureT ε computation α := cεoα
+structure FailureT
+    (ε : Type)
+    (computation : Type → Type)
+    (β : Type) : Type where
+  toComputationOfSum : computation (ε ⊕ β)
 
 instance [Monad computation] :
     Monad (FailureT ε computation) where
-  map  :=
-  λ αfβ ftcα =>
-    .mk (ftcα >>= λ εoα => match εoα with
-      | (Sum.inr α) => pure $ Sum.inr (αfβ α)
-      | (Sum.inl ε) => pure $ Sum.inl ε)
+  map :=
+  λ αfβ ⟨cεoα⟩  =>
+    ⟨cεoα >>= λ εoα => match εoα with
+      | (.inr α) => pure $ .inr (αfβ α)
+      | (.inl ε) => pure $ .inl ε⟩
   pure :=
     λ α =>
       .mk (pure (Sum.inr α))
   bind :=
-  λ ftcα αfftcβ =>
-    .mk (ftcα >>= λ εoα => match εoα with
-      | Sum.inr α  => αfftcβ α
-      | Sum.inl ε  => pure (Sum.inl ε))
+    λ ⟨cεoα⟩ αfftεcβ =>
+      ⟨cεoα >>= λ εoα => match εoα with
+        | .inr α  => (αfftεcβ α).toComputationOfSum
+        | .inl ε  => pure (.inl ε)⟩
 
-instance {ε : Type} [Applicative computation] :
-    WithFailure ε
-      (FromComputationValuedFunction
-        (FailureT ε computation)) where
-  failWith :=
+instance {ε : Type}
+    [Applicative computation] :
+  WithFailure ε
+    (FromComputationValuedFunction
+      (FailureT ε computation)) where
+  failureWith :=
     λ αfε =>
       ⟨λ α =>
-        let cεpβ :=
-          pure  $
-            Sum.inl $
-              αfε α
-        cεpβ⟩
+        ⟨pure $ Sum.inl $ αfε α⟩⟩
 ```
 
 ## `ProgramWithFailure`
@@ -1091,11 +1079,11 @@ abbrev ProgramWithFailure ε computation :=
 
 def materializeWithFailure
     [Monad computation] {α β : Type} :
-      ProgramWithFailure ε computation α β →
-      α →
-      computation (ε ⊕ β) :=
-  λ ⟨αpβ⟩ α =>
-    αpβ α
+  ProgramWithFailure ε computation α β →
+  α →
+  computation (ε ⊕ β) :=
+    λ ⟨αftεcβ⟩ α =>
+      (αftεcβ α).toComputationOfSum
 
 def materializeActiveWithFailure {α β : Type} :
  ProgramWithFailure ε Active α β → α → (ε ⊕ β) :=
@@ -1139,7 +1127,7 @@ def safeDiv
   program (Nat × Nat) Nat :=
     if_ (second >=> isNotZero) unsafeDiv $
       else_ $
-        failWith (λ (n, m) =>
+        failureWith (λ (n, m) =>
           s!"tried to divide {n} by {m}")
 ```
 
@@ -1155,13 +1143,112 @@ def safeDiv
 Sum.inr 2
 ```
 
-```savedLean (name := activeFailingafeDiv)
+```savedLean (name := activeFailingSafeDiv)
 #eval
   materializeActiveWithFailure
     safeDiv
     (10, 0)
 ```
 
-```leanOutput activeFailingafeDiv
+```leanOutput activeFailingSafeDiv
 Sum.inl "tried to divide 10 by 0"
 ```
+
+## `safeDivIsOne`
+
+Let's see how failure propagates
+
+
+```savedLean
+def safeDivIsOne
+[Functional program]
+    [Creational program]
+    [Sequential program]
+    [Conditional program]
+    [WithFailure String program] :
+  program (Nat × Nat) Bool :=
+    safeDiv >=> isOne
+```
+
+```savedLean (name := activeSafeDivIsOne)
+#eval
+  materializeActiveWithFailure
+    safeDivIsOne
+    (10, 10)
+```
+
+```leanOutput activeSafeDivIsOne
+Sum.inr true
+```
+
+```savedLean (name := activeFailingSafeDivIsOne)
+#eval
+  materializeActiveWithFailure
+    safeDivIsOne
+    (10, 0)
+```
+
+```leanOutput activeFailingSafeDivIsOne
+Sum.inl "tried to divide 10 by 0"
+```
+
+## `twiceSafeDiv`
+
+Let's see how failures accumulate
+
+```savedLean
+def twiceSafeDiv
+[Functional program]
+    [Creational program]
+    [Sequential program]
+    [Conditional program]
+    [WithFailure String program] :
+  program ((Nat × Nat) × Nat) Nat :=
+    (first >=> safeDiv) &&& second >=> safeDiv
+```
+
+```savedLean (name := activeTwiceSafeDiv)
+#eval
+  materializeActiveWithFailure
+    twiceSafeDiv
+    ((10, 5), 2)
+```
+
+```leanOutput activeTwiceSafeDiv
+Sum.inr 1
+```
+
+```savedLean (name := activeTwiceSafeDiv01)
+#eval
+  materializeActiveWithFailure
+    twiceSafeDiv
+    ((10, 2), 0)
+```
+
+```leanOutput activeTwiceSafeDiv01
+Sum.inl "tried to divide 5 by 0"
+```
+
+```savedLean (name := activeTwiceSafeDiv02)
+#eval
+  materializeActiveWithFailure
+    twiceSafeDiv
+    ((10, 0), 2)
+```
+
+```leanOutput activeTwiceSafeDiv02
+Sum.inl "tried to divide 10 by 0"
+```
+
+```savedLean (name := activeTwiceSafeDiv03)
+#eval
+  materializeActiveWithFailure
+    twiceSafeDiv
+    ((10, 0), 0)
+```
+
+```leanOutput activeTwiceSafeDiv03
+Sum.inl "tried to divide 10 by 0"
+```
+
+The last two examples show the fail-fast behavior of `failureWith`.
