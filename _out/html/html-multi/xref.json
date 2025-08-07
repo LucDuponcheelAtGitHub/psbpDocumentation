@@ -76,6 +76,16 @@
         "fibonacci  and  factorial",
         "What about  Functorial ?"]}},
      "address": "/fibonacci--and--factorial/What-about--Functorial-___/"}],
+   "twiceAccumulatingSafeDivIsOne":
+   [{"id": "twiceAccumulatingSafeDivIsOne",
+     "data":
+     {"/Programming-With-Failure/twiceAccumulatingSafeDivIsOne/#twiceAccumulatingSafeDivIsOne":
+      {"display": "twiceAccumulatingSafeDivIsOne",
+       "context":
+       ["PSBP Documentation",
+        "Programming With Failure",
+        "twiceAccumulatingSafeDivIsOne"]}},
+     "address": "/Programming-With-Failure/twiceAccumulatingSafeDivIsOne/"}],
    "trueToLeftFalseToRightF":
    [{"id": "trueToLeftFalseToRightF",
      "data":
@@ -294,6 +304,16 @@
       {"display": "minusOne",
        "context": ["PSBP Documentation", "fibonacci  and  factorial"]}},
      "address": "/fibonacci--and--factorial/"}],
+   "materializeWithValidation":
+   [{"id": "materializeWithValidation",
+     "data":
+     {"/Programming-With-Failure/ProgramWithValidation/#materializeWithValidation":
+      {"display": "materializeWithValidation",
+       "context":
+       ["PSBP Documentation",
+        "Programming With Failure",
+        "ProgramWithValidation"]}},
+     "address": "/Programming-With-Failure/ProgramWithValidation/"}],
    "materializeWithState":
    [{"id": "materializeWithState",
      "data":
@@ -319,6 +339,16 @@
       {"display": "materializeReactive",
        "context": ["PSBP Documentation", "ReactiveProgram"]}},
      "address": "/ReactiveProgram/"}],
+   "materializeActiveWithValidation":
+   [{"id": "materializeActiveWithValidation",
+     "data":
+     {"/Programming-With-Failure/ProgramWithValidation/#materializeActiveWithValidation":
+      {"display": "materializeActiveWithValidation",
+       "context":
+       ["PSBP Documentation",
+        "Programming With Failure",
+        "ProgramWithValidation"]}},
+     "address": "/Programming-With-Failure/ProgramWithValidation/"}],
    "materializeActiveWithState":
    [{"id": "materializeActiveWithState",
      "data":
@@ -507,6 +537,16 @@
       {"display": "addF",
        "context": ["PSBP Documentation", "fibonacci  and  factorial"]}},
      "address": "/fibonacci--and--factorial/"}],
+   "addAccumulatingSafeDivProduct":
+   [{"id": "addAccumulatingSafeDivProduct",
+     "data":
+     {"/Programming-With-Failure/addAccumulatingSafeDivProduct/#addAccumulatingSafeDivProduct":
+      {"display": "addAccumulatingSafeDivProduct",
+       "context":
+       ["PSBP Documentation",
+        "Programming With Failure",
+        "addAccumulatingSafeDivProduct"]}},
+     "address": "/Programming-With-Failure/addAccumulatingSafeDivProduct/"}],
    "add":
    [{"id": "add",
      "data":
@@ -514,6 +554,36 @@
       {"display": "add",
        "context": ["PSBP Documentation", "fibonacci  and  factorial"]}},
      "address": "/fibonacci--and--factorial/"}],
+   "accumulatingSafeDivProduct":
+   [{"id": "accumulatingSafeDivProduct",
+     "data":
+     {"/Programming-With-Failure/accumulatingSafeDivProduct/#accumulatingSafeDivProduct":
+      {"display": "accumulatingSafeDivProduct",
+       "context":
+       ["PSBP Documentation",
+        "Programming With Failure",
+        "accumulatingSafeDivProduct"]}},
+     "address": "/Programming-With-Failure/accumulatingSafeDivProduct/"}],
+   "accumulatingSafeDivIsOne":
+   [{"id": "accumulatingSafeDivIsOne",
+     "data":
+     {"/Programming-With-Failure/accumulatingSafeDivIsOne/#accumulatingSafeDivIsOne":
+      {"display": "accumulatingSafeDivIsOne",
+       "context":
+       ["PSBP Documentation",
+        "Programming With Failure",
+        "accumulatingSafeDivIsOne"]}},
+     "address": "/Programming-With-Failure/accumulatingSafeDivIsOne/"}],
+   "accumulatingSafeDiv":
+   [{"id": "accumulatingSafeDiv",
+     "data":
+     {"/Programming-With-Failure/accumulatingSafeDiv--revisited/#accumulatingSafeDiv":
+      {"display": "accumulatingSafeDiv",
+       "context":
+       ["PSBP Documentation",
+        "Programming With Failure",
+        "accumulatingSafeDiv  revisited"]}},
+     "address": "/Programming-With-Failure/accumulatingSafeDiv--revisited/"}],
    "WithState.writeState":
    [{"id": "WithState___writeState",
      "data":
@@ -602,6 +672,16 @@
       {"display": "Reactive",
        "context": ["PSBP Documentation", "ReactiveProgram"]}},
      "address": "/ReactiveProgram/"}],
+   "ProgramWithValidation":
+   [{"id": "ProgramWithValidation",
+     "data":
+     {"/Programming-With-Failure/ProgramWithValidation/#ProgramWithValidation":
+      {"display": "ProgramWithValidation",
+       "context":
+       ["PSBP Documentation",
+        "Programming With Failure",
+        "ProgramWithValidation"]}},
+     "address": "/Programming-With-Failure/ProgramWithValidation/"}],
    "ProgramWithState":
    [{"id": "ProgramWithState",
      "data":
@@ -636,6 +716,39 @@
        "context":
        ["PSBP Documentation", "Positional Programming", "class Positional"]}},
      "address": "/Positional-Programming/class-Positional/"}],
+   "Monoid.ν":
+   [{"id": "Monoid______",
+     "data":
+     {"/Programming-With-Failure/instance-WithFailure-___--_LPAR_validation_RPAR_/#Monoid______":
+      {"display": "ν",
+       "context":
+       ["PSBP Documentation",
+        "Programming With Failure",
+        "instance WithFailure ε  (validation)"]}},
+     "address":
+     "/Programming-With-Failure/instance-WithFailure-___--_LPAR_validation_RPAR_/"}],
+   "Monoid.combine":
+   [{"id": "Monoid___combine",
+     "data":
+     {"/Programming-With-Failure/instance-WithFailure-___--_LPAR_validation_RPAR_/#Monoid___combine":
+      {"display": "combine",
+       "context":
+       ["PSBP Documentation",
+        "Programming With Failure",
+        "instance WithFailure ε  (validation)"]}},
+     "address":
+     "/Programming-With-Failure/instance-WithFailure-___--_LPAR_validation_RPAR_/"}],
+   "Monoid":
+   [{"id": "Monoid",
+     "data":
+     {"/Programming-With-Failure/instance-WithFailure-___--_LPAR_validation_RPAR_/#Monoid":
+      {"display": "Monoid",
+       "context":
+       ["PSBP Documentation",
+        "Programming With Failure",
+        "instance WithFailure ε  (validation)"]}},
+     "address":
+     "/Programming-With-Failure/instance-WithFailure-___--_LPAR_validation_RPAR_/"}],
    "Functorial.andThenF":
    [{"id": "Functorial___andThenF",
      "data":
@@ -693,23 +806,25 @@
    "FailureT.toComputationOfSum":
    [{"id": "FailureT___toComputationOfSum",
      "data":
-     {"/Programming-With-Failure/instance-WithFailure-___/#FailureT___toComputationOfSum":
+     {"/Programming-With-Failure/instance-WithFailure-___--_LPAR_fail-fast_RPAR_/#FailureT___toComputationOfSum":
       {"display": "toComputationOfSum",
        "context":
        ["PSBP Documentation",
         "Programming With Failure",
-        "instance WithFailure ε"]}},
-     "address": "/Programming-With-Failure/instance-WithFailure-___/"}],
+        "instance WithFailure ε  (fail fast)"]}},
+     "address":
+     "/Programming-With-Failure/instance-WithFailure-___--_LPAR_fail-fast_RPAR_/"}],
    "FailureT":
    [{"id": "FailureT",
      "data":
-     {"/Programming-With-Failure/instance-WithFailure-___/#FailureT":
+     {"/Programming-With-Failure/instance-WithFailure-___--_LPAR_fail-fast_RPAR_/#FailureT":
       {"display": "FailureT",
        "context":
        ["PSBP Documentation",
         "Programming With Failure",
-        "instance WithFailure ε"]}},
-     "address": "/Programming-With-Failure/instance-WithFailure-___/"}],
+        "instance WithFailure ε  (fail fast)"]}},
+     "address":
+     "/Programming-With-Failure/instance-WithFailure-___--_LPAR_fail-fast_RPAR_/"}],
    "Creational.product":
    [{"id": "Creational___product",
      "data":

@@ -76,6 +76,16 @@
         "fibonacci  and  factorial",
         "What about  Functorial ?"]}},
      "address": "/"}],
+   "twiceAccumulatingSafeDivIsOne":
+   [{"id": "twiceAccumulatingSafeDivIsOne",
+     "data":
+     {"/#twiceAccumulatingSafeDivIsOne":
+      {"display": "twiceAccumulatingSafeDivIsOne",
+       "context":
+       ["PSBP Documentation",
+        "Programming With Failure",
+        "twiceAccumulatingSafeDivIsOne"]}},
+     "address": "/"}],
    "trueToLeftFalseToRightF":
    [{"id": "trueToLeftFalseToRightF",
      "data":
@@ -288,6 +298,16 @@
       {"display": "minusOne",
        "context": ["PSBP Documentation", "fibonacci  and  factorial"]}},
      "address": "/"}],
+   "materializeWithValidation":
+   [{"id": "materializeWithValidation",
+     "data":
+     {"/#materializeWithValidation":
+      {"display": "materializeWithValidation",
+       "context":
+       ["PSBP Documentation",
+        "Programming With Failure",
+        "ProgramWithValidation"]}},
+     "address": "/"}],
    "materializeWithState":
    [{"id": "materializeWithState",
      "data":
@@ -312,6 +332,16 @@
      {"/#materializeReactive":
       {"display": "materializeReactive",
        "context": ["PSBP Documentation", "ReactiveProgram"]}},
+     "address": "/"}],
+   "materializeActiveWithValidation":
+   [{"id": "materializeActiveWithValidation",
+     "data":
+     {"/#materializeActiveWithValidation":
+      {"display": "materializeActiveWithValidation",
+       "context":
+       ["PSBP Documentation",
+        "Programming With Failure",
+        "ProgramWithValidation"]}},
      "address": "/"}],
    "materializeActiveWithState":
    [{"id": "materializeActiveWithState",
@@ -496,12 +526,52 @@
       {"display": "addF",
        "context": ["PSBP Documentation", "fibonacci  and  factorial"]}},
      "address": "/"}],
+   "addAccumulatingSafeDivProduct":
+   [{"id": "addAccumulatingSafeDivProduct",
+     "data":
+     {"/#addAccumulatingSafeDivProduct":
+      {"display": "addAccumulatingSafeDivProduct",
+       "context":
+       ["PSBP Documentation",
+        "Programming With Failure",
+        "addAccumulatingSafeDivProduct"]}},
+     "address": "/"}],
    "add":
    [{"id": "add",
      "data":
      {"/#add":
       {"display": "add",
        "context": ["PSBP Documentation", "fibonacci  and  factorial"]}},
+     "address": "/"}],
+   "accumulatingSafeDivProduct":
+   [{"id": "accumulatingSafeDivProduct",
+     "data":
+     {"/#accumulatingSafeDivProduct":
+      {"display": "accumulatingSafeDivProduct",
+       "context":
+       ["PSBP Documentation",
+        "Programming With Failure",
+        "accumulatingSafeDivProduct"]}},
+     "address": "/"}],
+   "accumulatingSafeDivIsOne":
+   [{"id": "accumulatingSafeDivIsOne",
+     "data":
+     {"/#accumulatingSafeDivIsOne":
+      {"display": "accumulatingSafeDivIsOne",
+       "context":
+       ["PSBP Documentation",
+        "Programming With Failure",
+        "accumulatingSafeDivIsOne"]}},
+     "address": "/"}],
+   "accumulatingSafeDiv":
+   [{"id": "accumulatingSafeDiv",
+     "data":
+     {"/#accumulatingSafeDiv":
+      {"display": "accumulatingSafeDiv",
+       "context":
+       ["PSBP Documentation",
+        "Programming With Failure",
+        "accumulatingSafeDiv  revisited"]}},
      "address": "/"}],
    "WithState.writeState":
    [{"id": "WithState___writeState",
@@ -591,6 +661,16 @@
       {"display": "Reactive",
        "context": ["PSBP Documentation", "ReactiveProgram"]}},
      "address": "/"}],
+   "ProgramWithValidation":
+   [{"id": "ProgramWithValidation",
+     "data":
+     {"/#ProgramWithValidation":
+      {"display": "ProgramWithValidation",
+       "context":
+       ["PSBP Documentation",
+        "Programming With Failure",
+        "ProgramWithValidation"]}},
+     "address": "/"}],
    "ProgramWithState":
    [{"id": "ProgramWithState",
      "data":
@@ -624,6 +704,36 @@
       {"display": "Positional",
        "context":
        ["PSBP Documentation", "Positional Programming", "class Positional"]}},
+     "address": "/"}],
+   "Monoid.ν":
+   [{"id": "Monoid______",
+     "data":
+     {"/#Monoid______":
+      {"display": "ν",
+       "context":
+       ["PSBP Documentation",
+        "Programming With Failure",
+        "instance WithFailure ε  (validation)"]}},
+     "address": "/"}],
+   "Monoid.combine":
+   [{"id": "Monoid___combine",
+     "data":
+     {"/#Monoid___combine":
+      {"display": "combine",
+       "context":
+       ["PSBP Documentation",
+        "Programming With Failure",
+        "instance WithFailure ε  (validation)"]}},
+     "address": "/"}],
+   "Monoid":
+   [{"id": "Monoid",
+     "data":
+     {"/#Monoid":
+      {"display": "Monoid",
+       "context":
+       ["PSBP Documentation",
+        "Programming With Failure",
+        "instance WithFailure ε  (validation)"]}},
      "address": "/"}],
    "Functorial.andThenF":
    [{"id": "Functorial___andThenF",
@@ -687,7 +797,7 @@
        "context":
        ["PSBP Documentation",
         "Programming With Failure",
-        "instance WithFailure ε"]}},
+        "instance WithFailure ε  (fail fast)"]}},
      "address": "/"}],
    "FailureT":
    [{"id": "FailureT",
@@ -697,7 +807,7 @@
        "context":
        ["PSBP Documentation",
         "Programming With Failure",
-        "instance WithFailure ε"]}},
+        "instance WithFailure ε  (fail fast)"]}},
      "address": "/"}],
    "Creational.product":
    [{"id": "Creational___product",

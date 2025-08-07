@@ -1031,7 +1031,7 @@ class WithFailure
 export WithFailure (failureWith)
 ```
 
-## `instance WithFailure ε`
+## `instance WithFailure ε` (fail fast)
 
 `WithFailure ε` is implemented in terms of `FailureT`, which is defined in terms of `⊕`. Given an initial (argument)
 value, a program with failure may transform it to a final failure (result) value (at left) or a final succedd (result)
@@ -1090,6 +1090,9 @@ def materializeActiveWithFailure {α β : Type} :
   materializeWithFailure
 ```
 
+`instance Monad (FailureT ε computation)` and `materializeActiveWithFailure` above cause programs to a fail fast when a
+first exception has been encountered. The examples below illustrate this.
+
 ## `safeDiv`
 
 Let
@@ -1116,7 +1119,6 @@ def unsafeDiv [Functional program] :
 
 in
 
-
 ```savedLean
 def safeDiv
     [Functional program]
@@ -1130,7 +1132,6 @@ def safeDiv
         failureWith (λ (n, m) =>
           s!"tried to divide {n} by {m}")
 ```
-
 
 ```savedLean (name := activeSafeDiv)
 #eval
@@ -1155,9 +1156,6 @@ Sum.inl "tried to divide 10 by 0"
 ```
 
 ## `safeDivIsOne`
-
-Let's see how failure propagates
-
 
 ```savedLean
 def safeDivIsOne
@@ -1193,8 +1191,6 @@ Sum.inl "tried to divide 10 by 0"
 ```
 
 ## `twiceSafeDiv`
-
-Let's see how failures accumulate
 
 ```savedLean
 def twiceSafeDiv
@@ -1251,4 +1247,339 @@ Sum.inl "tried to divide 10 by 0"
 Sum.inl "tried to divide 10 by 0"
 ```
 
-The last two examples show the fail-fast behavior of `failureWith`.
+## `instance WithFailure ε` (validation)
+
+What about accumulating exceptions instead of failing fast?
+
+Accumulation is specified using a `Monoid` type class. For now, the neutral element `ν` is used, this means that only a
+semigroup is required instead of a monoid.
+
+```savedLean
+class Monoid (μ : Type) where
+  ν : μ
+  combine : μ → μ → μ
+
+export Monoid (ν combine)
+
+infixl:60 " * " => combine
+```
+
+Accumulation can, for example, be implemented using the `List α` type.
+
+```savedLean
+instance : Monoid (List α) where
+  ν := []
+  combine := .append
+```
+
+```savedLean
+instance
+    [Functor computation] :
+  Functor (FailureT ε computation) where
+    map :=
+     λ αfβ ⟨cεoα⟩ =>
+       ⟨(λ εoα =>
+           match εoα with
+            | .inl ε => .inl ε
+            | .inr α => .inr (αfβ α)) <$> cεoα
+       ⟩
+
+instance
+    [Applicative computation]
+    [Monoid ε] :
+  Applicative (FailureT ε computation) where
+    pure :=
+      λ α =>
+        ⟨pure $ .inr α⟩
+    seq :=
+      λ ⟨cεoαfβ⟩ ufftεcα =>
+        let cεoα :=
+          (ufftεcα ()).toComputationOfSum
+        let εoαfεoαfβfεoβ {α β : Type} :
+          (ε ⊕ α) → (ε ⊕ (α → β)) → (ε ⊕ β) :=
+            λ εoα εoαfβ =>
+              match εoα with
+                | .inl ε =>
+                  match εoαfβ with
+                    | .inr _  => .inl ε
+                    | .inl ε' => .inl (ε' * ε)
+                | .inr α =>
+                  match εoαfβ with
+                    | .inr αfβ  => .inr (αfβ α)
+                    | .inl ε' => .inl ε'
+        ⟨εoαfεoαfβfεoβ <$> cεoα <*> cεoαfβ⟩
+```
+
+## `ProgramWithValidation`
+
+```savedLean
+abbrev ProgramWithValidation ε computation :=
+  FromComputationValuedFunction (FailureT ε computation)
+
+def materializeWithValidation
+    [Monad computation]
+    [Monoid ε] {α β : Type} :
+  ProgramWithValidation ε computation α β →
+  α →
+  computation (ε ⊕ β) :=
+    λ ⟨αftεcβ⟩ α =>
+      (αftεcβ α).toComputationOfSum
+
+def materializeActiveWithValidation
+    [Monoid ε] {α β : Type} :
+ ProgramWithValidation ε Active α β → α → (ε ⊕ β) :=
+  materializeWithValidation
+```
+
+`instance Functor (FailureT ε computation)`, `instance Applicative (FailureT ε computation)` and
+`materializeActiveWithValidation` above cause programs to accumulate all exceptions that are encountered.
+
+The examples below illustrate this accumulation behavior.
+
+## `accumulatingSafeDiv` revisited
+
+```savedLean
+def accumulatingSafeDiv
+    [Functional program]
+    [Creational program]
+    [Sequential program]
+    [Conditional program]
+    [WithFailure (List String) program] :
+  program (Nat × Nat) Nat :=
+    if_ (second >=> isNotZero) unsafeDiv $
+      else_ $
+        failureWith (λ (n, m) =>
+          [s!"tried to divide {n} by {m}"])
+```
+
+```savedLean (name := activeAccumulatingSafeDiv)
+#eval
+materializeActiveWithValidation
+  accumulatingSafeDiv
+  (10, 5)
+```
+
+```leanOutput activeAccumulatingSafeDiv
+Sum.inr 2
+```
+
+```savedLean (name := activeAccumulatingFailingSafeDiv)
+#eval
+materializeActiveWithValidation
+  accumulatingSafeDiv
+  (10, 0)
+```
+
+```leanOutput activeAccumulatingFailingSafeDiv
+Sum.inl ["tried to divide 10 by 0"]
+```
+
+## `accumulatingSafeDivIsOne`
+
+```savedLean
+def accumulatingSafeDivIsOne
+[Functional program]
+    [Creational program]
+    [Sequential program]
+    [Conditional program]
+    [WithFailure (List String) program] :
+  program (Nat × Nat) Bool :=
+    accumulatingSafeDiv >=> isOne
+```
+
+```savedLean (name := activeAccumulatingSafeDivIsOne)
+#eval
+  materializeActiveWithValidation
+    accumulatingSafeDivIsOne
+    (10, 10)
+```
+
+```leanOutput activeAccumulatingSafeDivIsOne
+Sum.inr true
+```
+
+```savedLean (name := activeAccumulatingFailingSafeDivIsOne)
+#eval
+  materializeActiveWithValidation
+    accumulatingSafeDivIsOne
+    (10, 0)
+```
+
+```leanOutput activeFailingSafeDivIsOne
+Sum.inl "tried to divide 10 by 0"
+```
+
+## `twiceAccumulatingSafeDivIsOne`
+
+```savedLean
+def twiceAccumulatingSafeDivIsOne
+[Functional program]
+    [Creational program]
+    [Sequential program]
+    [Conditional program]
+    [WithFailure (List String) program] :
+  program ((Nat × Nat) × Nat) Nat :=
+    ((first >=> accumulatingSafeDiv) &&& second) >=>
+    accumulatingSafeDiv
+```
+
+```savedLean (name := activeAccumulatingTwiceSafeDiv)
+#eval
+  materializeActiveWithValidation
+    twiceAccumulatingSafeDivIsOne
+    ((10, 5), 2)
+```
+
+```leanOutput activeAccumulatingTwiceSafeDiv
+Sum.inr 1
+```
+
+```savedLean (name := activeAccumulatingTwiceSafeDiv01)
+#eval
+  materializeActiveWithValidation
+    twiceAccumulatingSafeDivIsOne
+    ((10, 2), 0)
+```
+
+```leanOutput activeTwiceSafeDiv01
+Sum.inl "tried to divide 5 by 0"
+```
+
+```savedLean (name := activeAccumulatingTwiceSafeDiv02)
+#eval
+  materializeActiveWithValidation
+    twiceAccumulatingSafeDivIsOne
+    ((10, 0), 2)
+```
+
+```leanOutput activeAccumulatingTwiceSafeDiv02
+Sum.inl ["tried to divide 10 by 0"]
+```
+
+```savedLean (name := activeAccumulatingTwiceSafeDiv03)
+#eval
+  materializeActiveWithValidation
+    twiceAccumulatingSafeDivIsOne
+    ((10, 0), 0)
+```
+
+```leanOutput activeAccumulatingTwiceSafeDiv03
+Sum.inl ["tried to divide 10 by 0"]
+```
+
+## `accumulatingSafeDivProduct`
+
+```savedLean
+def accumulatingSafeDivProduct
+[Functional program]
+    [Creational program]
+    [Sequential program]
+    [Conditional program]
+    [WithFailure (List String) program] :
+  program ((Nat × Nat) × (Nat × Nat)) (Nat × Nat) :=
+    (first >=> accumulatingSafeDiv) &&& (second >=>
+    accumulatingSafeDiv)
+```
+
+```savedLean (name := activeAccumulatingSafeDivProduct01)
+#eval
+  materializeActiveWithValidation
+    accumulatingSafeDivProduct
+    ((10, 5), (8, 2))
+```
+
+```leanOutput activeAccumulatingSafeDivProduct01
+Sum.inr (2, 4)
+```
+
+```savedLean (name := activeAccumulatingSafeDivProduct02)
+#eval
+  materializeActiveWithValidation
+    accumulatingSafeDivProduct
+    ((10, 0), (8, 2))
+```
+
+```leanOutput activeAccumulatingSafeDivProduct02
+Sum.inl ["tried to divide 10 by 0"]
+```
+
+```savedLean (name := activeAccumulatingSafeDivProduct03)
+#eval
+  materializeActiveWithValidation
+    accumulatingSafeDivProduct
+    ((10, 5), (8, 0))
+```
+
+```leanOutput activeAccumulatingSafeDivProduct03
+Sum.inl ["tried to divide 8 by 0"]
+```
+
+```savedLean (name := activeAccumulatingSafeDivProduct04)
+#eval
+  materializeActiveWithValidation
+    accumulatingSafeDivProduct
+    ((10, 0), (8, 0))
+```
+
+```leanOutput activeAccumulatingSafeDivProduct04
+Sum.inl ["tried to divide 10 by 0", "tried to divide 8 by 0"]
+```
+
+## `addAccumulatingSafeDivProduct`
+
+```savedLean
+def addAccumulatingSafeDivProduct
+[Functional program]
+    [Creational program]
+    [Sequential program]
+    [Conditional program]
+    [WithFailure (List String) program] :
+  program ((Nat × Nat) × (Nat × Nat)) Nat :=
+    (first >=> accumulatingSafeDiv) &&&
+    (second >=> accumulatingSafeDiv) >=>
+    add
+```
+
+```savedLean (name := activeAddAccumulatingSafeDivProduct01)
+#eval
+  materializeActiveWithValidation
+    addAccumulatingSafeDivProduct
+    ((10, 5), (8, 2))
+```
+
+```leanOutput activeAddAccumulatingSafeDivProduct01
+Sum.inr 6
+```
+
+```savedLean (name := activeAddAccumulatingSafeDivProduct02)
+#eval
+  materializeActiveWithValidation
+    addAccumulatingSafeDivProduct
+    ((10, 0), (8, 2))
+```
+
+```leanOutput activeAccumulatingSafeDivProduct02
+Sum.inl ["tried to divide 10 by 0"]
+```
+
+```savedLean (name := activeAddAccumulatingSafeDivProduct03)
+#eval
+  materializeActiveWithValidation
+    addAccumulatingSafeDivProduct
+    ((10, 5), (8, 0))
+```
+
+```leanOutput activeAccumulatingSafeDivProduct03
+Sum.inl ["tried to divide 8 by 0"]
+```
+
+```savedLean (name := activeAddAccumulatingSafeDivProduct04)
+#eval
+  materializeActiveWithValidation
+    addAccumulatingSafeDivProduct
+    ((10, 0), (8, 0))
+```
+
+```leanOutput activeAccumulatingSafeDivProduct04
+Sum.inl ["tried to divide 10 by 0", "tried to divide 8 by 0"]
+```

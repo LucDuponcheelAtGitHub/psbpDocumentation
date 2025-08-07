@@ -130,13 +130,52 @@
  "24": "<code>Sort u_1</code>",
  "23": "<code>in_.{u_1} {α : Sort u_1} : α → α</code>",
  "22": "<code>program (α × β) γ</code>",
+ "210":
+ "<code>addAccumulatingSafeDivProduct {program : Type → Type → Type} [Functional program] [Creational program]\n  [Sequential program] [Conditional program] [WithFailure (List String) program] : program ((Nat × Nat) × Nat × Nat) Nat</code>",
  "21": "<code>program α β</code>",
+ "209":
+ "<code>accumulatingSafeDivProduct {program : Type → Type → Type} [Functional program] [Creational program] [Sequential program]\n  [Conditional program] [WithFailure (List String) program] : program ((Nat × Nat) × Nat × Nat) (Nat × Nat)</code>",
+ "208":
+ "<code>twiceAccumulatingSafeDivIsOne {program : Type → Type → Type} [Functional program] [Creational program]\n  [Sequential program] [Conditional program] [WithFailure (List String) program] : program ((Nat × Nat) × Nat) Nat</code>",
+ "207":
+ "<code>accumulatingSafeDivIsOne {program : Type → Type → Type} [Functional program] [Creational program] [Sequential program]\n  [Conditional program] [WithFailure (List String) program] : program (Nat × Nat) Bool</code>",
+ "206":
+ "<code>accumulatingSafeDiv {program : Type → Type → Type} [Functional program] [Creational program] [Sequential program]\n  [Conditional program] [WithFailure (List String) program] : program (Nat × Nat) Nat</code>",
+ "205":
+ "<code>materializeActiveWithValidation {ε : Type} [Monoid ε] {α β : Type} : ProgramWithValidation ε Active α β → α → ε ⊕ β</code>",
+ "204":
+ "<code>materializeWithValidation {computation : Type → Type} {ε : Type} [Monad computation] [Monoid ε] {α β : Type} :\n  ProgramWithValidation ε computation α β → α → computation (ε ⊕ β)</code>",
+ "203":
+ "<code>ProgramWithValidation (ε : Type) (computation : Type → Type) (α β : Type) : Type</code>",
+ "202": "<code>ε</code>",
+ "201": "<code>α✝ → β</code>",
+ "200": "<code>ε ⊕ (α✝ → β)</code>",
  "20":
  "<code>let_ {program : Type → Type → Type} {α β γ : Type} [Functional program] [Sequential program] [Creational program] :\n  program α β → program (α × β) γ → program α γ</code>",
  "2":
  "<code class=\"docstring\">A type universe. `Type ≡ Type 0`, `Type u ≡ Sort (u + 1)`. </code>",
+ "199": "<code>ε✝ ⊕ (α → β)</code>",
+ "198": "<code>ε ⊕ (α → β)</code>",
+ "197": "<code>ε ⊕ α</code>",
+ "196": "<code>{α β : Type} → ε ⊕ α → ε ⊕ (α → β) → ε ⊕ β</code>",
+ "195":
+ "<code class=\"docstring\">`let` is used to declare a local definition. Example:\n```\nlet x := 1\nlet y := x + 1\nx + y\n```\nSince functions are first class citizens in Lean, you can use `let` to declare\nlocal functions too.\n```\nlet double := fun x =&gt; 2*x\ndouble (double 3)\n```\nFor recursive definitions, you should use `let rec`.\nYou can also perform pattern matching using `let`. For example,\nassume `p` has type `Nat × Nat`, then you can write\n```\nlet (x, y) := p\nx + y\n```\n\nThe *anaphoric let* `let := v` defines a variable called `this`.\n</code>",
+ "194": "<code>Unit → FailureT ε computation α✝</code>",
+ "193": "<code>computation (ε ⊕ (α✝ → β✝))</code>",
+ "192":
+ "<code>{α β : Type} → FailureT ε computation (α → β) → (Unit → FailureT ε computation α) → FailureT ε computation β</code><span class=\"sep\"></span><code class=\"docstring\">The implementation of the `&lt;*&gt;` operator.\n\nIn a monad, `mf &lt;*&gt; mx` is the same as `do let f ← mf; x ← mx; pure (f x)`: it evaluates the\nfunction first, then the argument, and applies one to the other.\n\nTo avoid surprising evaluation semantics, `mx` is taken \"lazily\", using a `Unit → f α` function.\n\n\nConventions for notations in identifiers:\n\n * The recommended spelling of `&lt;*&gt;` in identifiers is `seq`.</code>",
+ "191":
+ "<code>List.append.{u} {α : Type u} (xs ys : List α) : List α</code><span class=\"sep\"></span><code class=\"docstring\">Appends two lists. Normally used via the `++` operator.\n\nAppending lists takes time proportional to the length of the first list: `O(|xs|)`.\n\nExamples:\n* `[1, 2, 3] ++ [4, 5] = [1, 2, 3, 4, 5]`.\n* `[] ++ [4, 5] = [4, 5]`.\n* `[1, 2, 3] ++ [] = [1, 2, 3]`.\n</code>",
+ "190": "<code>List α → List α → List α</code>",
  "19":
  "<code>id.{u} {α : Sort u} (a : α) : α</code><span class=\"sep\"></span><code class=\"docstring\">The identity function. `id` takes an implicit argument `α : Sort u`\n(a type in any universe), and an argument `a : α`, and returns `a`.\n\nAlthough this may look like a useless function, one application of the identity\nfunction is to explicitly put a type on an expression. If `e` has type `T`,\nand `T'` is definitionally equal to `T`, then `@id T' e` typechecks, and Lean\nknows that this expression has type `T'` rather than `T`. This can make a\ndifference for typeclass inference, since `T` and `T'` may have different\ntypeclass instances on them. `show T' from e` is sugar for an `@id T' e`\nexpression.\n</code>",
+ "189": "<code>List α</code>",
+ "188":
+ "<code>List.{u} (α : Type u) : Type u</code><span class=\"sep\"></span><code class=\"docstring\">Linked lists: ordered lists, in which each element has a reference to the next element.\n\nMost operations on linked lists take time proportional to the length of the list, because each\nelement must be traversed to find the next element.\n\n`List α` is isomorphic to `Array α`, but they are useful for different things:\n* `List α` is easier for reasoning, and `Array α` is modeled as a wrapper around `List α`.\n* `List α` works well as a persistent data structure, when many copies of the tail are shared. When\n  the value is not shared, `Array α` will have better performance because it can do destructive\n  updates.\n</code>",
+ "187": "<code><span class=\"literal string\">\" * \"</span> : String</code>",
+ "186": "<code>Monoid.combine {μ : Type} [self : Monoid μ] : μ → μ → μ</code>",
+ "185": "<code>Monoid.ν {μ : Type} [self : Monoid μ] : μ</code>",
+ "184": "<code>Monoid (μ : Type) : Type</code>",
  "183":
  "<code>twiceSafeDiv {program : Type → Type → Type} [Functional program] [Creational program] [Sequential program]\n  [Conditional program] [WithFailure String program] : program ((Nat × Nat) × Nat) Nat</code>",
  "182":

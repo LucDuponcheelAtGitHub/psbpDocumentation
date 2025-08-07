@@ -569,202 +569,6 @@
 }
 
 </style><script>
-      
-window.onload = () => {
-
-    // Don't show hovers inside of closed tactic states
-    function blockedByTactic(elem) {
-      let parent = elem.parentNode;
-      while (parent && "classList" in parent) {
-        if (parent.classList.contains("tactic")) {
-          const toggle = parent.querySelector("input.tactic-toggle");
-          if (toggle) {
-            return !toggle.checked;
-          }
-        }
-        parent = parent.parentNode;
-      }
-      return false;
-    }
-
-    function blockedByTippy(elem) {
-      // Don't show a new hover until the old ones are all closed.
-      // Scoped to the nearest "top-level block" to avoid being O(n) in the size of the document.
-      var block = elem;
-      const topLevel = new Set(["section", "body", "html", "nav", "header"]);
-      while (block.parentNode && !topLevel.has(block.parentNode.nodeName.toLowerCase())) {
-        block = block.parentNode;
-      }
-      for (const child of block.querySelectorAll(".token, .has-info")) {
-        if (child._tippy && child._tippy.state.isVisible) { return true };
-      }
-      return false;
-    }
-
-    for (const c of document.querySelectorAll(".hl.lean .token")) {
-        if (c.dataset.binding != "") {
-            c.addEventListener("mouseover", (event) => {
-                if (blockedByTactic(c)) {return;}
-                const context = c.closest(".hl.lean").dataset.leanContext;
-                for (const example of document.querySelectorAll(".hl.lean")) {
-                    if (example.dataset.leanContext == context) {
-                        for (const tok of example.querySelectorAll(".token")) {
-                            if (c.dataset.binding == tok.dataset.binding) {
-                                tok.classList.add("binding-hl");
-                            }
-                        }
-                    }
-                }
-            });
-        }
-        c.addEventListener("mouseout", (event) => {
-            for (const tok of document.querySelectorAll(".hl.lean .token")) {
-                tok.classList.remove("binding-hl");
-            }
-        });
-    }
-    /* Render docstrings */
-    if ('undefined' !== typeof marked) {
-        for (const d of document.querySelectorAll("code.docstring, pre.docstring")) {
-            const str = d.innerText;
-            const html = marked.parse(str);
-            const rendered = document.createElement("div");
-            rendered.classList.add("docstring");
-            rendered.innerHTML = html;
-            d.parentNode.replaceChild(rendered, d);
-        }
-    }
-    // Add hovers
-    let siteRoot = typeof __versoSiteRoot !== 'undefined' ? __versoSiteRoot : "/";
-    let docsJson = siteRoot + "-verso-docs.json";
-    fetch(docsJson).then((resp) => resp.json()).then((versoDocData) => {
-
-      function hideParentTooltips(element) {
-        let parent = element.parentElement;
-        while (parent) {
-          const tippyInstance = parent._tippy;
-          if (tippyInstance) {
-            tippyInstance.hide();
-          }
-          parent = parent.parentElement;
-        }
-      }
-
-
-
-      const defaultTippyProps = {
-        /* DEBUG -- remove the space: * /
-        onHide(any) { return false; },
-        trigger: "click",
-        // */
-        /* theme: "lean", */
-        maxWidth: "none",
-        appendTo: () => document.body,
-        interactive: true,
-        delay: [100, null],
-        /* ignoreAttributes: true, */
-        followCursor: 'initial',
-        onShow(inst) {
-          if (inst.reference.className == 'tactic') {
-
-            const toggle = inst.reference.querySelector("input.tactic-toggle");
-            if (toggle && toggle.checked) {
-              return false;
-            }
-            hideParentTooltips(inst.reference);
-            //if (blockedByTippy(inst.reference)) { return false; }
-
-          } else if (inst.reference.querySelector(".hover-info") || "versoHover" in inst.reference.dataset) {
-            if (blockedByTactic(inst.reference)) { return false };
-            if (blockedByTippy(inst.reference)) { return false; }
-          } else { // Nothing to show here!
-            return false;
-          }
-        },
-        content (tgt) {
-          const content = document.createElement("span");
-          if (tgt.className == 'tactic') {
-            const state = tgt.querySelector(".tactic-state").cloneNode(true);
-            state.style.display = "block";
-            content.appendChild(state);
-            content.style.display = "block";
-            content.className = "hl lean popup";
-          } else {
-            content.className = "hl lean";
-            content.style.display = "block";
-            content.style.maxHeight = "300px";
-            content.style.overflowY = "auto";
-            content.style.overflowX = "hidden";
-            const hoverId = tgt.dataset.versoHover;
-            const hoverInfo = tgt.querySelector(".hover-info");
-            if (hoverId) { // Docstrings from the table
-              // TODO stop doing an implicit conversion from string to number here
-              let data = versoDocData[hoverId];
-              if (data) {
-                const info = document.createElement("span");
-                info.className = "hover-info";
-                info.style.display = "block";
-                info.innerHTML = data;
-                content.appendChild(info);
-                /* Render docstrings - TODO server-side */
-                if ('undefined' !== typeof marked) {
-                    for (const d of content.querySelectorAll("code.docstring, pre.docstring")) {
-                        const str = d.innerText;
-                        const html = marked.parse(str);
-                        const rendered = document.createElement("div");
-                        rendered.classList.add("docstring");
-                        rendered.innerHTML = html;
-                        d.parentNode.replaceChild(rendered, d);
-                    }
-                }
-              } else {
-                content.innerHTML = "Failed to load doc ID: " + hoverId;
-              }
-            } else if (hoverInfo) { // The inline info, still used for compiler messages
-              content.appendChild(hoverInfo.cloneNode(true));
-            }
-            const extraLinks = tgt.parentElement.dataset['versoLinks'];
-            if (extraLinks) {
-              try {
-                const extras = JSON.parse(extraLinks);
-                const links = document.createElement('ul');
-                links.className = 'extra-doc-links';
-                extras.forEach((l) => {
-                  const li = document.createElement('li');
-                  li.innerHTML = "<a href=\"" + l['href'] + "\" title=\"" + l.long + "\">" + l.short + "</a>";
-                  links.appendChild(li);
-                });
-                content.appendChild(links);
-              } catch (error) {
-                console.error(error);
-              }
-            }
-          }
-          return content;
-        }
-      };
-
-
-      document.querySelectorAll('.hl.lean .const.token, .hl.lean .keyword.token, .hl.lean .literal.token, .hl.lean .option.token, .hl.lean .var.token, .hl.lean .typed.token, .hl.lean .level-var, .hl.lean .level-const, .hl.lean .level-op, .hl.lean .sort').forEach(element => {
-        element.setAttribute('data-tippy-theme', 'lean');
-      });
-      document.querySelectorAll('.hl.lean .has-info.warning').forEach(element => {
-        element.setAttribute('data-tippy-theme', 'warning message');
-      });
-      document.querySelectorAll('.hl.lean .has-info.information').forEach(element => {
-        element.setAttribute('data-tippy-theme', 'info message');
-      });
-      document.querySelectorAll('.hl.lean .has-info.error').forEach(element => {
-        element.setAttribute('data-tippy-theme', 'error message');
-      });
-      document.querySelectorAll('.hl.lean .tactic').forEach(element => {
-        element.setAttribute('data-tippy-theme', 'tactic');
-      });
-      let insts = tippy('.hl.lean .const.token, .hl.lean .keyword.token, .hl.lean .literal.token, .hl.lean .option.token, .hl.lean .var.token, .hl.lean .typed.token, .hl.lean .has-info, .hl.lean .tactic, .hl.lean .level-var, .hl.lean .level-const, .hl.lean .level-op, .hl.lean .sort', defaultTippyProps);
-  });
-}
-</script>
-    <script>
       let xref = {"Verso.Genre.Manual.section":
  {"title": "Sections or chapters of the manual",
   "description": null,
@@ -843,6 +647,16 @@ window.onload = () => {
         "fibonacci  and  factorial",
         "What about  Functorial ?"]}},
      "address": "/fibonacci--and--factorial/What-about--Functorial-___/"}],
+   "twiceAccumulatingSafeDivIsOne":
+   [{"id": "twiceAccumulatingSafeDivIsOne",
+     "data":
+     {"/Programming-With-Failure/twiceAccumulatingSafeDivIsOne/#twiceAccumulatingSafeDivIsOne":
+      {"display": "twiceAccumulatingSafeDivIsOne",
+       "context":
+       ["PSBP Documentation",
+        "Programming With Failure",
+        "twiceAccumulatingSafeDivIsOne"]}},
+     "address": "/Programming-With-Failure/twiceAccumulatingSafeDivIsOne/"}],
    "trueToLeftFalseToRightF":
    [{"id": "trueToLeftFalseToRightF",
      "data":
@@ -1061,6 +875,16 @@ window.onload = () => {
       {"display": "minusOne",
        "context": ["PSBP Documentation", "fibonacci  and  factorial"]}},
      "address": "/fibonacci--and--factorial/"}],
+   "materializeWithValidation":
+   [{"id": "materializeWithValidation",
+     "data":
+     {"/Programming-With-Failure/ProgramWithValidation/#materializeWithValidation":
+      {"display": "materializeWithValidation",
+       "context":
+       ["PSBP Documentation",
+        "Programming With Failure",
+        "ProgramWithValidation"]}},
+     "address": "/Programming-With-Failure/ProgramWithValidation/"}],
    "materializeWithState":
    [{"id": "materializeWithState",
      "data":
@@ -1086,6 +910,16 @@ window.onload = () => {
       {"display": "materializeReactive",
        "context": ["PSBP Documentation", "ReactiveProgram"]}},
      "address": "/ReactiveProgram/"}],
+   "materializeActiveWithValidation":
+   [{"id": "materializeActiveWithValidation",
+     "data":
+     {"/Programming-With-Failure/ProgramWithValidation/#materializeActiveWithValidation":
+      {"display": "materializeActiveWithValidation",
+       "context":
+       ["PSBP Documentation",
+        "Programming With Failure",
+        "ProgramWithValidation"]}},
+     "address": "/Programming-With-Failure/ProgramWithValidation/"}],
    "materializeActiveWithState":
    [{"id": "materializeActiveWithState",
      "data":
@@ -1274,6 +1108,16 @@ window.onload = () => {
       {"display": "addF",
        "context": ["PSBP Documentation", "fibonacci  and  factorial"]}},
      "address": "/fibonacci--and--factorial/"}],
+   "addAccumulatingSafeDivProduct":
+   [{"id": "addAccumulatingSafeDivProduct",
+     "data":
+     {"/Programming-With-Failure/addAccumulatingSafeDivProduct/#addAccumulatingSafeDivProduct":
+      {"display": "addAccumulatingSafeDivProduct",
+       "context":
+       ["PSBP Documentation",
+        "Programming With Failure",
+        "addAccumulatingSafeDivProduct"]}},
+     "address": "/Programming-With-Failure/addAccumulatingSafeDivProduct/"}],
    "add":
    [{"id": "add",
      "data":
@@ -1281,6 +1125,36 @@ window.onload = () => {
       {"display": "add",
        "context": ["PSBP Documentation", "fibonacci  and  factorial"]}},
      "address": "/fibonacci--and--factorial/"}],
+   "accumulatingSafeDivProduct":
+   [{"id": "accumulatingSafeDivProduct",
+     "data":
+     {"/Programming-With-Failure/accumulatingSafeDivProduct/#accumulatingSafeDivProduct":
+      {"display": "accumulatingSafeDivProduct",
+       "context":
+       ["PSBP Documentation",
+        "Programming With Failure",
+        "accumulatingSafeDivProduct"]}},
+     "address": "/Programming-With-Failure/accumulatingSafeDivProduct/"}],
+   "accumulatingSafeDivIsOne":
+   [{"id": "accumulatingSafeDivIsOne",
+     "data":
+     {"/Programming-With-Failure/accumulatingSafeDivIsOne/#accumulatingSafeDivIsOne":
+      {"display": "accumulatingSafeDivIsOne",
+       "context":
+       ["PSBP Documentation",
+        "Programming With Failure",
+        "accumulatingSafeDivIsOne"]}},
+     "address": "/Programming-With-Failure/accumulatingSafeDivIsOne/"}],
+   "accumulatingSafeDiv":
+   [{"id": "accumulatingSafeDiv",
+     "data":
+     {"/Programming-With-Failure/accumulatingSafeDiv--revisited/#accumulatingSafeDiv":
+      {"display": "accumulatingSafeDiv",
+       "context":
+       ["PSBP Documentation",
+        "Programming With Failure",
+        "accumulatingSafeDiv  revisited"]}},
+     "address": "/Programming-With-Failure/accumulatingSafeDiv--revisited/"}],
    "WithState.writeState":
    [{"id": "WithState___writeState",
      "data":
@@ -1369,6 +1243,16 @@ window.onload = () => {
       {"display": "Reactive",
        "context": ["PSBP Documentation", "ReactiveProgram"]}},
      "address": "/ReactiveProgram/"}],
+   "ProgramWithValidation":
+   [{"id": "ProgramWithValidation",
+     "data":
+     {"/Programming-With-Failure/ProgramWithValidation/#ProgramWithValidation":
+      {"display": "ProgramWithValidation",
+       "context":
+       ["PSBP Documentation",
+        "Programming With Failure",
+        "ProgramWithValidation"]}},
+     "address": "/Programming-With-Failure/ProgramWithValidation/"}],
    "ProgramWithState":
    [{"id": "ProgramWithState",
      "data":
@@ -1403,6 +1287,39 @@ window.onload = () => {
        "context":
        ["PSBP Documentation", "Positional Programming", "class Positional"]}},
      "address": "/Positional-Programming/class-Positional/"}],
+   "Monoid.ν":
+   [{"id": "Monoid______",
+     "data":
+     {"/Programming-With-Failure/instance-WithFailure-___--_LPAR_validation_RPAR_/#Monoid______":
+      {"display": "ν",
+       "context":
+       ["PSBP Documentation",
+        "Programming With Failure",
+        "instance WithFailure ε  (validation)"]}},
+     "address":
+     "/Programming-With-Failure/instance-WithFailure-___--_LPAR_validation_RPAR_/"}],
+   "Monoid.combine":
+   [{"id": "Monoid___combine",
+     "data":
+     {"/Programming-With-Failure/instance-WithFailure-___--_LPAR_validation_RPAR_/#Monoid___combine":
+      {"display": "combine",
+       "context":
+       ["PSBP Documentation",
+        "Programming With Failure",
+        "instance WithFailure ε  (validation)"]}},
+     "address":
+     "/Programming-With-Failure/instance-WithFailure-___--_LPAR_validation_RPAR_/"}],
+   "Monoid":
+   [{"id": "Monoid",
+     "data":
+     {"/Programming-With-Failure/instance-WithFailure-___--_LPAR_validation_RPAR_/#Monoid":
+      {"display": "Monoid",
+       "context":
+       ["PSBP Documentation",
+        "Programming With Failure",
+        "instance WithFailure ε  (validation)"]}},
+     "address":
+     "/Programming-With-Failure/instance-WithFailure-___--_LPAR_validation_RPAR_/"}],
    "Functorial.andThenF":
    [{"id": "Functorial___andThenF",
      "data":
@@ -1460,23 +1377,25 @@ window.onload = () => {
    "FailureT.toComputationOfSum":
    [{"id": "FailureT___toComputationOfSum",
      "data":
-     {"/Programming-With-Failure/instance-WithFailure-___/#FailureT___toComputationOfSum":
+     {"/Programming-With-Failure/instance-WithFailure-___--_LPAR_fail-fast_RPAR_/#FailureT___toComputationOfSum":
       {"display": "toComputationOfSum",
        "context":
        ["PSBP Documentation",
         "Programming With Failure",
-        "instance WithFailure ε"]}},
-     "address": "/Programming-With-Failure/instance-WithFailure-___/"}],
+        "instance WithFailure ε  (fail fast)"]}},
+     "address":
+     "/Programming-With-Failure/instance-WithFailure-___--_LPAR_fail-fast_RPAR_/"}],
    "FailureT":
    [{"id": "FailureT",
      "data":
-     {"/Programming-With-Failure/instance-WithFailure-___/#FailureT":
+     {"/Programming-With-Failure/instance-WithFailure-___--_LPAR_fail-fast_RPAR_/#FailureT":
       {"display": "FailureT",
        "context":
        ["PSBP Documentation",
         "Programming With Failure",
-        "instance WithFailure ε"]}},
-     "address": "/Programming-With-Failure/instance-WithFailure-___/"}],
+        "instance WithFailure ε  (fail fast)"]}},
+     "address":
+     "/Programming-With-Failure/instance-WithFailure-___--_LPAR_fail-fast_RPAR_/"}],
    "Creational.product":
    [{"id": "Creational___product",
      "data":
@@ -1610,6 +1529,202 @@ if(name) {
         document.querySelector("#title").innerHTML = "No name provided";
         document.querySelector("#message").innerHTML = "<p>This page expects a 'name' query parameter, along with documentation domains.</p>";
     });
+}
+</script>
+    <script>
+      
+window.onload = () => {
+
+    // Don't show hovers inside of closed tactic states
+    function blockedByTactic(elem) {
+      let parent = elem.parentNode;
+      while (parent && "classList" in parent) {
+        if (parent.classList.contains("tactic")) {
+          const toggle = parent.querySelector("input.tactic-toggle");
+          if (toggle) {
+            return !toggle.checked;
+          }
+        }
+        parent = parent.parentNode;
+      }
+      return false;
+    }
+
+    function blockedByTippy(elem) {
+      // Don't show a new hover until the old ones are all closed.
+      // Scoped to the nearest "top-level block" to avoid being O(n) in the size of the document.
+      var block = elem;
+      const topLevel = new Set(["section", "body", "html", "nav", "header"]);
+      while (block.parentNode && !topLevel.has(block.parentNode.nodeName.toLowerCase())) {
+        block = block.parentNode;
+      }
+      for (const child of block.querySelectorAll(".token, .has-info")) {
+        if (child._tippy && child._tippy.state.isVisible) { return true };
+      }
+      return false;
+    }
+
+    for (const c of document.querySelectorAll(".hl.lean .token")) {
+        if (c.dataset.binding != "") {
+            c.addEventListener("mouseover", (event) => {
+                if (blockedByTactic(c)) {return;}
+                const context = c.closest(".hl.lean").dataset.leanContext;
+                for (const example of document.querySelectorAll(".hl.lean")) {
+                    if (example.dataset.leanContext == context) {
+                        for (const tok of example.querySelectorAll(".token")) {
+                            if (c.dataset.binding == tok.dataset.binding) {
+                                tok.classList.add("binding-hl");
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        c.addEventListener("mouseout", (event) => {
+            for (const tok of document.querySelectorAll(".hl.lean .token")) {
+                tok.classList.remove("binding-hl");
+            }
+        });
+    }
+    /* Render docstrings */
+    if ('undefined' !== typeof marked) {
+        for (const d of document.querySelectorAll("code.docstring, pre.docstring")) {
+            const str = d.innerText;
+            const html = marked.parse(str);
+            const rendered = document.createElement("div");
+            rendered.classList.add("docstring");
+            rendered.innerHTML = html;
+            d.parentNode.replaceChild(rendered, d);
+        }
+    }
+    // Add hovers
+    let siteRoot = typeof __versoSiteRoot !== 'undefined' ? __versoSiteRoot : "/";
+    let docsJson = siteRoot + "-verso-docs.json";
+    fetch(docsJson).then((resp) => resp.json()).then((versoDocData) => {
+
+      function hideParentTooltips(element) {
+        let parent = element.parentElement;
+        while (parent) {
+          const tippyInstance = parent._tippy;
+          if (tippyInstance) {
+            tippyInstance.hide();
+          }
+          parent = parent.parentElement;
+        }
+      }
+
+
+
+      const defaultTippyProps = {
+        /* DEBUG -- remove the space: * /
+        onHide(any) { return false; },
+        trigger: "click",
+        // */
+        /* theme: "lean", */
+        maxWidth: "none",
+        appendTo: () => document.body,
+        interactive: true,
+        delay: [100, null],
+        /* ignoreAttributes: true, */
+        followCursor: 'initial',
+        onShow(inst) {
+          if (inst.reference.className == 'tactic') {
+
+            const toggle = inst.reference.querySelector("input.tactic-toggle");
+            if (toggle && toggle.checked) {
+              return false;
+            }
+            hideParentTooltips(inst.reference);
+            //if (blockedByTippy(inst.reference)) { return false; }
+
+          } else if (inst.reference.querySelector(".hover-info") || "versoHover" in inst.reference.dataset) {
+            if (blockedByTactic(inst.reference)) { return false };
+            if (blockedByTippy(inst.reference)) { return false; }
+          } else { // Nothing to show here!
+            return false;
+          }
+        },
+        content (tgt) {
+          const content = document.createElement("span");
+          if (tgt.className == 'tactic') {
+            const state = tgt.querySelector(".tactic-state").cloneNode(true);
+            state.style.display = "block";
+            content.appendChild(state);
+            content.style.display = "block";
+            content.className = "hl lean popup";
+          } else {
+            content.className = "hl lean";
+            content.style.display = "block";
+            content.style.maxHeight = "300px";
+            content.style.overflowY = "auto";
+            content.style.overflowX = "hidden";
+            const hoverId = tgt.dataset.versoHover;
+            const hoverInfo = tgt.querySelector(".hover-info");
+            if (hoverId) { // Docstrings from the table
+              // TODO stop doing an implicit conversion from string to number here
+              let data = versoDocData[hoverId];
+              if (data) {
+                const info = document.createElement("span");
+                info.className = "hover-info";
+                info.style.display = "block";
+                info.innerHTML = data;
+                content.appendChild(info);
+                /* Render docstrings - TODO server-side */
+                if ('undefined' !== typeof marked) {
+                    for (const d of content.querySelectorAll("code.docstring, pre.docstring")) {
+                        const str = d.innerText;
+                        const html = marked.parse(str);
+                        const rendered = document.createElement("div");
+                        rendered.classList.add("docstring");
+                        rendered.innerHTML = html;
+                        d.parentNode.replaceChild(rendered, d);
+                    }
+                }
+              } else {
+                content.innerHTML = "Failed to load doc ID: " + hoverId;
+              }
+            } else if (hoverInfo) { // The inline info, still used for compiler messages
+              content.appendChild(hoverInfo.cloneNode(true));
+            }
+            const extraLinks = tgt.parentElement.dataset['versoLinks'];
+            if (extraLinks) {
+              try {
+                const extras = JSON.parse(extraLinks);
+                const links = document.createElement('ul');
+                links.className = 'extra-doc-links';
+                extras.forEach((l) => {
+                  const li = document.createElement('li');
+                  li.innerHTML = "<a href=\"" + l['href'] + "\" title=\"" + l.long + "\">" + l.short + "</a>";
+                  links.appendChild(li);
+                });
+                content.appendChild(links);
+              } catch (error) {
+                console.error(error);
+              }
+            }
+          }
+          return content;
+        }
+      };
+
+
+      document.querySelectorAll('.hl.lean .const.token, .hl.lean .keyword.token, .hl.lean .literal.token, .hl.lean .option.token, .hl.lean .var.token, .hl.lean .typed.token, .hl.lean .level-var, .hl.lean .level-const, .hl.lean .level-op, .hl.lean .sort').forEach(element => {
+        element.setAttribute('data-tippy-theme', 'lean');
+      });
+      document.querySelectorAll('.hl.lean .has-info.warning').forEach(element => {
+        element.setAttribute('data-tippy-theme', 'warning message');
+      });
+      document.querySelectorAll('.hl.lean .has-info.information').forEach(element => {
+        element.setAttribute('data-tippy-theme', 'info message');
+      });
+      document.querySelectorAll('.hl.lean .has-info.error').forEach(element => {
+        element.setAttribute('data-tippy-theme', 'error message');
+      });
+      document.querySelectorAll('.hl.lean .tactic').forEach(element => {
+        element.setAttribute('data-tippy-theme', 'tactic');
+      });
+      let insts = tippy('.hl.lean .const.token, .hl.lean .keyword.token, .hl.lean .literal.token, .hl.lean .option.token, .hl.lean .var.token, .hl.lean .typed.token, .hl.lean .has-info, .hl.lean .tactic, .hl.lean .level-var, .hl.lean .level-const, .hl.lean .level-op, .hl.lean .sort', defaultTippyProps);
+  });
 }
 </script>
     <script src="-verso-search/search-highlight.js" defer="defer"></script>
