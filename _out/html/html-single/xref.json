@@ -267,7 +267,7 @@
      {"/#oneF":
       {"display": "oneF",
        "context":
-       ["PSBP Documentation", "fibonacci  and  factorial", "def if_"]}},
+       ["PSBP Documentation", "fibonacci  and  factorial", "Primitives"]}},
      "address": "/"}],
    "one":
    [{"id": "one",
@@ -275,7 +275,7 @@
      {"/#one":
       {"display": "one",
        "context":
-       ["PSBP Documentation", "fibonacci  and  factorial", "def if_"]}},
+       ["PSBP Documentation", "fibonacci  and  factorial", "Primitives"]}},
      "address": "/"}],
    "multiplyF":
    [{"id": "multiplyF",
@@ -283,7 +283,7 @@
      {"/#multiplyF":
       {"display": "multiplyF",
        "context":
-       ["PSBP Documentation", "fibonacci  and  factorial", "def if_"]}},
+       ["PSBP Documentation", "fibonacci  and  factorial", "Primitives"]}},
      "address": "/"}],
    "multiply":
    [{"id": "multiply",
@@ -291,7 +291,7 @@
      {"/#multiply":
       {"display": "multiply",
        "context":
-       ["PSBP Documentation", "fibonacci  and  factorial", "def if_"]}},
+       ["PSBP Documentation", "fibonacci  and  factorial", "Primitives"]}},
      "address": "/"}],
    "modifyStateWith":
    [{"id": "modifyStateWith",
@@ -310,7 +310,7 @@
      {"/#minusTwoF":
       {"display": "minusTwoF",
        "context":
-       ["PSBP Documentation", "fibonacci  and  factorial", "def if_"]}},
+       ["PSBP Documentation", "fibonacci  and  factorial", "Primitives"]}},
      "address": "/"}],
    "minusTwo":
    [{"id": "minusTwo",
@@ -318,7 +318,7 @@
      {"/#minusTwo":
       {"display": "minusTwo",
        "context":
-       ["PSBP Documentation", "fibonacci  and  factorial", "def if_"]}},
+       ["PSBP Documentation", "fibonacci  and  factorial", "Primitives"]}},
      "address": "/"}],
    "minusOneF":
    [{"id": "minusOneF",
@@ -326,7 +326,7 @@
      {"/#minusOneF":
       {"display": "minusOneF",
        "context":
-       ["PSBP Documentation", "fibonacci  and  factorial", "def if_"]}},
+       ["PSBP Documentation", "fibonacci  and  factorial", "Primitives"]}},
      "address": "/"}],
    "minusOne":
    [{"id": "minusOne",
@@ -334,7 +334,7 @@
      {"/#minusOne":
       {"display": "minusOne",
        "context":
-       ["PSBP Documentation", "fibonacci  and  factorial", "def if_"]}},
+       ["PSBP Documentation", "fibonacci  and  factorial", "Primitives"]}},
      "address": "/"}],
    "materializeWithValidation":
    [{"id": "materializeWithValidation",
@@ -404,8 +404,7 @@
      "data":
      {"/#materializeActive":
       {"display": "materializeActive",
-       "context":
-       ["PSBP Documentation", "Creational  theorems", "ActiveProgram"]}},
+       "context": ["PSBP Documentation", "ActiveProgram"]}},
      "address": "/"}],
    "let_":
    [{"id": "let_",
@@ -428,7 +427,7 @@
      {"/#isZeroF":
       {"display": "isZeroF",
        "context":
-       ["PSBP Documentation", "fibonacci  and  factorial", "def if_"]}},
+       ["PSBP Documentation", "fibonacci  and  factorial", "Primitives"]}},
      "address": "/"}],
    "isZero":
    [{"id": "isZero",
@@ -436,7 +435,7 @@
      {"/#isZero":
       {"display": "isZero",
        "context":
-       ["PSBP Documentation", "fibonacci  and  factorial", "def if_"]}},
+       ["PSBP Documentation", "fibonacci  and  factorial", "Primitives"]}},
      "address": "/"}],
    "isOneF":
    [{"id": "isOneF",
@@ -444,7 +443,7 @@
      {"/#isOneF":
       {"display": "isOneF",
        "context":
-       ["PSBP Documentation", "fibonacci  and  factorial", "def if_"]}},
+       ["PSBP Documentation", "fibonacci  and  factorial", "Primitives"]}},
      "address": "/"}],
    "isOne":
    [{"id": "isOne",
@@ -452,7 +451,7 @@
      {"/#isOne":
       {"display": "isOne",
        "context":
-       ["PSBP Documentation", "fibonacci  and  factorial", "def if_"]}},
+       ["PSBP Documentation", "fibonacci  and  factorial", "Primitives"]}},
      "address": "/"}],
    "isNotZeroF":
    [{"id": "isNotZeroF",
@@ -582,7 +581,7 @@
      {"/#fibonacci":
       {"display": "fibonacci",
        "context":
-       ["PSBP Documentation", "fibonacci  and  factorial", "def if_"]}},
+       ["PSBP Documentation", "fibonacci  and  factorial", "fibonacci"]}},
      "address": "/"}],
    "factorial":
    [{"id": "factorial",
@@ -590,7 +589,7 @@
      {"/#factorial":
       {"display": "factorial",
        "context":
-       ["PSBP Documentation", "fibonacci  and  factorial", "def if_"]}},
+       ["PSBP Documentation", "fibonacci  and  factorial", "factorial"]}},
      "address": "/"}],
    "else_":
    [{"id": "else_",
@@ -605,42 +604,42 @@
      "data":
      {"/#creational_onlyFirst_sequential":
       {"display": "creational_onlyFirst_sequential",
-       "context": ["PSBP Documentation", "Creational  theorems"]}},
+       "context": ["PSBP Documentation", "Theorems", "Creational  theorems"]}},
      "address": "/"}],
    "creational_onlyFirst_first":
    [{"id": "creational_onlyFirst_first",
      "data":
      {"/#creational_onlyFirst_first":
       {"display": "creational_onlyFirst_first",
-       "context": ["PSBP Documentation", "Creational  theorems"]}},
+       "context": ["PSBP Documentation", "Theorems", "Creational  theorems"]}},
      "address": "/"}],
    "creational_onlyFirst_assoc":
    [{"id": "creational_onlyFirst_assoc",
      "data":
      {"/#creational_onlyFirst_assoc":
       {"display": "creational_onlyFirst_assoc",
-       "context": ["PSBP Documentation", "Creational  theorems"]}},
+       "context": ["PSBP Documentation", "Theorems", "Creational  theorems"]}},
      "address": "/"}],
    "creational_onlyFirst_asProgram'":
    [{"id": "creational_onlyFirst_asProgram___",
      "data":
      {"/#creational_onlyFirst_asProgram___":
       {"display": "creational_onlyFirst_asProgram'",
-       "context": ["PSBP Documentation", "Creational  theorems"]}},
+       "context": ["PSBP Documentation", "Theorems", "Creational  theorems"]}},
      "address": "/"}],
    "creational_onlyFirst_asProgram":
    [{"id": "creational_onlyFirst_asProgram",
      "data":
      {"/#creational_onlyFirst_asProgram":
       {"display": "creational_onlyFirst_asProgram",
-       "context": ["PSBP Documentation", "Creational  theorems"]}},
+       "context": ["PSBP Documentation", "Theorems", "Creational  theorems"]}},
      "address": "/"}],
    "creational_onlyFirst_applyAtSecond":
    [{"id": "creational_onlyFirst_applyAtSecond",
      "data":
      {"/#creational_onlyFirst_applyAtSecond":
       {"display": "creational_onlyFirst_applyAtSecond",
-       "context": ["PSBP Documentation", "Creational  theorems"]}},
+       "context": ["PSBP Documentation", "Theorems", "Creational  theorems"]}},
      "address": "/"}],
    "assoc":
    [{"id": "assoc",
@@ -669,7 +668,7 @@
      {"/#addF":
       {"display": "addF",
        "context":
-       ["PSBP Documentation", "fibonacci  and  factorial", "def if_"]}},
+       ["PSBP Documentation", "fibonacci  and  factorial", "Primitives"]}},
      "address": "/"}],
    "addAccumulatingSafeDivProduct":
    [{"id": "addAccumulatingSafeDivProduct",
@@ -687,7 +686,7 @@
      {"/#add":
       {"display": "add",
        "context":
-       ["PSBP Documentation", "fibonacci  and  factorial", "def if_"]}},
+       ["PSBP Documentation", "fibonacci  and  factorial", "Primitives"]}},
      "address": "/"}],
    "accumulatingSafeDivProduct":
    [{"id": "accumulatingSafeDivProduct",
@@ -1133,16 +1132,14 @@
      "data":
      {"/#ActiveProgram":
       {"display": "ActiveProgram",
-       "context":
-       ["PSBP Documentation", "Creational  theorems", "ActiveProgram"]}},
+       "context": ["PSBP Documentation", "ActiveProgram"]}},
      "address": "/"}],
    "Active":
    [{"id": "Active",
      "data":
      {"/#Active":
       {"display": "Active",
-       "context":
-       ["PSBP Documentation", "Creational  theorems", "ActiveProgram"]}},
+       "context": ["PSBP Documentation", "ActiveProgram"]}},
      "address": "/"}]}},
  "Verso.Genre.Manual.doc.tech":
  {"title": "Terminology",

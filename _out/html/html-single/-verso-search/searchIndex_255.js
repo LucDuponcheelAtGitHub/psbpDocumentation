@@ -1,1 +1,1 @@
-window.docContents[255].resolve({"/#PSBP-Documentation--Laws":{"id":"/#PSBP-Documentation--Laws","header":"6. Laws","context":"PSBP Documentation","contents":"\n\n\n\n\n\n\n\n\n\n\n\n"}});
+window.docContents[255].resolve({"/#PSBP-Documentation--Laws":{"id":"/#PSBP-Documentation--Laws","header":"6. Laws","context":"PSBP Documentation","contents":"\n\n\n\n\n\n\n\n\n\n"}});

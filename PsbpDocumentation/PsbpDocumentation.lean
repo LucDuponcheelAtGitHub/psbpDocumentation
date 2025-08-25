@@ -22,8 +22,8 @@ This document is about the
 [`Lean` `PSBP` library](https://github.com/LucDuponcheelAtGitHub/PSBP),
 in what follows, also simply called `PSBP`.
 
-This document can be seen as a, somewhat special, not to say opinionated, programming course, especiallty useful for
-mathematicians and/or computer scientists, researchers as well as students, possible future researchers, who are
+This document can be seen as a, somewhat special, not to say opinionated, programming course, especially useful for
+mathematicians and/or computer scientists, researchers as well as students (possibly future researchers), who are
 interested in mathematical foundations of programming.
 
 The code of this document can be seen as a programming course for `Lean` itself. `Lean` turns out to be both a very
@@ -551,6 +551,9 @@ def if_
 
 def else_ : α → α := id
 ```
+
+## Primitives
+
 For readability and reusability reasons it is useful to first define some primitive functions
 
 ```lean
@@ -615,6 +618,8 @@ def multiply
     asProgram multiplyF
 ```
 
+## `fibonacci`
+
 Program `fibonacci` is defined as follows
 
 ```lean
@@ -632,6 +637,8 @@ unsafe def fibonacci
             (minusTwo >=> fibonacci) >=>
             add
 ```
+
+## `factorial`
 
 Program `factorial` is defined as follows
 
@@ -705,8 +712,6 @@ example is more flexible error handling when processing a submitted web form and
 document.
 
 # Laws
-
-## `def identity`
 
 ## `class LawfulFunctional`
 
@@ -1264,7 +1269,7 @@ Theorem `sequential_associative` uses `simp` to let `Lean` do the heavy lifting
       (αpβ >=> (βpγ >=> γpδ)) := by simp[andThen]
 ```
 
-# `Creational` theorems
+## `Creational` theorems
 
 Theorem `creational_onlyFirst_asProgram'` uses the `pure_bind` law of `LawfulMonad` and the `map_pure` law of
 `LawfulApplicative`.
@@ -1443,12 +1448,12 @@ In what follows, I will, mostly, only show the `simp` based proofs.
         ]
 ```
 
-## `ActiveProgram`
+# `ActiveProgram`
 
 There is not a lot of work to be done for active implementations. The `Functor`, `Applicative` and `Monad`
 implementations of `Id` can be used.
 
-```savedLean
+```lean
 abbrev Active := Id
 
 abbrev ActiveProgram α β :=
@@ -1505,7 +1510,7 @@ We can now run our programs in an active way.
 
 There is much more work to be done for reactive implementations. They are callback handler, a.k.a. continuation based.
 
-```savedLean
+```lean
 structure ReactiveT
     (ρ : Type)
     (computation: Type → Type)
@@ -1617,7 +1622,7 @@ def threeF : Nat → Nat := λ _ => 3
 
 and
 
-```savedLean
+```lean
 def two [Functional program] :
   program Nat Nat :=
     asProgram twoF
@@ -1628,7 +1633,7 @@ def three [Functional program] :
 ```
 in
 
-```savedLean
+```lean
 def someProgram01
     [Functional program]
     [Functorial program]
@@ -1669,7 +1674,7 @@ involved is homogeneous but it might as well be a heterogeneous one. More about 
 
 `someProgram02` below could also be a solution. `someProgram02` makes use of `Sequential`.
 
-```savedLean
+```lean
 def someProgram02
     [Functional program]
     [Sequential program]
@@ -1694,7 +1699,7 @@ As already mentioned before, using `Sequential` is, in this case, an overkill.
 
 ## `class Positional`
 
-```savedLean
+```lean
 class Positional
     (program : Type → Type → Type) where
   at_ {σ α β γ : Type} :
@@ -1717,7 +1722,7 @@ The `σ` stands for (runtime) "stack", and `σ × β` stands for `β` pushed ont
 
 The `at_` library level keyword of `Positional` can be defined in terms of `Functional`, `Creational` and `Sequential`.
 
-```savedLean
+```lean
 instance
     [Functional program]
     [Creational program]
@@ -1741,7 +1746,7 @@ transform `σ` to `γ`.
 
 Let's define some positions on a runtime stack `σ`.
 
-```savedLean
+```lean
 def positionOne
     [Functional program] :
   program (σ × α) α :=
@@ -1767,7 +1772,7 @@ def positionOneAndTwo
 Below are two positional programs. The first one, `positionalFactorialOfFibonacci` uses only uses `positionOne`. The
 second one `positionalSumOfFibonacciAndFactorial` uses three positions. Positions go up starting from their use site.
 
-```savedLean
+```lean
 unsafe def positionalFactorialOfFibonacci
     [Functional program]
     [Creational program]
@@ -1779,7 +1784,7 @@ unsafe def positionalFactorialOfFibonacci
         positionOne
 ```
 
-```savedLean
+```lean
 unsafe def positionalSumOfFibonacciAndFactorial
     [Functional program]
     [Creational program]
@@ -1821,7 +1826,7 @@ unsafe def positionalSumOfFibonacciAndFactorial
 It is instructive to show the runtime stack using `identity`. This is done in `positionalFactorialOfFibonacci'` and
 `positionalSumOfFibonacciAndFactorial'` below.
 
-```savedLean
+```lean
 unsafe def positionalFactorialOfFibonacci'
     [Functional program]
     [Creational program]
@@ -1833,7 +1838,7 @@ unsafe def positionalFactorialOfFibonacci'
         identity
 ```
 
-```savedLean
+```lean
 unsafe def positionalSumOfFibonacciAndFactorial'
     [Functional program]
     [Creational program]
@@ -1874,7 +1879,7 @@ unsafe def positionalSumOfFibonacciAndFactorial'
 
 `PSBP` enables programming with state using the `WithState` class below.
 
-```savedLean
+```lean
 class WithState
     (σ : outParam Type)
     (program : Type → Type → Type) where
@@ -1890,23 +1895,7 @@ The `σ` above stands for "state".
 
 Below is `modifyStateWith`, a useful programming with state capability.
 
--- Let
-
--- ```savedLean
--- def first
---     [Functional program] :
---   program (α × β) α :=
---     asProgram λ (α, _) => α
-
--- def second
---     [Functional program] :
---   program (α × β) β :=
---     asProgram  λ (_, β) => β
--- ```
-
--- in (only `first` above is used)
-
-```savedLean
+```lean
 def modifyStateWith
     [Functional program]
     [Sequential program]
@@ -1923,7 +1912,7 @@ def modifyStateWith
 
 ## `withInitialStateAsInitialValue`
 
-```savedLean
+```lean
 def withInitialStateAsInitialValue
     [Functional program]
     [Creational program]
@@ -1942,7 +1931,7 @@ value.
 
 `WithState σ` is implemented in terms of `MonadStateOf`.
 
-```savedLean
+```lean
 instance [MonadStateOf σ computation] :
     WithState σ
       (FromComputationValuedFunction computation) where
@@ -1952,7 +1941,7 @@ instance [MonadStateOf σ computation] :
 
 ## `ProgramWithState`
 
-```savedLean
+```lean
 abbrev ProgramWithState σ computation :=
   FromComputationValuedFunction (StateT σ computation)
 
@@ -1980,7 +1969,7 @@ initial state as initial (argument) value and modifying it.
 
 Let
 
-```savedLean
+```lean
 unsafe def fibonacciIncrementingArgument
     [Functional program]
     [Creational program]
@@ -1994,7 +1983,7 @@ unsafe def fibonacciIncrementingArgument
 
 in
 
-```savedLean
+```lean
 unsafe def fibonacciIncrementingArgumentPair
     [Functional program]
     [Creational program]
@@ -2016,12 +2005,11 @@ unsafe def fibonacciIncrementingArgumentPair
 
 # Programming With Failure
 
-
 ## `WithFailure ε`
 
 `PSBP` enables programming with failure using the `WithFailure` class below.
 
-```savedLean
+```lean
 class WithFailure
     (ε : outParam Type)
     (program : Type → Type →Type) where
@@ -2036,7 +2024,7 @@ export WithFailure (failureWith)
 value, a program with failure may transform it to a final failure (result) value (at left) or a final succedd (result)
 value (at right).
 
-```savedLean
+```lean
 structure FailureT
     (ε : Type)
     (computation : Type → Type)
@@ -2072,7 +2060,7 @@ instance {ε : Type}
 
 ## `ProgramWithFailure`
 
-```savedLean
+```lean
 abbrev ProgramWithFailure ε computation :=
   FromComputationValuedFunction (FailureT ε computation)
 
@@ -2096,7 +2084,7 @@ first exception has been encountered. The examples below illustrate this.
 
 Let
 
-```savedLean
+```lean
 def isNotZeroF: Nat → Bool :=
   λ n => n != 0
 
@@ -2106,7 +2094,7 @@ def unsafeDivF : Nat × Nat → Nat :=
 
 and
 
-```savedLean
+```lean
 def isNotZero [Functional program] :
   program Nat Bool :=
     asProgram isNotZeroF
@@ -2118,7 +2106,7 @@ def unsafeDiv [Functional program] :
 
 in
 
-```savedLean
+```lean
 def safeDiv
     [Functional program]
     [Creational program]
@@ -2156,7 +2144,7 @@ Sum.inl "tried to divide 10 by 0"
 
 ## `safeDivIsOne`
 
-```savedLean
+```lean
 def safeDivIsOne
 [Functional program]
     [Creational program]
@@ -2191,7 +2179,7 @@ Sum.inl "tried to divide 10 by 0"
 
 ## `twiceSafeDiv`
 
-```savedLean
+```lean
 def twiceSafeDiv
 [Functional program]
     [Creational program]
@@ -2253,7 +2241,7 @@ What about accumulating exceptions instead of failing fast?
 Accumulation is specified using a `Monoid` type class. For now, the neutral element `ν` is used, this means that only a
 semigroup is required instead of a monoid.
 
-```savedLean
+```lean
 class Monoid (μ : Type) where
   ν : μ
   combine : μ → μ → μ
@@ -2265,13 +2253,13 @@ infixl:60 " * " => combine
 
 Accumulation can, for example, be implemented using the `List α` type.
 
-```savedLean
+```lean
 instance : Monoid (List α) where
   ν := []
   combine := .append
 ```
 
-```savedLean
+```lean
 instance
     [Functor computation] :
   Functor (FailureT ε computation) where
@@ -2311,7 +2299,7 @@ instance
 
 ## `ProgramWithValidation`
 
-```savedLean
+```lean
 abbrev ProgramWithValidation ε computation :=
   FromComputationValuedFunction (FailureT ε computation)
 
@@ -2337,7 +2325,7 @@ The examples below illustrate this accumulation behavior.
 
 ## `accumulatingSafeDiv` revisited
 
-```savedLean
+```lean
 def accumulatingSafeDiv
     [Functional program]
     [Creational program]
@@ -2375,7 +2363,7 @@ Sum.inl ["tried to divide 10 by 0"]
 
 ## `accumulatingSafeDivIsOne`
 
-```savedLean
+```lean
 def accumulatingSafeDivIsOne
 [Functional program]
     [Creational program]
@@ -2410,7 +2398,7 @@ Sum.inl "tried to divide 10 by 0"
 
 ## `twiceAccumulatingSafeDivIsOne`
 
-```savedLean
+```lean
 def twiceAccumulatingSafeDivIsOne
 [Functional program]
     [Creational program]
@@ -2468,7 +2456,7 @@ Sum.inl ["tried to divide 10 by 0"]
 
 ## `accumulatingSafeDivProduct`
 
-```savedLean
+```lean
 def accumulatingSafeDivProduct
 [Functional program]
     [Creational program]
@@ -2526,7 +2514,7 @@ Sum.inl ["tried to divide 10 by 0", "tried to divide 8 by 0"]
 
 ## `addAccumulatingSafeDivProduct`
 
-```savedLean
+```lean
 def addAccumulatingSafeDivProduct
 [Functional program]
     [Creational program]

@@ -569,6 +569,202 @@
 }
 
 </style><script>
+      
+window.onload = () => {
+
+    // Don't show hovers inside of closed tactic states
+    function blockedByTactic(elem) {
+      let parent = elem.parentNode;
+      while (parent && "classList" in parent) {
+        if (parent.classList.contains("tactic")) {
+          const toggle = parent.querySelector("input.tactic-toggle");
+          if (toggle) {
+            return !toggle.checked;
+          }
+        }
+        parent = parent.parentNode;
+      }
+      return false;
+    }
+
+    function blockedByTippy(elem) {
+      // Don't show a new hover until the old ones are all closed.
+      // Scoped to the nearest "top-level block" to avoid being O(n) in the size of the document.
+      var block = elem;
+      const topLevel = new Set(["section", "body", "html", "nav", "header"]);
+      while (block.parentNode && !topLevel.has(block.parentNode.nodeName.toLowerCase())) {
+        block = block.parentNode;
+      }
+      for (const child of block.querySelectorAll(".token, .has-info")) {
+        if (child._tippy && child._tippy.state.isVisible) { return true };
+      }
+      return false;
+    }
+
+    for (const c of document.querySelectorAll(".hl.lean .token")) {
+        if (c.dataset.binding != "") {
+            c.addEventListener("mouseover", (event) => {
+                if (blockedByTactic(c)) {return;}
+                const context = c.closest(".hl.lean").dataset.leanContext;
+                for (const example of document.querySelectorAll(".hl.lean")) {
+                    if (example.dataset.leanContext == context) {
+                        for (const tok of example.querySelectorAll(".token")) {
+                            if (c.dataset.binding == tok.dataset.binding) {
+                                tok.classList.add("binding-hl");
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        c.addEventListener("mouseout", (event) => {
+            for (const tok of document.querySelectorAll(".hl.lean .token")) {
+                tok.classList.remove("binding-hl");
+            }
+        });
+    }
+    /* Render docstrings */
+    if ('undefined' !== typeof marked) {
+        for (const d of document.querySelectorAll("code.docstring, pre.docstring")) {
+            const str = d.innerText;
+            const html = marked.parse(str);
+            const rendered = document.createElement("div");
+            rendered.classList.add("docstring");
+            rendered.innerHTML = html;
+            d.parentNode.replaceChild(rendered, d);
+        }
+    }
+    // Add hovers
+    let siteRoot = typeof __versoSiteRoot !== 'undefined' ? __versoSiteRoot : "/";
+    let docsJson = siteRoot + "-verso-docs.json";
+    fetch(docsJson).then((resp) => resp.json()).then((versoDocData) => {
+
+      function hideParentTooltips(element) {
+        let parent = element.parentElement;
+        while (parent) {
+          const tippyInstance = parent._tippy;
+          if (tippyInstance) {
+            tippyInstance.hide();
+          }
+          parent = parent.parentElement;
+        }
+      }
+
+
+
+      const defaultTippyProps = {
+        /* DEBUG -- remove the space: * /
+        onHide(any) { return false; },
+        trigger: "click",
+        // */
+        /* theme: "lean", */
+        maxWidth: "none",
+        appendTo: () => document.body,
+        interactive: true,
+        delay: [100, null],
+        /* ignoreAttributes: true, */
+        followCursor: 'initial',
+        onShow(inst) {
+          if (inst.reference.className == 'tactic') {
+
+            const toggle = inst.reference.querySelector("input.tactic-toggle");
+            if (toggle && toggle.checked) {
+              return false;
+            }
+            hideParentTooltips(inst.reference);
+            //if (blockedByTippy(inst.reference)) { return false; }
+
+          } else if (inst.reference.querySelector(".hover-info") || "versoHover" in inst.reference.dataset) {
+            if (blockedByTactic(inst.reference)) { return false };
+            if (blockedByTippy(inst.reference)) { return false; }
+          } else { // Nothing to show here!
+            return false;
+          }
+        },
+        content (tgt) {
+          const content = document.createElement("span");
+          if (tgt.className == 'tactic') {
+            const state = tgt.querySelector(".tactic-state").cloneNode(true);
+            state.style.display = "block";
+            content.appendChild(state);
+            content.style.display = "block";
+            content.className = "hl lean popup";
+          } else {
+            content.className = "hl lean";
+            content.style.display = "block";
+            content.style.maxHeight = "300px";
+            content.style.overflowY = "auto";
+            content.style.overflowX = "hidden";
+            const hoverId = tgt.dataset.versoHover;
+            const hoverInfo = tgt.querySelector(".hover-info");
+            if (hoverId) { // Docstrings from the table
+              // TODO stop doing an implicit conversion from string to number here
+              let data = versoDocData[hoverId];
+              if (data) {
+                const info = document.createElement("span");
+                info.className = "hover-info";
+                info.style.display = "block";
+                info.innerHTML = data;
+                content.appendChild(info);
+                /* Render docstrings - TODO server-side */
+                if ('undefined' !== typeof marked) {
+                    for (const d of content.querySelectorAll("code.docstring, pre.docstring")) {
+                        const str = d.innerText;
+                        const html = marked.parse(str);
+                        const rendered = document.createElement("div");
+                        rendered.classList.add("docstring");
+                        rendered.innerHTML = html;
+                        d.parentNode.replaceChild(rendered, d);
+                    }
+                }
+              } else {
+                content.innerHTML = "Failed to load doc ID: " + hoverId;
+              }
+            } else if (hoverInfo) { // The inline info, still used for compiler messages
+              content.appendChild(hoverInfo.cloneNode(true));
+            }
+            const extraLinks = tgt.parentElement.dataset['versoLinks'];
+            if (extraLinks) {
+              try {
+                const extras = JSON.parse(extraLinks);
+                const links = document.createElement('ul');
+                links.className = 'extra-doc-links';
+                extras.forEach((l) => {
+                  const li = document.createElement('li');
+                  li.innerHTML = "<a href=\"" + l['href'] + "\" title=\"" + l.long + "\">" + l.short + "</a>";
+                  links.appendChild(li);
+                });
+                content.appendChild(links);
+              } catch (error) {
+                console.error(error);
+              }
+            }
+          }
+          return content;
+        }
+      };
+
+
+      document.querySelectorAll('.hl.lean .const.token, .hl.lean .keyword.token, .hl.lean .literal.token, .hl.lean .option.token, .hl.lean .var.token, .hl.lean .typed.token, .hl.lean .level-var, .hl.lean .level-const, .hl.lean .level-op, .hl.lean .sort').forEach(element => {
+        element.setAttribute('data-tippy-theme', 'lean');
+      });
+      document.querySelectorAll('.hl.lean .has-info.warning').forEach(element => {
+        element.setAttribute('data-tippy-theme', 'warning message');
+      });
+      document.querySelectorAll('.hl.lean .has-info.information').forEach(element => {
+        element.setAttribute('data-tippy-theme', 'info message');
+      });
+      document.querySelectorAll('.hl.lean .has-info.error').forEach(element => {
+        element.setAttribute('data-tippy-theme', 'error message');
+      });
+      document.querySelectorAll('.hl.lean .tactic').forEach(element => {
+        element.setAttribute('data-tippy-theme', 'tactic');
+      });
+      let insts = tippy('.hl.lean .const.token, .hl.lean .keyword.token, .hl.lean .literal.token, .hl.lean .option.token, .hl.lean .var.token, .hl.lean .typed.token, .hl.lean .has-info, .hl.lean .tactic, .hl.lean .level-var, .hl.lean .level-const, .hl.lean .level-op, .hl.lean .sort', defaultTippyProps);
+  });
+}
+</script>
+    <script>
       let xref = {"Verso.Genre.Manual.section":
  {"title": "Sections or chapters of the manual",
   "description": null,
@@ -839,35 +1035,35 @@
    "oneF":
    [{"id": "oneF",
      "data":
-     {"/fibonacci--and--factorial/def-if_/#oneF":
+     {"/fibonacci--and--factorial/Primitives/#oneF":
       {"display": "oneF",
        "context":
-       ["PSBP Documentation", "fibonacci  and  factorial", "def if_"]}},
-     "address": "/fibonacci--and--factorial/def-if_/"}],
+       ["PSBP Documentation", "fibonacci  and  factorial", "Primitives"]}},
+     "address": "/fibonacci--and--factorial/Primitives/"}],
    "one":
    [{"id": "one",
      "data":
-     {"/fibonacci--and--factorial/def-if_/#one":
+     {"/fibonacci--and--factorial/Primitives/#one":
       {"display": "one",
        "context":
-       ["PSBP Documentation", "fibonacci  and  factorial", "def if_"]}},
-     "address": "/fibonacci--and--factorial/def-if_/"}],
+       ["PSBP Documentation", "fibonacci  and  factorial", "Primitives"]}},
+     "address": "/fibonacci--and--factorial/Primitives/"}],
    "multiplyF":
    [{"id": "multiplyF",
      "data":
-     {"/fibonacci--and--factorial/def-if_/#multiplyF":
+     {"/fibonacci--and--factorial/Primitives/#multiplyF":
       {"display": "multiplyF",
        "context":
-       ["PSBP Documentation", "fibonacci  and  factorial", "def if_"]}},
-     "address": "/fibonacci--and--factorial/def-if_/"}],
+       ["PSBP Documentation", "fibonacci  and  factorial", "Primitives"]}},
+     "address": "/fibonacci--and--factorial/Primitives/"}],
    "multiply":
    [{"id": "multiply",
      "data":
-     {"/fibonacci--and--factorial/def-if_/#multiply":
+     {"/fibonacci--and--factorial/Primitives/#multiply":
       {"display": "multiply",
        "context":
-       ["PSBP Documentation", "fibonacci  and  factorial", "def if_"]}},
-     "address": "/fibonacci--and--factorial/def-if_/"}],
+       ["PSBP Documentation", "fibonacci  and  factorial", "Primitives"]}},
+     "address": "/fibonacci--and--factorial/Primitives/"}],
    "modifyStateWith":
    [{"id": "modifyStateWith",
      "data":
@@ -882,35 +1078,35 @@
    "minusTwoF":
    [{"id": "minusTwoF",
      "data":
-     {"/fibonacci--and--factorial/def-if_/#minusTwoF":
+     {"/fibonacci--and--factorial/Primitives/#minusTwoF":
       {"display": "minusTwoF",
        "context":
-       ["PSBP Documentation", "fibonacci  and  factorial", "def if_"]}},
-     "address": "/fibonacci--and--factorial/def-if_/"}],
+       ["PSBP Documentation", "fibonacci  and  factorial", "Primitives"]}},
+     "address": "/fibonacci--and--factorial/Primitives/"}],
    "minusTwo":
    [{"id": "minusTwo",
      "data":
-     {"/fibonacci--and--factorial/def-if_/#minusTwo":
+     {"/fibonacci--and--factorial/Primitives/#minusTwo":
       {"display": "minusTwo",
        "context":
-       ["PSBP Documentation", "fibonacci  and  factorial", "def if_"]}},
-     "address": "/fibonacci--and--factorial/def-if_/"}],
+       ["PSBP Documentation", "fibonacci  and  factorial", "Primitives"]}},
+     "address": "/fibonacci--and--factorial/Primitives/"}],
    "minusOneF":
    [{"id": "minusOneF",
      "data":
-     {"/fibonacci--and--factorial/def-if_/#minusOneF":
+     {"/fibonacci--and--factorial/Primitives/#minusOneF":
       {"display": "minusOneF",
        "context":
-       ["PSBP Documentation", "fibonacci  and  factorial", "def if_"]}},
-     "address": "/fibonacci--and--factorial/def-if_/"}],
+       ["PSBP Documentation", "fibonacci  and  factorial", "Primitives"]}},
+     "address": "/fibonacci--and--factorial/Primitives/"}],
    "minusOne":
    [{"id": "minusOne",
      "data":
-     {"/fibonacci--and--factorial/def-if_/#minusOne":
+     {"/fibonacci--and--factorial/Primitives/#minusOne":
       {"display": "minusOne",
        "context":
-       ["PSBP Documentation", "fibonacci  and  factorial", "def if_"]}},
-     "address": "/fibonacci--and--factorial/def-if_/"}],
+       ["PSBP Documentation", "fibonacci  and  factorial", "Primitives"]}},
+     "address": "/fibonacci--and--factorial/Primitives/"}],
    "materializeWithValidation":
    [{"id": "materializeWithValidation",
      "data":
@@ -977,11 +1173,10 @@
    "materializeActive":
    [{"id": "materializeActive",
      "data":
-     {"/Creational--theorems/ActiveProgram/#materializeActive":
+     {"/ActiveProgram/#materializeActive":
       {"display": "materializeActive",
-       "context":
-       ["PSBP Documentation", "Creational  theorems", "ActiveProgram"]}},
-     "address": "/Creational--theorems/ActiveProgram/"}],
+       "context": ["PSBP Documentation", "ActiveProgram"]}},
+     "address": "/ActiveProgram/"}],
    "let_":
    [{"id": "let_",
      "data":
@@ -1000,35 +1195,35 @@
    "isZeroF":
    [{"id": "isZeroF",
      "data":
-     {"/fibonacci--and--factorial/def-if_/#isZeroF":
+     {"/fibonacci--and--factorial/Primitives/#isZeroF":
       {"display": "isZeroF",
        "context":
-       ["PSBP Documentation", "fibonacci  and  factorial", "def if_"]}},
-     "address": "/fibonacci--and--factorial/def-if_/"}],
+       ["PSBP Documentation", "fibonacci  and  factorial", "Primitives"]}},
+     "address": "/fibonacci--and--factorial/Primitives/"}],
    "isZero":
    [{"id": "isZero",
      "data":
-     {"/fibonacci--and--factorial/def-if_/#isZero":
+     {"/fibonacci--and--factorial/Primitives/#isZero":
       {"display": "isZero",
        "context":
-       ["PSBP Documentation", "fibonacci  and  factorial", "def if_"]}},
-     "address": "/fibonacci--and--factorial/def-if_/"}],
+       ["PSBP Documentation", "fibonacci  and  factorial", "Primitives"]}},
+     "address": "/fibonacci--and--factorial/Primitives/"}],
    "isOneF":
    [{"id": "isOneF",
      "data":
-     {"/fibonacci--and--factorial/def-if_/#isOneF":
+     {"/fibonacci--and--factorial/Primitives/#isOneF":
       {"display": "isOneF",
        "context":
-       ["PSBP Documentation", "fibonacci  and  factorial", "def if_"]}},
-     "address": "/fibonacci--and--factorial/def-if_/"}],
+       ["PSBP Documentation", "fibonacci  and  factorial", "Primitives"]}},
+     "address": "/fibonacci--and--factorial/Primitives/"}],
    "isOne":
    [{"id": "isOne",
      "data":
-     {"/fibonacci--and--factorial/def-if_/#isOne":
+     {"/fibonacci--and--factorial/Primitives/#isOne":
       {"display": "isOne",
        "context":
-       ["PSBP Documentation", "fibonacci  and  factorial", "def if_"]}},
-     "address": "/fibonacci--and--factorial/def-if_/"}],
+       ["PSBP Documentation", "fibonacci  and  factorial", "Primitives"]}},
+     "address": "/fibonacci--and--factorial/Primitives/"}],
    "isNotZeroF":
    [{"id": "isNotZeroF",
      "data":
@@ -1154,19 +1349,19 @@
    "fibonacci":
    [{"id": "fibonacci",
      "data":
-     {"/fibonacci--and--factorial/def-if_/#fibonacci":
+     {"/fibonacci--and--factorial/fibonacci/#fibonacci":
       {"display": "fibonacci",
        "context":
-       ["PSBP Documentation", "fibonacci  and  factorial", "def if_"]}},
-     "address": "/fibonacci--and--factorial/def-if_/"}],
+       ["PSBP Documentation", "fibonacci  and  factorial", "fibonacci"]}},
+     "address": "/fibonacci--and--factorial/fibonacci/"}],
    "factorial":
    [{"id": "factorial",
      "data":
-     {"/fibonacci--and--factorial/def-if_/#factorial":
+     {"/fibonacci--and--factorial/factorial/#factorial":
       {"display": "factorial",
        "context":
-       ["PSBP Documentation", "fibonacci  and  factorial", "def if_"]}},
-     "address": "/fibonacci--and--factorial/def-if_/"}],
+       ["PSBP Documentation", "fibonacci  and  factorial", "factorial"]}},
+     "address": "/fibonacci--and--factorial/factorial/"}],
    "else_":
    [{"id": "else_",
      "data":
@@ -1178,45 +1373,45 @@
    "creational_onlyFirst_sequential":
    [{"id": "creational_onlyFirst_sequential",
      "data":
-     {"/Creational--theorems/#creational_onlyFirst_sequential":
+     {"/Theorems/Creational--theorems/#creational_onlyFirst_sequential":
       {"display": "creational_onlyFirst_sequential",
-       "context": ["PSBP Documentation", "Creational  theorems"]}},
-     "address": "/Creational--theorems/"}],
+       "context": ["PSBP Documentation", "Theorems", "Creational  theorems"]}},
+     "address": "/Theorems/Creational--theorems/"}],
    "creational_onlyFirst_first":
    [{"id": "creational_onlyFirst_first",
      "data":
-     {"/Creational--theorems/#creational_onlyFirst_first":
+     {"/Theorems/Creational--theorems/#creational_onlyFirst_first":
       {"display": "creational_onlyFirst_first",
-       "context": ["PSBP Documentation", "Creational  theorems"]}},
-     "address": "/Creational--theorems/"}],
+       "context": ["PSBP Documentation", "Theorems", "Creational  theorems"]}},
+     "address": "/Theorems/Creational--theorems/"}],
    "creational_onlyFirst_assoc":
    [{"id": "creational_onlyFirst_assoc",
      "data":
-     {"/Creational--theorems/#creational_onlyFirst_assoc":
+     {"/Theorems/Creational--theorems/#creational_onlyFirst_assoc":
       {"display": "creational_onlyFirst_assoc",
-       "context": ["PSBP Documentation", "Creational  theorems"]}},
-     "address": "/Creational--theorems/"}],
+       "context": ["PSBP Documentation", "Theorems", "Creational  theorems"]}},
+     "address": "/Theorems/Creational--theorems/"}],
    "creational_onlyFirst_asProgram'":
    [{"id": "creational_onlyFirst_asProgram___",
      "data":
-     {"/Creational--theorems/#creational_onlyFirst_asProgram___":
+     {"/Theorems/Creational--theorems/#creational_onlyFirst_asProgram___":
       {"display": "creational_onlyFirst_asProgram'",
-       "context": ["PSBP Documentation", "Creational  theorems"]}},
-     "address": "/Creational--theorems/"}],
+       "context": ["PSBP Documentation", "Theorems", "Creational  theorems"]}},
+     "address": "/Theorems/Creational--theorems/"}],
    "creational_onlyFirst_asProgram":
    [{"id": "creational_onlyFirst_asProgram",
      "data":
-     {"/Creational--theorems/#creational_onlyFirst_asProgram":
+     {"/Theorems/Creational--theorems/#creational_onlyFirst_asProgram":
       {"display": "creational_onlyFirst_asProgram",
-       "context": ["PSBP Documentation", "Creational  theorems"]}},
-     "address": "/Creational--theorems/"}],
+       "context": ["PSBP Documentation", "Theorems", "Creational  theorems"]}},
+     "address": "/Theorems/Creational--theorems/"}],
    "creational_onlyFirst_applyAtSecond":
    [{"id": "creational_onlyFirst_applyAtSecond",
      "data":
-     {"/Creational--theorems/#creational_onlyFirst_applyAtSecond":
+     {"/Theorems/Creational--theorems/#creational_onlyFirst_applyAtSecond":
       {"display": "creational_onlyFirst_applyAtSecond",
-       "context": ["PSBP Documentation", "Creational  theorems"]}},
-     "address": "/Creational--theorems/"}],
+       "context": ["PSBP Documentation", "Theorems", "Creational  theorems"]}},
+     "address": "/Theorems/Creational--theorems/"}],
    "assoc":
    [{"id": "assoc",
      "data":
@@ -1241,11 +1436,11 @@
    "addF":
    [{"id": "addF",
      "data":
-     {"/fibonacci--and--factorial/def-if_/#addF":
+     {"/fibonacci--and--factorial/Primitives/#addF":
       {"display": "addF",
        "context":
-       ["PSBP Documentation", "fibonacci  and  factorial", "def if_"]}},
-     "address": "/fibonacci--and--factorial/def-if_/"}],
+       ["PSBP Documentation", "fibonacci  and  factorial", "Primitives"]}},
+     "address": "/fibonacci--and--factorial/Primitives/"}],
    "addAccumulatingSafeDivProduct":
    [{"id": "addAccumulatingSafeDivProduct",
      "data":
@@ -1259,11 +1454,11 @@
    "add":
    [{"id": "add",
      "data":
-     {"/fibonacci--and--factorial/def-if_/#add":
+     {"/fibonacci--and--factorial/Primitives/#add":
       {"display": "add",
        "context":
-       ["PSBP Documentation", "fibonacci  and  factorial", "def if_"]}},
-     "address": "/fibonacci--and--factorial/def-if_/"}],
+       ["PSBP Documentation", "fibonacci  and  factorial", "Primitives"]}},
+     "address": "/fibonacci--and--factorial/Primitives/"}],
    "accumulatingSafeDivProduct":
    [{"id": "accumulatingSafeDivProduct",
      "data":
@@ -1711,19 +1906,17 @@
    "ActiveProgram":
    [{"id": "ActiveProgram",
      "data":
-     {"/Creational--theorems/ActiveProgram/#ActiveProgram":
+     {"/ActiveProgram/#ActiveProgram":
       {"display": "ActiveProgram",
-       "context":
-       ["PSBP Documentation", "Creational  theorems", "ActiveProgram"]}},
-     "address": "/Creational--theorems/ActiveProgram/"}],
+       "context": ["PSBP Documentation", "ActiveProgram"]}},
+     "address": "/ActiveProgram/"}],
    "Active":
    [{"id": "Active",
      "data":
-     {"/Creational--theorems/ActiveProgram/#Active":
+     {"/ActiveProgram/#Active":
       {"display": "Active",
-       "context":
-       ["PSBP Documentation", "Creational  theorems", "ActiveProgram"]}},
-     "address": "/Creational--theorems/ActiveProgram/"}]}},
+       "context": ["PSBP Documentation", "ActiveProgram"]}},
+     "address": "/ActiveProgram/"}]}},
  "Verso.Genre.Manual.doc.tech":
  {"title": "Terminology",
   "description": "Definitions of technical terms",
@@ -1805,202 +1998,6 @@ if(name) {
     });
 }
 </script>
-    <script>
-      
-window.onload = () => {
-
-    // Don't show hovers inside of closed tactic states
-    function blockedByTactic(elem) {
-      let parent = elem.parentNode;
-      while (parent && "classList" in parent) {
-        if (parent.classList.contains("tactic")) {
-          const toggle = parent.querySelector("input.tactic-toggle");
-          if (toggle) {
-            return !toggle.checked;
-          }
-        }
-        parent = parent.parentNode;
-      }
-      return false;
-    }
-
-    function blockedByTippy(elem) {
-      // Don't show a new hover until the old ones are all closed.
-      // Scoped to the nearest "top-level block" to avoid being O(n) in the size of the document.
-      var block = elem;
-      const topLevel = new Set(["section", "body", "html", "nav", "header"]);
-      while (block.parentNode && !topLevel.has(block.parentNode.nodeName.toLowerCase())) {
-        block = block.parentNode;
-      }
-      for (const child of block.querySelectorAll(".token, .has-info")) {
-        if (child._tippy && child._tippy.state.isVisible) { return true };
-      }
-      return false;
-    }
-
-    for (const c of document.querySelectorAll(".hl.lean .token")) {
-        if (c.dataset.binding != "") {
-            c.addEventListener("mouseover", (event) => {
-                if (blockedByTactic(c)) {return;}
-                const context = c.closest(".hl.lean").dataset.leanContext;
-                for (const example of document.querySelectorAll(".hl.lean")) {
-                    if (example.dataset.leanContext == context) {
-                        for (const tok of example.querySelectorAll(".token")) {
-                            if (c.dataset.binding == tok.dataset.binding) {
-                                tok.classList.add("binding-hl");
-                            }
-                        }
-                    }
-                }
-            });
-        }
-        c.addEventListener("mouseout", (event) => {
-            for (const tok of document.querySelectorAll(".hl.lean .token")) {
-                tok.classList.remove("binding-hl");
-            }
-        });
-    }
-    /* Render docstrings */
-    if ('undefined' !== typeof marked) {
-        for (const d of document.querySelectorAll("code.docstring, pre.docstring")) {
-            const str = d.innerText;
-            const html = marked.parse(str);
-            const rendered = document.createElement("div");
-            rendered.classList.add("docstring");
-            rendered.innerHTML = html;
-            d.parentNode.replaceChild(rendered, d);
-        }
-    }
-    // Add hovers
-    let siteRoot = typeof __versoSiteRoot !== 'undefined' ? __versoSiteRoot : "/";
-    let docsJson = siteRoot + "-verso-docs.json";
-    fetch(docsJson).then((resp) => resp.json()).then((versoDocData) => {
-
-      function hideParentTooltips(element) {
-        let parent = element.parentElement;
-        while (parent) {
-          const tippyInstance = parent._tippy;
-          if (tippyInstance) {
-            tippyInstance.hide();
-          }
-          parent = parent.parentElement;
-        }
-      }
-
-
-
-      const defaultTippyProps = {
-        /* DEBUG -- remove the space: * /
-        onHide(any) { return false; },
-        trigger: "click",
-        // */
-        /* theme: "lean", */
-        maxWidth: "none",
-        appendTo: () => document.body,
-        interactive: true,
-        delay: [100, null],
-        /* ignoreAttributes: true, */
-        followCursor: 'initial',
-        onShow(inst) {
-          if (inst.reference.className == 'tactic') {
-
-            const toggle = inst.reference.querySelector("input.tactic-toggle");
-            if (toggle && toggle.checked) {
-              return false;
-            }
-            hideParentTooltips(inst.reference);
-            //if (blockedByTippy(inst.reference)) { return false; }
-
-          } else if (inst.reference.querySelector(".hover-info") || "versoHover" in inst.reference.dataset) {
-            if (blockedByTactic(inst.reference)) { return false };
-            if (blockedByTippy(inst.reference)) { return false; }
-          } else { // Nothing to show here!
-            return false;
-          }
-        },
-        content (tgt) {
-          const content = document.createElement("span");
-          if (tgt.className == 'tactic') {
-            const state = tgt.querySelector(".tactic-state").cloneNode(true);
-            state.style.display = "block";
-            content.appendChild(state);
-            content.style.display = "block";
-            content.className = "hl lean popup";
-          } else {
-            content.className = "hl lean";
-            content.style.display = "block";
-            content.style.maxHeight = "300px";
-            content.style.overflowY = "auto";
-            content.style.overflowX = "hidden";
-            const hoverId = tgt.dataset.versoHover;
-            const hoverInfo = tgt.querySelector(".hover-info");
-            if (hoverId) { // Docstrings from the table
-              // TODO stop doing an implicit conversion from string to number here
-              let data = versoDocData[hoverId];
-              if (data) {
-                const info = document.createElement("span");
-                info.className = "hover-info";
-                info.style.display = "block";
-                info.innerHTML = data;
-                content.appendChild(info);
-                /* Render docstrings - TODO server-side */
-                if ('undefined' !== typeof marked) {
-                    for (const d of content.querySelectorAll("code.docstring, pre.docstring")) {
-                        const str = d.innerText;
-                        const html = marked.parse(str);
-                        const rendered = document.createElement("div");
-                        rendered.classList.add("docstring");
-                        rendered.innerHTML = html;
-                        d.parentNode.replaceChild(rendered, d);
-                    }
-                }
-              } else {
-                content.innerHTML = "Failed to load doc ID: " + hoverId;
-              }
-            } else if (hoverInfo) { // The inline info, still used for compiler messages
-              content.appendChild(hoverInfo.cloneNode(true));
-            }
-            const extraLinks = tgt.parentElement.dataset['versoLinks'];
-            if (extraLinks) {
-              try {
-                const extras = JSON.parse(extraLinks);
-                const links = document.createElement('ul');
-                links.className = 'extra-doc-links';
-                extras.forEach((l) => {
-                  const li = document.createElement('li');
-                  li.innerHTML = "<a href=\"" + l['href'] + "\" title=\"" + l.long + "\">" + l.short + "</a>";
-                  links.appendChild(li);
-                });
-                content.appendChild(links);
-              } catch (error) {
-                console.error(error);
-              }
-            }
-          }
-          return content;
-        }
-      };
-
-
-      document.querySelectorAll('.hl.lean .const.token, .hl.lean .keyword.token, .hl.lean .literal.token, .hl.lean .option.token, .hl.lean .var.token, .hl.lean .typed.token, .hl.lean .level-var, .hl.lean .level-const, .hl.lean .level-op, .hl.lean .sort').forEach(element => {
-        element.setAttribute('data-tippy-theme', 'lean');
-      });
-      document.querySelectorAll('.hl.lean .has-info.warning').forEach(element => {
-        element.setAttribute('data-tippy-theme', 'warning message');
-      });
-      document.querySelectorAll('.hl.lean .has-info.information').forEach(element => {
-        element.setAttribute('data-tippy-theme', 'info message');
-      });
-      document.querySelectorAll('.hl.lean .has-info.error').forEach(element => {
-        element.setAttribute('data-tippy-theme', 'error message');
-      });
-      document.querySelectorAll('.hl.lean .tactic').forEach(element => {
-        element.setAttribute('data-tippy-theme', 'tactic');
-      });
-      let insts = tippy('.hl.lean .const.token, .hl.lean .keyword.token, .hl.lean .literal.token, .hl.lean .option.token, .hl.lean .var.token, .hl.lean .typed.token, .hl.lean .has-info, .hl.lean .tactic, .hl.lean .level-var, .hl.lean .level-const, .hl.lean .level-op, .hl.lean .sort', defaultTippyProps);
-  });
-}
-</script>
     <script src="-verso-search/search-highlight.js" defer="defer"></script>
     </head>
   <body>
@@ -2021,7 +2018,7 @@ window.onload = () => {
             <div class="split-toc book">
               <div class="title">
                 <label for="--verso-manual-toc-----bookRoot" class="toggle-split-toc"><input type="checkbox" class="toggle-split-toc" id="--verso-manual-toc-----bookRoot" checked="checked"></label><span class="">Table of Contents</span></div>
-              <table><tr class="numbered"><td class="num">1.</td><td><a href="About/#PSBP-Documentation--About">About</a></td></tr><tr class="numbered"><td class="num">2.</td><td><a href="Naming-conventions/#PSBP-Documentation--Naming-conventions">Naming conventions</a></td></tr><tr class="numbered"><td class="num">3.</td><td><a href="Programs-versus-Computations/#PSBP-Documentation--Programs-versus-Computations">Programs versus Computations</a></td></tr><tr class="numbered"><td class="num">4.</td><td><a href="The--PSBP--library-type-classes/#PSBP-Documentation--The--PSBP--library-type-classes">The <code>PSBP</code> library type classes</a></td></tr><tr class="numbered"><td class="num">5.</td><td><a href="fibonacci--and--factorial/#PSBP-Documentation--fibonacci--and--factorial"><code>fibonacci</code> and <code>factorial</code></a></td></tr><tr class="numbered"><td class="num">6.</td><td><a href="Laws/#PSBP-Documentation--Laws">Laws</a></td></tr><tr class="numbered"><td class="num">7.</td><td><a href="Computation-Valued-Functions/#PSBP-Documentation--Computation-Valued-Functions">Computation Valued Functions</a></td></tr><tr class="numbered"><td class="num">8.</td><td><a href="Theorems/#PSBP-Documentation--Theorems">Theorems</a></td></tr><tr class="numbered"><td class="num">9.</td><td><a href="Creational--theorems/#PSBP-Documentation--Creational--theorems"><code>Creational</code> theorems</a></td></tr><tr class="numbered"><td class="num">10.</td><td><a href="ReactiveProgram/#PSBP-Documentation--ReactiveProgram"><code>ReactiveProgram</code></a></td></tr><tr class="numbered"><td class="num">11.</td><td><a href="Positional-Programming/#PSBP-Documentation--Positional-Programming">Positional Programming</a></td></tr><tr class="numbered"><td class="num">12.</td><td><a href="Programming-With-State/#PSBP-Documentation--Programming-With-State">Programming With State</a></td></tr><tr class="numbered"><td class="num">13.</td><td><a href="Programming-With-Failure/#PSBP-Documentation--Programming-With-Failure">Programming With Failure</a></td></tr></table></div>
+              <table><tr class="numbered"><td class="num">1.</td><td><a href="About/#PSBP-Documentation--About">About</a></td></tr><tr class="numbered"><td class="num">2.</td><td><a href="Naming-conventions/#PSBP-Documentation--Naming-conventions">Naming conventions</a></td></tr><tr class="numbered"><td class="num">3.</td><td><a href="Programs-versus-Computations/#PSBP-Documentation--Programs-versus-Computations">Programs versus Computations</a></td></tr><tr class="numbered"><td class="num">4.</td><td><a href="The--PSBP--library-type-classes/#PSBP-Documentation--The--PSBP--library-type-classes">The <code>PSBP</code> library type classes</a></td></tr><tr class="numbered"><td class="num">5.</td><td><a href="fibonacci--and--factorial/#PSBP-Documentation--fibonacci--and--factorial"><code>fibonacci</code> and <code>factorial</code></a></td></tr><tr class="numbered"><td class="num">6.</td><td><a href="Laws/#PSBP-Documentation--Laws">Laws</a></td></tr><tr class="numbered"><td class="num">7.</td><td><a href="Computation-Valued-Functions/#PSBP-Documentation--Computation-Valued-Functions">Computation Valued Functions</a></td></tr><tr class="numbered"><td class="num">8.</td><td><a href="Theorems/#PSBP-Documentation--Theorems">Theorems</a></td></tr><tr class="numbered"><td class="num">9.</td><td><a href="ActiveProgram/#PSBP-Documentation--ActiveProgram"><code>ActiveProgram</code></a></td></tr><tr class="numbered"><td class="num">10.</td><td><a href="ReactiveProgram/#PSBP-Documentation--ReactiveProgram"><code>ReactiveProgram</code></a></td></tr><tr class="numbered"><td class="num">11.</td><td><a href="Positional-Programming/#PSBP-Documentation--Positional-Programming">Positional Programming</a></td></tr><tr class="numbered"><td class="num">12.</td><td><a href="Programming-With-State/#PSBP-Documentation--Programming-With-State">Programming With State</a></td></tr><tr class="numbered"><td class="num">13.</td><td><a href="Programming-With-Failure/#PSBP-Documentation--Programming-With-Failure">Programming With Failure</a></td></tr></table></div>
             </div>
           </div>
         <div class="last"></div>
