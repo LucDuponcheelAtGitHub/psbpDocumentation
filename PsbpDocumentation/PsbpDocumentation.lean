@@ -22,25 +22,30 @@ This document is about the
 [`Lean` `PSBP` library](https://github.com/LucDuponcheelAtGitHub/PSBP),
 in what follows, also simply called `PSBP`.
 
-This document can be seen as a, somewhat special, not to say opinionated, programming course, especially useful for
-mathematicians and/or computer scientists, researchers as well as students (possibly future researchers), who are
-interested in mathematical foundations of programming.
+`PSBP` stands for "Program Specification Based Programming".
 
-The code of this document can be seen as a programming course for `Lean` itself. `Lean` turns out to be both a very
-demanding and very helpful student.
+This document can be seen as a, somewhat special, not to say opinionated, programming course.
 
-When I worked with Doatse Swierstra at the University of Utrecht, he once told me that, apart from sound proving
+The course is especially useful for mathematicians and/or computer scientists, researchers as well as students
+(possibly future researchers), who are interested in mathematical foundations of programming.
+
+The code of this document can be seen as a programming course for `Lean`.
+
+`Lean` turns out to be both a very demanding and very helpful student.
+
+When I worked with Doatse Swierstra at the University of Utrecht, he once said to me that, apart from sound proving
 techniques like "proof by induction", there is also this unsound proving technique "proof by intimidation". When no
 student complains about the correctness of a proof, the proof is correct. Of course, Doaitse did not apply this
-technique when teaching. `Lean` would be this very demanding student asking you for more and more into proof details
-before accepting the correctness of the proof. But `Lean` would also be this very helpful student that would be able to
-infer the proof details for you if you are stuck.
+technique when teaching. `Lean` would be this very demanding student asking you for more and more proof details before
+accepting the correctness of the proof. But `Lean` would also be this very helpful student that would be able to infer
+the proof details for you if you are sick and tired to go into more and more proof details.
 
-The first sections of this course do not always explain all concepts that they deal with. Please keep on reading. All
-concepts will, eventually, be explained. Starting from section "The PSBP Library type classes" the course is self
-contained and requires, at least in theory, no previous knowledge.
+The first sections of this course do not always explain all concepts they deal with. Please keep on reading. All
+concepts will, eventually, be explained. Starting from section "The PSBP Library type classes", the course is
+self-contained and requires, at least in theory, no previous knowledge.
 
-So let's end this section with a, somewhat offensive, motivation to keep on reading this document.
+So let's end this section with a, somewhat offensive statement (I am sorry), hopefully motivation you to keep on reading
+this document.
 
 If `Lean` can understand the course then you should be able to understand it as well.
 
@@ -52,7 +57,7 @@ As a consequence, in this document, the word programming means (the process of) 
 
 I hope that this naming convention does not lead to any confusion.
 
-`PSBP` stands for "Program Specification Based Programming" (using the naming conventions above).
+"Program Specification Based Programming" uses the naming conventions above.
 
 `PSBP` is a pointfree effectful functional programming library, written using the `Lean` programming language.
 
