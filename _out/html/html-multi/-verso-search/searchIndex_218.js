@@ -1,0 +1,1 @@
+window.docContents[218].resolve({"/Laws/def-identity/#PSBP-Documentation--Laws--def-identity":{"id":"/Laws/def-identity/#PSBP-Documentation--Laws--def-identity","header":"6.1. def identity","context":"PSBP Documentation\u0009Laws","contents":""}});

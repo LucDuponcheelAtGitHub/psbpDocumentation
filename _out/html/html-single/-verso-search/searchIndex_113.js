@@ -1,0 +1,1 @@
+window.docContents[113].resolve({"/#PSBP-Documentation--The--PSBP--library-type-classes":{"id":"/#PSBP-Documentation--The--PSBP--library-type-classes","header":"4. The  PSBP  library type classes","context":"PSBP Documentation","contents":"The PSBP library type classes are binary type constructor classes, but we also simply call them type classes.\n\n\n\n\n\n\n\n\n\n\n\n\n\n"}});

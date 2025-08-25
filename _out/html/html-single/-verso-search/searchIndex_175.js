@@ -1,0 +1,1 @@
+window.docContents[175].resolve({"/#PSBP-Documentation--Theorems":{"id":"/#PSBP-Documentation--Theorems","header":"8. Theorems","context":"PSBP Documentation","contents":"The laws of the various type classes need to be proved for the various instances. First we prove them and next we let\nLean prove them for us.\n\n\n\n\n\n\n\n"}});

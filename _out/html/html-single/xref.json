@@ -86,28 +86,6 @@
         "Programming With Failure",
         "twiceAccumulatingSafeDivIsOne"]}},
      "address": "/"}],
-   "trueToLeftFalseToRightF":
-   [{"id": "trueToLeftFalseToRightF",
-     "data":
-     {"/#trueToLeftFalseToRightF":
-      {"display": "trueToLeftFalseToRightF",
-       "context":
-       ["PSBP Documentation",
-        "The  PSBP  Library type classes",
-        "Programs and program combinators defined in terms of the basic ones",
-        "def if_"]}},
-     "address": "/"}],
-   "trueToLeftFalseToRight":
-   [{"id": "trueToLeftFalseToRight",
-     "data":
-     {"/#trueToLeftFalseToRight":
-      {"display": "trueToLeftFalseToRight",
-       "context":
-       ["PSBP Documentation",
-        "The  PSBP  Library type classes",
-        "Programs and program combinators defined in terms of the basic ones",
-        "def if_"]}},
-     "address": "/"}],
    "threeF":
    [{"id": "threeF",
      "data":
@@ -140,16 +118,54 @@
        "context":
        ["PSBP Documentation", "Positional Programming", "Using  Functorial"]}},
      "address": "/"}],
+   "sequential_right_identity'":
+   [{"id": "sequential_right_identity___",
+     "data":
+     {"/#sequential_right_identity___":
+      {"display": "sequential_right_identity'",
+       "context": ["PSBP Documentation", "Theorems", "Sequential  theorems"]}},
+     "address": "/"}],
+   "sequential_right_identity":
+   [{"id": "sequential_right_identity",
+     "data":
+     {"/#sequential_right_identity":
+      {"display": "sequential_right_identity",
+       "context": ["PSBP Documentation", "Theorems", "Sequential  theorems"]}},
+     "address": "/"}],
+   "sequential_left_identity'":
+   [{"id": "sequential_left_identity___",
+     "data":
+     {"/#sequential_left_identity___":
+      {"display": "sequential_left_identity'",
+       "context": ["PSBP Documentation", "Theorems", "Sequential  theorems"]}},
+     "address": "/"}],
+   "sequential_left_identity":
+   [{"id": "sequential_left_identity",
+     "data":
+     {"/#sequential_left_identity":
+      {"display": "sequential_left_identity",
+       "context": ["PSBP Documentation", "Theorems", "Sequential  theorems"]}},
+     "address": "/"}],
+   "sequential_associative'":
+   [{"id": "sequential_associative___",
+     "data":
+     {"/#sequential_associative___":
+      {"display": "sequential_associative'",
+       "context": ["PSBP Documentation", "Theorems", "Sequential  theorems"]}},
+     "address": "/"}],
+   "sequential_associative":
+   [{"id": "sequential_associative",
+     "data":
+     {"/#sequential_associative":
+      {"display": "sequential_associative",
+       "context": ["PSBP Documentation", "Theorems", "Sequential  theorems"]}},
+     "address": "/"}],
    "second":
    [{"id": "second",
      "data":
      {"/#second":
       {"display": "second",
-       "context":
-       ["PSBP Documentation",
-        "Programming With State",
-        "class WithState σ",
-        "def modifyStateWith"]}},
+       "context": ["PSBP Documentation", "Laws", "class LawfulCreational"]}},
      "address": "/"}],
    "safeDivIsOne":
    [{"id": "safeDivIsOne",
@@ -166,6 +182,13 @@
       {"display": "safeDiv",
        "context":
        ["PSBP Documentation", "Programming With Failure", "safeDiv"]}},
+     "address": "/"}],
+   "right":
+   [{"id": "right",
+     "data":
+     {"/#right":
+      {"display": "right",
+       "context": ["PSBP Documentation", "Laws", "class LawfulConditional"]}},
      "address": "/"}],
    "positionalSumOfFibonacciAndFactorial'":
    [{"id": "positionalSumOfFibonacciAndFactorial___",
@@ -231,33 +254,44 @@
        "context":
        ["PSBP Documentation", "Positional Programming", "Some positions"]}},
      "address": "/"}],
+   "onlyFirst":
+   [{"id": "onlyFirst",
+     "data":
+     {"/#onlyFirst":
+      {"display": "onlyFirst",
+       "context": ["PSBP Documentation", "Laws", "class LawfulCreational"]}},
+     "address": "/"}],
    "oneF":
    [{"id": "oneF",
      "data":
      {"/#oneF":
       {"display": "oneF",
-       "context": ["PSBP Documentation", "fibonacci  and  factorial"]}},
+       "context":
+       ["PSBP Documentation", "fibonacci  and  factorial", "def if_"]}},
      "address": "/"}],
    "one":
    [{"id": "one",
      "data":
      {"/#one":
       {"display": "one",
-       "context": ["PSBP Documentation", "fibonacci  and  factorial"]}},
+       "context":
+       ["PSBP Documentation", "fibonacci  and  factorial", "def if_"]}},
      "address": "/"}],
    "multiplyF":
    [{"id": "multiplyF",
      "data":
      {"/#multiplyF":
       {"display": "multiplyF",
-       "context": ["PSBP Documentation", "fibonacci  and  factorial"]}},
+       "context":
+       ["PSBP Documentation", "fibonacci  and  factorial", "def if_"]}},
      "address": "/"}],
    "multiply":
    [{"id": "multiply",
      "data":
      {"/#multiply":
       {"display": "multiply",
-       "context": ["PSBP Documentation", "fibonacci  and  factorial"]}},
+       "context":
+       ["PSBP Documentation", "fibonacci  and  factorial", "def if_"]}},
      "address": "/"}],
    "modifyStateWith":
    [{"id": "modifyStateWith",
@@ -275,28 +309,32 @@
      "data":
      {"/#minusTwoF":
       {"display": "minusTwoF",
-       "context": ["PSBP Documentation", "fibonacci  and  factorial"]}},
+       "context":
+       ["PSBP Documentation", "fibonacci  and  factorial", "def if_"]}},
      "address": "/"}],
    "minusTwo":
    [{"id": "minusTwo",
      "data":
      {"/#minusTwo":
       {"display": "minusTwo",
-       "context": ["PSBP Documentation", "fibonacci  and  factorial"]}},
+       "context":
+       ["PSBP Documentation", "fibonacci  and  factorial", "def if_"]}},
      "address": "/"}],
    "minusOneF":
    [{"id": "minusOneF",
      "data":
      {"/#minusOneF":
       {"display": "minusOneF",
-       "context": ["PSBP Documentation", "fibonacci  and  factorial"]}},
+       "context":
+       ["PSBP Documentation", "fibonacci  and  factorial", "def if_"]}},
      "address": "/"}],
    "minusOne":
    [{"id": "minusOne",
      "data":
      {"/#minusOne":
       {"display": "minusOne",
-       "context": ["PSBP Documentation", "fibonacci  and  factorial"]}},
+       "context":
+       ["PSBP Documentation", "fibonacci  and  factorial", "def if_"]}},
      "address": "/"}],
    "materializeWithValidation":
    [{"id": "materializeWithValidation",
@@ -366,7 +404,8 @@
      "data":
      {"/#materializeActive":
       {"display": "materializeActive",
-       "context": ["PSBP Documentation", "ActiveProgram"]}},
+       "context":
+       ["PSBP Documentation", "Creational  theorems", "ActiveProgram"]}},
      "address": "/"}],
    "let_":
    [{"id": "let_",
@@ -374,38 +413,46 @@
      {"/#let_":
       {"display": "let_",
        "context":
-       ["PSBP Documentation",
-        "The  PSBP  Library type classes",
-        "Programs and program combinators defined in terms of the basic ones",
-        "def let_"]}},
+       ["PSBP Documentation", "fibonacci  and  factorial", "def let_"]}},
+     "address": "/"}],
+   "left":
+   [{"id": "left",
+     "data":
+     {"/#left":
+      {"display": "left",
+       "context": ["PSBP Documentation", "Laws", "class LawfulConditional"]}},
      "address": "/"}],
    "isZeroF":
    [{"id": "isZeroF",
      "data":
      {"/#isZeroF":
       {"display": "isZeroF",
-       "context": ["PSBP Documentation", "fibonacci  and  factorial"]}},
+       "context":
+       ["PSBP Documentation", "fibonacci  and  factorial", "def if_"]}},
      "address": "/"}],
    "isZero":
    [{"id": "isZero",
      "data":
      {"/#isZero":
       {"display": "isZero",
-       "context": ["PSBP Documentation", "fibonacci  and  factorial"]}},
+       "context":
+       ["PSBP Documentation", "fibonacci  and  factorial", "def if_"]}},
      "address": "/"}],
    "isOneF":
    [{"id": "isOneF",
      "data":
      {"/#isOneF":
       {"display": "isOneF",
-       "context": ["PSBP Documentation", "fibonacci  and  factorial"]}},
+       "context":
+       ["PSBP Documentation", "fibonacci  and  factorial", "def if_"]}},
      "address": "/"}],
    "isOne":
    [{"id": "isOne",
      "data":
      {"/#isOne":
       {"display": "isOne",
-       "context": ["PSBP Documentation", "fibonacci  and  factorial"]}},
+       "context":
+       ["PSBP Documentation", "fibonacci  and  factorial", "def if_"]}},
      "address": "/"}],
    "isNotZeroF":
    [{"id": "isNotZeroF",
@@ -429,10 +476,7 @@
      {"/#in_":
       {"display": "in_",
        "context":
-       ["PSBP Documentation",
-        "The  PSBP  Library type classes",
-        "Programs and program combinators defined in terms of the basic ones",
-        "def let_"]}},
+       ["PSBP Documentation", "fibonacci  and  factorial", "def let_"]}},
      "address": "/"}],
    "if_":
    [{"id": "if_",
@@ -440,21 +484,63 @@
      {"/#if_":
       {"display": "if_",
        "context":
-       ["PSBP Documentation",
-        "The  PSBP  Library type classes",
-        "Programs and program combinators defined in terms of the basic ones",
-        "def if_"]}},
+       ["PSBP Documentation", "fibonacci  and  factorial", "def if_"]}},
      "address": "/"}],
    "identity":
    [{"id": "identity",
      "data":
      {"/#identity":
       {"display": "identity",
-       "context":
-       ["PSBP Documentation",
-        "The  PSBP  Library type classes",
-        "Programs and program combinators defined in terms of the basic ones",
-        "def identity"]}},
+       "context": ["PSBP Documentation", "fibonacci  and  factorial"]}},
+     "address": "/"}],
+   "functorial_sequential'":
+   [{"id": "functorial_sequential___",
+     "data":
+     {"/#functorial_sequential___":
+      {"display": "functorial_sequential'",
+       "context": ["PSBP Documentation", "Theorems", "Functorial  theorems"]}},
+     "address": "/"}],
+   "functorial_sequential":
+   [{"id": "functorial_sequential",
+     "data":
+     {"/#functorial_sequential":
+      {"display": "functorial_sequential",
+       "context": ["PSBP Documentation", "Theorems", "Functorial  theorems"]}},
+     "address": "/"}],
+   "functorial_identity'":
+   [{"id": "functorial_identity___",
+     "data":
+     {"/#functorial_identity___":
+      {"display": "functorial_identity'",
+       "context": ["PSBP Documentation", "Theorems", "Functorial  theorems"]}},
+     "address": "/"}],
+   "functorial_identity":
+   [{"id": "functorial_identity",
+     "data":
+     {"/#functorial_identity":
+      {"display": "functorial_identity",
+       "context": ["PSBP Documentation", "Theorems", "Functorial  theorems"]}},
+     "address": "/"}],
+   "functional_sequential'":
+   [{"id": "functional_sequential___",
+     "data":
+     {"/#functional_sequential___":
+      {"display": "functional_sequential'",
+       "context": ["PSBP Documentation", "Theorems", "Functional  theorems"]}},
+     "address": "/"}],
+   "functional_sequential":
+   [{"id": "functional_sequential",
+     "data":
+     {"/#functional_sequential":
+      {"display": "functional_sequential",
+       "context": ["PSBP Documentation", "Theorems", "Functional  theorems"]}},
+     "address": "/"}],
+   "functional_identity":
+   [{"id": "functional_identity",
+     "data":
+     {"/#functional_identity":
+      {"display": "functional_identity",
+       "context": ["PSBP Documentation", "Theorems", "Functional  theorems"]}},
      "address": "/"}],
    "foldSum":
    [{"id": "foldSum",
@@ -468,11 +554,7 @@
      "data":
      {"/#first":
       {"display": "first",
-       "context":
-       ["PSBP Documentation",
-        "Programming With State",
-        "class WithState σ",
-        "def modifyStateWith"]}},
+       "context": ["PSBP Documentation", "Laws", "class LawfulCreational"]}},
      "address": "/"}],
    "fibonacciIncrementingArgumentPair":
    [{"id": "fibonacciIncrementingArgumentPair",
@@ -499,14 +581,16 @@
      "data":
      {"/#fibonacci":
       {"display": "fibonacci",
-       "context": ["PSBP Documentation", "fibonacci  and  factorial"]}},
+       "context":
+       ["PSBP Documentation", "fibonacci  and  factorial", "def if_"]}},
      "address": "/"}],
    "factorial":
    [{"id": "factorial",
      "data":
      {"/#factorial":
       {"display": "factorial",
-       "context": ["PSBP Documentation", "fibonacci  and  factorial"]}},
+       "context":
+       ["PSBP Documentation", "fibonacci  and  factorial", "def if_"]}},
      "address": "/"}],
    "else_":
    [{"id": "else_",
@@ -514,17 +598,78 @@
      {"/#else_":
       {"display": "else_",
        "context":
-       ["PSBP Documentation",
-        "The  PSBP  Library type classes",
-        "Programs and program combinators defined in terms of the basic ones",
-        "def if_"]}},
+       ["PSBP Documentation", "fibonacci  and  factorial", "def if_"]}},
+     "address": "/"}],
+   "creational_onlyFirst_sequential":
+   [{"id": "creational_onlyFirst_sequential",
+     "data":
+     {"/#creational_onlyFirst_sequential":
+      {"display": "creational_onlyFirst_sequential",
+       "context": ["PSBP Documentation", "Creational  theorems"]}},
+     "address": "/"}],
+   "creational_onlyFirst_first":
+   [{"id": "creational_onlyFirst_first",
+     "data":
+     {"/#creational_onlyFirst_first":
+      {"display": "creational_onlyFirst_first",
+       "context": ["PSBP Documentation", "Creational  theorems"]}},
+     "address": "/"}],
+   "creational_onlyFirst_assoc":
+   [{"id": "creational_onlyFirst_assoc",
+     "data":
+     {"/#creational_onlyFirst_assoc":
+      {"display": "creational_onlyFirst_assoc",
+       "context": ["PSBP Documentation", "Creational  theorems"]}},
+     "address": "/"}],
+   "creational_onlyFirst_asProgram'":
+   [{"id": "creational_onlyFirst_asProgram___",
+     "data":
+     {"/#creational_onlyFirst_asProgram___":
+      {"display": "creational_onlyFirst_asProgram'",
+       "context": ["PSBP Documentation", "Creational  theorems"]}},
+     "address": "/"}],
+   "creational_onlyFirst_asProgram":
+   [{"id": "creational_onlyFirst_asProgram",
+     "data":
+     {"/#creational_onlyFirst_asProgram":
+      {"display": "creational_onlyFirst_asProgram",
+       "context": ["PSBP Documentation", "Creational  theorems"]}},
+     "address": "/"}],
+   "creational_onlyFirst_applyAtSecond":
+   [{"id": "creational_onlyFirst_applyAtSecond",
+     "data":
+     {"/#creational_onlyFirst_applyAtSecond":
+      {"display": "creational_onlyFirst_applyAtSecond",
+       "context": ["PSBP Documentation", "Creational  theorems"]}},
+     "address": "/"}],
+   "assoc":
+   [{"id": "assoc",
+     "data":
+     {"/#assoc":
+      {"display": "assoc",
+       "context": ["PSBP Documentation", "Laws", "class LawfulCreational"]}},
+     "address": "/"}],
+   "applyAtSecond":
+   [{"id": "applyAtSecond",
+     "data":
+     {"/#applyAtSecond":
+      {"display": "applyAtSecond",
+       "context": ["PSBP Documentation", "Laws", "class LawfulCreational"]}},
+     "address": "/"}],
+   "applyAtFirst":
+   [{"id": "applyAtFirst",
+     "data":
+     {"/#applyAtFirst":
+      {"display": "applyAtFirst",
+       "context": ["PSBP Documentation", "Laws", "class LawfulCreational"]}},
      "address": "/"}],
    "addF":
    [{"id": "addF",
      "data":
      {"/#addF":
       {"display": "addF",
-       "context": ["PSBP Documentation", "fibonacci  and  factorial"]}},
+       "context":
+       ["PSBP Documentation", "fibonacci  and  factorial", "def if_"]}},
      "address": "/"}],
    "addAccumulatingSafeDivProduct":
    [{"id": "addAccumulatingSafeDivProduct",
@@ -541,7 +686,8 @@
      "data":
      {"/#add":
       {"display": "add",
-       "context": ["PSBP Documentation", "fibonacci  and  factorial"]}},
+       "context":
+       ["PSBP Documentation", "fibonacci  and  factorial", "def if_"]}},
      "address": "/"}],
    "accumulatingSafeDivProduct":
    [{"id": "accumulatingSafeDivProduct",
@@ -620,7 +766,7 @@
       {"display": "andThen",
        "context":
        ["PSBP Documentation",
-        "The  PSBP  Library type classes",
+        "The  PSBP  library type classes",
         "class Sequential"]}},
      "address": "/"}],
    "Sequential":
@@ -630,7 +776,7 @@
       {"display": "Sequential",
        "context":
        ["PSBP Documentation",
-        "The  PSBP  Library type classes",
+        "The  PSBP  library type classes",
         "class Sequential"]}},
      "address": "/"}],
    "ReactiveT.runReactiveT":
@@ -735,6 +881,139 @@
         "Programming With Failure",
         "instance WithFailure ε  (validation)"]}},
      "address": "/"}],
+   "LawfulSequential.sequential_right_identity":
+   [{"id": "LawfulSequential___sequential_right_identity",
+     "data":
+     {"/#LawfulSequential___sequential_right_identity":
+      {"display": "sequential_right_identity",
+       "context": ["PSBP Documentation", "Laws", "class LawfulSequential"]}},
+     "address": "/"}],
+   "LawfulSequential.sequential_left_identity":
+   [{"id": "LawfulSequential___sequential_left_identity",
+     "data":
+     {"/#LawfulSequential___sequential_left_identity":
+      {"display": "sequential_left_identity",
+       "context": ["PSBP Documentation", "Laws", "class LawfulSequential"]}},
+     "address": "/"}],
+   "LawfulSequential.sequential_associativity":
+   [{"id": "LawfulSequential___sequential_associativity",
+     "data":
+     {"/#LawfulSequential___sequential_associativity":
+      {"display": "sequential_associativity",
+       "context": ["PSBP Documentation", "Laws", "class LawfulSequential"]}},
+     "address": "/"}],
+   "LawfulSequential":
+   [{"id": "LawfulSequential",
+     "data":
+     {"/#LawfulSequential":
+      {"display": "LawfulSequential",
+       "context": ["PSBP Documentation", "Laws", "class LawfulSequential"]}},
+     "address": "/"}],
+   "LawfulFunctorial.functorial_sequential":
+   [{"id": "LawfulFunctorial___functorial_sequential",
+     "data":
+     {"/#LawfulFunctorial___functorial_sequential":
+      {"display": "functorial_sequential",
+       "context": ["PSBP Documentation", "Laws", "class LawfulFunctorial"]}},
+     "address": "/"}],
+   "LawfulFunctorial.functorial_identity":
+   [{"id": "LawfulFunctorial___functorial_identity",
+     "data":
+     {"/#LawfulFunctorial___functorial_identity":
+      {"display": "functorial_identity",
+       "context": ["PSBP Documentation", "Laws", "class LawfulFunctorial"]}},
+     "address": "/"}],
+   "LawfulFunctorial":
+   [{"id": "LawfulFunctorial",
+     "data":
+     {"/#LawfulFunctorial":
+      {"display": "LawfulFunctorial",
+       "context": ["PSBP Documentation", "Laws", "class LawfulFunctorial"]}},
+     "address": "/"}],
+   "LawfulFunctional.functional_sequential":
+   [{"id": "LawfulFunctional___functional_sequential",
+     "data":
+     {"/#LawfulFunctional___functional_sequential":
+      {"display": "functional_sequential",
+       "context": ["PSBP Documentation", "Laws", "class LawfulFunctional"]}},
+     "address": "/"}],
+   "LawfulFunctional.functional_identity":
+   [{"id": "LawfulFunctional___functional_identity",
+     "data":
+     {"/#LawfulFunctional___functional_identity":
+      {"display": "functional_identity",
+       "context": ["PSBP Documentation", "Laws", "class LawfulFunctional"]}},
+     "address": "/"}],
+   "LawfulFunctional":
+   [{"id": "LawfulFunctional",
+     "data":
+     {"/#LawfulFunctional":
+      {"display": "LawfulFunctional",
+       "context": ["PSBP Documentation", "Laws", "class LawfulFunctional"]}},
+     "address": "/"}],
+   "LawfulCreational.creational_onlyFirst_sequential":
+   [{"id": "LawfulCreational___creational_onlyFirst_sequential",
+     "data":
+     {"/#LawfulCreational___creational_onlyFirst_sequential":
+      {"display": "creational_onlyFirst_sequential",
+       "context": ["PSBP Documentation", "Laws", "class LawfulCreational"]}},
+     "address": "/"}],
+   "LawfulCreational.creational_onlyFirst_first":
+   [{"id": "LawfulCreational___creational_onlyFirst_first",
+     "data":
+     {"/#LawfulCreational___creational_onlyFirst_first":
+      {"display": "creational_onlyFirst_first",
+       "context": ["PSBP Documentation", "Laws", "class LawfulCreational"]}},
+     "address": "/"}],
+   "LawfulCreational.creational_onlyFirst_assoc":
+   [{"id": "LawfulCreational___creational_onlyFirst_assoc",
+     "data":
+     {"/#LawfulCreational___creational_onlyFirst_assoc":
+      {"display": "creational_onlyFirst_assoc",
+       "context": ["PSBP Documentation", "Laws", "class LawfulCreational"]}},
+     "address": "/"}],
+   "LawfulCreational.creational_onlyFirst_asProgram":
+   [{"id": "LawfulCreational___creational_onlyFirst_asProgram",
+     "data":
+     {"/#LawfulCreational___creational_onlyFirst_asProgram":
+      {"display": "creational_onlyFirst_asProgram",
+       "context": ["PSBP Documentation", "Laws", "class LawfulCreational"]}},
+     "address": "/"}],
+   "LawfulCreational.creational_onlyFirst_applyAtSecond":
+   [{"id": "LawfulCreational___creational_onlyFirst_applyAtSecond",
+     "data":
+     {"/#LawfulCreational___creational_onlyFirst_applyAtSecond":
+      {"display": "creational_onlyFirst_applyAtSecond",
+       "context": ["PSBP Documentation", "Laws", "class LawfulCreational"]}},
+     "address": "/"}],
+   "LawfulCreational":
+   [{"id": "LawfulCreational",
+     "data":
+     {"/#LawfulCreational":
+      {"display": "LawfulCreational",
+       "context": ["PSBP Documentation", "Laws", "class LawfulCreational"]}},
+     "address": "/"}],
+   "LawfulConditional.conditional_right":
+   [{"id": "LawfulConditional___conditional_right",
+     "data":
+     {"/#LawfulConditional___conditional_right":
+      {"display": "conditional_right",
+       "context": ["PSBP Documentation", "Laws", "class LawfulConditional"]}},
+     "address": "/"}],
+   "LawfulConditional.conditional_left":
+   [{"id": "LawfulConditional___conditional_left",
+     "data":
+     {"/#LawfulConditional___conditional_left":
+      {"display": "conditional_left",
+       "context": ["PSBP Documentation", "Laws", "class LawfulConditional"]}},
+     "address": "/"}],
+   "LawfulConditional":
+   [{"id": "LawfulConditional",
+     "data":
+     {"/#LawfulConditional":
+      {"display": "LawfulConditional",
+       "context": ["PSBP Documentation", "Laws", "class LawfulConditional"]}},
+     "address": "/"}],
    "Functorial.andThenF":
    [{"id": "Functorial___andThenF",
      "data":
@@ -742,7 +1021,7 @@
       {"display": "andThenF",
        "context":
        ["PSBP Documentation",
-        "The  PSBP  Library type classes",
+        "The  PSBP  library type classes",
         "class Functorial"]}},
      "address": "/"}],
    "Functorial":
@@ -752,7 +1031,7 @@
       {"display": "Functorial",
        "context":
        ["PSBP Documentation",
-        "The  PSBP  Library type classes",
+        "The  PSBP  library type classes",
         "class Functorial"]}},
      "address": "/"}],
    "Functional.asProgram":
@@ -762,7 +1041,7 @@
       {"display": "asProgram",
        "context":
        ["PSBP Documentation",
-        "The  PSBP  Library type classes",
+        "The  PSBP  library type classes",
         "class Functional"]}},
      "address": "/"}],
    "Functional":
@@ -772,7 +1051,7 @@
       {"display": "Functional",
        "context":
        ["PSBP Documentation",
-        "The  PSBP  Library type classes",
+        "The  PSBP  library type classes",
         "class Functional"]}},
      "address": "/"}],
    "FromComputationValuedFunction.toComputationValuedFunction":
@@ -816,7 +1095,7 @@
       {"display": "product",
        "context":
        ["PSBP Documentation",
-        "The  PSBP  Library type classes",
+        "The  PSBP  library type classes",
         "class Creational"]}},
      "address": "/"}],
    "Creational":
@@ -826,7 +1105,7 @@
       {"display": "Creational",
        "context":
        ["PSBP Documentation",
-        "The  PSBP  Library type classes",
+        "The  PSBP  library type classes",
         "class Creational"]}},
      "address": "/"}],
    "Conditional.sum":
@@ -836,7 +1115,7 @@
       {"display": "sum",
        "context":
        ["PSBP Documentation",
-        "The  PSBP  Library type classes",
+        "The  PSBP  library type classes",
         "class Conditional"]}},
      "address": "/"}],
    "Conditional":
@@ -846,7 +1125,7 @@
       {"display": "Conditional",
        "context":
        ["PSBP Documentation",
-        "The  PSBP  Library type classes",
+        "The  PSBP  library type classes",
         "class Conditional"]}},
      "address": "/"}],
    "ActiveProgram":
@@ -854,14 +1133,16 @@
      "data":
      {"/#ActiveProgram":
       {"display": "ActiveProgram",
-       "context": ["PSBP Documentation", "ActiveProgram"]}},
+       "context":
+       ["PSBP Documentation", "Creational  theorems", "ActiveProgram"]}},
      "address": "/"}],
    "Active":
    [{"id": "Active",
      "data":
      {"/#Active":
       {"display": "Active",
-       "context": ["PSBP Documentation", "ActiveProgram"]}},
+       "context":
+       ["PSBP Documentation", "Creational  theorems", "ActiveProgram"]}},
      "address": "/"}]}},
  "Verso.Genre.Manual.doc.tech":
  {"title": "Terminology",

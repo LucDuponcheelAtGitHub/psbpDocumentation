@@ -1,0 +1,1089 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script>
+      (function(){
+  const {protocol:proto, host:hostName, pathname:path, search:srch, hash:hsh} = window.location;
+  if (!(path.endsWith("/") || path.endsWith(".html"))) {
+    window.location.replace(`${proto}//${hostName}${path}/${srch}${hsh}`);
+  }
+})()</script>
+    <base href="./../"><meta charset="utf-8">
+    <meta name="viewport" content="height=device-height, width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+    <title>Programs versus Computations</title><link rel="stylesheet" href="book.css">
+    <script>
+      const __versoSiteRoot = document.baseURI;</script>
+    <script src="https://cdn.jsdelivr.net/npm/marked@11.1.1/marked.min.js" integrity="sha384-zbcZAIxlvJtNE3Dp5nxLXdXtXyxwOdnILY1TDPVmKFhl4r4nSUG1r8bcFXGVa4Te" crossorigin="anonymous"></script>
+    <script src="-verso-search/elasticlunr.min.js"></script>
+    <script src="-verso-search/fuzzysort.js"></script>
+    <script src="-verso-search/searchIndex.js"></script>
+    <script type="module" src="-verso-search/search-init.js"></script>
+    <link rel="stylesheet" href="-verso-search/search-box.css">
+    <link rel="stylesheet" href="-verso-search/search-highlight.css">
+    <link rel="stylesheet" href="-verso-search/domain-display.css">
+    <script src="-verso-data/popper.js"></script>
+    <script src="-verso-data/tippy.js"></script>
+    <link rel="stylesheet" href="-verso-data/tippy-border.css">
+    <style>
+
+.hl.lean {
+  white-space: pre;
+  font-weight: normal;
+  font-style: normal;
+}
+
+.hl.lean .keyword {
+  font-weight : bold;
+}
+
+.hl.lean .var {
+  font-style: italic;
+  position: relative;
+}
+
+.hover-container {
+  width: 0;
+  height: 0;
+  position: relative;
+  display: inline;
+}
+
+.hl.lean a {
+  color: inherit;
+  text-decoration: currentcolor underline dotted;
+}
+
+.hl.lean a:hover {
+  text-decoration: currentcolor underline solid;
+}
+
+.hl.lean .hover-info {
+  white-space: normal;
+}
+
+.hl.lean .token .hover-info {
+  display: none;
+  position: absolute;
+  background-color: #e5e5e5;
+  border: 1px solid black;
+  padding: 0.5rem;
+  z-index: 300;
+  font-size: inherit;
+}
+
+.hl.lean .hover-info.messages {
+  max-height: 10rem;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-gutter: stable;
+  padding: 0 0.5rem 0 0;
+  display: block;
+}
+
+.hl.lean .hover-info code {
+  white-space: pre-wrap;
+}
+
+.hl.lean .hover-info.messages > code {
+  padding: 0.5rem;
+  display: block;
+  width: fit-content;
+}
+
+.hl.lean .hover-info.messages > code:only-child {
+  margin: 0;
+}
+
+.hl.lean .hover-info.messages > code {
+  margin: 0.1rem;
+}
+
+.hl.lean .hover-info.messages > code:not(:first-child) {
+  margin-top: 0rem;
+}
+
+.hl.lean.block {
+  display: block;
+}
+
+.hl.lean.inline {
+  display: inline;
+  white-space: pre-wrap;
+}
+
+.hl.lean .token {
+  transition: all 0.25s; /* Slight fade for highlights */
+}
+
+@media (hover: hover) {
+  .hl.lean .token.binding-hl, .hl.lean .literal.string:hover, .hl.lean .token.typed:hover {
+    background-color: #eee;
+    border-radius: 2px;
+    transition: none;
+  }
+}
+
+
+.hl.lean .has-info .token:not(.tactic-state):not(.tactic-state *), .hl.lean .has-info .inter-text:not(.tactic-state):not(.tactic-state *) {
+  text-decoration-style: wavy;
+  text-decoration-line: underline;
+  text-decoration-thickness: from-font;
+  text-decoration-skip-ink: none;
+}
+
+.hl.lean .has-info .hover-info {
+  display: none;
+  position: absolute;
+  transform: translate(0.25rem, 0.3rem);
+  border: 1px solid black;
+  padding: 0.5rem;
+  z-index: 400;
+  text-align: left;
+}
+
+.hl.lean .has-info.error :not(.tactic-state):not(.tactic-state *){
+  text-decoration-color: red;
+}
+
+@media (hover: hover) {
+  .hl.lean .has-info.error:hover {
+    background-color: #ffb3b3;
+  }
+}
+
+.hl.lean .hover-info.messages > code.error {
+  background-color: #e5e5e5;
+  border-left: 0.2rem solid #ffb3b3;
+}
+
+.tippy-box[data-theme~='error'] .hl.lean .hover-info.messages > code.error {
+  background: none;
+  border: none;
+}
+
+.error .verso-message {
+    color: red;
+}
+
+.hl.lean .has-info.warning :not(.tactic-state):not(.tactic-state *) {
+  text-decoration-color: var(--verso-warning-color);
+}
+
+@media (hover: hover) {
+  .hl.lean .has-info.warning:hover {
+    background-color:var(--verso-warning-color);
+  }
+}
+
+.hl.lean .hover-info.messages > code.warning {
+  background-color: var(--verso-warning-color);
+}
+
+.hl.lean .hover-info.messages > code.error {
+  background-color: #e5e5e5;
+  border-left: 0.2rem solid var(--verso-warning-color);
+}
+
+.tippy-box[data-theme~='warning'] .hl.lean .hover-info.messages > code.warning {
+  background: none;
+  border: none;
+}
+
+
+.hl.lean .has-info.information :not(.tactic-state):not(.tactic-state *) {
+  text-decoration-color: blue;
+}
+
+@media (hover: hover) {
+  .hl.lean .has-info.information:hover {
+    background-color: #4777ff;
+  }
+}
+
+
+.hl.lean .hover-info.messages > code.info {
+  background-color: #e5e5e5;
+  border-left: 0.2rem solid #4777ff;
+}
+
+.tippy-box[data-theme~='info'] .hl.lean .hover-info.messages > code.info {
+  background: none;
+  border: none;
+}
+
+.hl.lean div.docstring {
+  font-family: sans-serif;
+  white-space: normal;
+  max-width: 40rem;
+  width: max-content;
+}
+
+.hl.lean div.docstring > :last-child {
+  margin-bottom: 0;
+}
+
+.hl.lean div.docstring > :first-child {
+  margin-top: 0;
+}
+
+.hl.lean .hover-info .sep {
+  display: block;
+  width: auto;
+  margin-left: 1rem;
+  margin-right: 1rem;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+  padding: 0;
+  height: 1px;
+  border-top: 1px solid #ccc;
+}
+
+.hl.lean code {
+  font-family: var(--verso-code-font-family);
+}
+
+.hl.lean .tactic-state {
+  display: none;
+  position: relative;
+  width: fit-content;
+  border: 1px solid #888888;
+  border-radius: 0.1rem;
+  padding: 0.5rem;
+  font-family: sans-serif;
+  background-color: #ffffff;
+}
+
+.hl.lean.popup .tactic-state {
+  position: static;
+  display: block;
+  width: auto;
+  border: none;
+  padding: 0.5rem;
+  font-family: sans-serif;
+  background-color: #ffffff;
+}
+
+
+.hl.lean .tactic {
+  position: relative;
+  display: inline-grid;
+  grid-template-columns: 1fr;
+  vertical-align: top;
+  /* Without these, mobile Safari will start making font sizes inconsistent when its text size adjustment feature is triggered.*/
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+.hl.lean .tactic-toggle:checked ~ .tactic-state {
+  display: inline-block;
+  vertical-align: top;
+  grid-row: 2;
+  justify-self: start;
+}
+
+.hl.lean .tactic > label {
+  position: relative;
+  grid-row: 1;
+}
+
+@media (hover: hover) {
+  .hl.lean .tactic:has(.tactic-toggle:not(:checked)) > label:hover {
+    background-color: #eeeeee;
+  }
+}
+
+.hl.lean .tactic-toggle {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  height: 0;
+  width: 0;
+  z-index: -10;
+}
+
+.hl.lean .tactic > label::after {
+  content: "";
+  border: 1px solid #bbbbbb;
+  border-radius: 1rem;
+  height: 0.25rem;
+  vertical-align: middle;
+  width: 0.6rem;
+  margin-left: 0.1rem;
+  margin-right: 0.1rem;
+  display: inline-block;
+  transition: all 0.5s;
+}
+
+/*
+@media (hover: hover) {
+  .hl.lean .tactic > label:hover::after {
+    border: 1px solid #aaaaaa;
+    background-color: #aaaaaa;
+    transition: all 0.5s;
+  }
+}
+*/
+
+.hl.lean .tactic > label:has(+ .tactic-toggle:checked)::after {
+  border: 1px solid #999999;
+  background-color: #999999;
+  transition: all 0.5s;
+}
+
+.hl.lean .tactic-state .goal + .goal {
+  margin-top: 1.5rem;
+}
+
+.hl.lean .tactic-state summary {
+  margin-left: -0.5rem;
+}
+
+.hl.lean .tactic-state details {
+  padding-left: 0.5rem;
+}
+
+.hl.lean .case-label {
+  display: block;
+  position: relative;
+}
+
+.hl.lean .case-label input[type="checkbox"] {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  height: 0;
+  width: 0;
+  z-index: -10;
+}
+
+.hl.lean .case-label:has(input[type="checkbox"])::before {
+  display: inline-block;
+  background-color: black;
+  content: ' ';
+  transition: ease 0.2s;
+  margin-right: 0.7em;
+  clip-path: polygon(100% 0, 0 0, 50% 100%);
+  width: 0.6em;
+  height: 0.6em;
+  vertical-align: middle;
+}
+
+.hl.lean .case-label:has(input[type="checkbox"]:not(:checked))::before {
+  transform: rotate(-90deg);
+}
+
+.hl.lean .case-label:has(input[type="checkbox"]) {
+
+}
+
+.hl.lean .case-label:has(input[type="checkbox"]:checked) {
+
+}
+
+
+.hl.lean .labeled-case > :not(:first-child) {
+  max-height: 0px;
+  display: block;
+  overflow: hidden;
+  transition: max-height 0.1s ease-in;
+  margin-left: 0.5rem;
+  margin-top: 0.1rem;
+}
+
+.hl.lean .labeled-case:has(.case-label input[type="checkbox"]:checked) > :not(:first-child) {
+  max-height: 100%;
+}
+
+
+.hl.lean .goal-name::before {
+  font-style: normal;
+  content: "case ";
+}
+
+.hl.lean .goal-name {
+  font-style: italic;
+  font-family: var(--verso-code-font-family);
+}
+
+.hl.lean .hypotheses {
+  display: table;
+}
+
+.hl.lean .hypothesis {
+  display: table-row;
+}
+
+.hl.lean .hypothesis > * {
+  display: table-cell;
+}
+
+
+.hl.lean .hypotheses .colon {
+  text-align: center;
+  min-width: 1rem;
+}
+
+.hl.lean .hypotheses .name {
+  text-align: right;
+}
+
+.hl.lean .hypotheses .name,
+.hl.lean .hypotheses .type,
+.hl.lean .conclusion .type {
+  font-family: var(--verso-code-font-family);
+}
+
+.tippy-box[data-theme~='lean'] {
+  background-color: #e5e5e5;
+  color: black;
+  border: 1px solid black;
+}
+.tippy-box[data-theme~='lean'][data-placement^='top'] > .tippy-arrow::before {
+  border-top-color: #e5e5e5;
+}
+.tippy-box[data-theme~='lean'][data-placement^='bottom'] > .tippy-arrow::before {
+  border-bottom-color: #e5e5e5;
+}
+.tippy-box[data-theme~='lean'][data-placement^='left'] > .tippy-arrow::before {
+  border-left-color: #e5e5e5;
+}
+.tippy-box[data-theme~='lean'][data-placement^='right'] > .tippy-arrow::before {
+  border-right-color: #e5e5e5;
+}
+
+.tippy-box[data-theme~='message'][data-placement^='top'] > .tippy-arrow::before {
+  border-top-color: #e5e5e5;
+  border-width: 11px 11px 0;
+}
+.tippy-box[data-theme~='message'][data-placement^='top'] > .tippy-arrow::after {
+  bottom: -11px;
+  border-width: 11px 11px 0;
+}
+.tippy-box[data-theme~='message'][data-placement^='bottom'] > .tippy-arrow::before {
+  border-width: 0 11px 11px;
+}
+.tippy-box[data-theme~='message'][data-placement^='bottom'] > .tippy-arrow::after {
+  top: -11px;
+  border-width: 0 11px 11px;
+}
+.tippy-box[data-theme~='message'][data-placement^='left'] > .tippy-arrow::before {
+  border-left-color: #e5e5e5;
+  border-width: 11px 0 11px 11px;
+}
+.tippy-box[data-theme~='message'][data-placement^='left'] > .tippy-arrow::after {
+  right: -11px;
+  border-width: 11px 0 11px 11px;
+}
+
+.tippy-box[data-theme~='message'][data-placement^='right'] > .tippy-arrow::before {
+  border-right-color: #e5e5e5;
+  border-width: 11px 11px 11px 0;
+}
+.tippy-box[data-theme~='message'][data-placement^='right'] > .tippy-arrow::after {
+  left: -11px;
+  border-width: 11px 11px 11px 0;
+}
+
+
+
+.tippy-box[data-theme~='warning'] {
+  background-color: #e5e5e5;
+  color: black;
+  border: 3px solid var(--verso-warning-color);
+}
+
+.tippy-box[data-theme~='error'] {
+  background-color: #e5e5e5;
+  color: black;
+  border: 3px solid #f7a7af;
+}
+
+.tippy-box[data-theme~='info'] {
+  background-color: #e5e5e5;
+  color: black;
+  border: 3px solid #99b3c2;
+}
+
+.tippy-box[data-theme~='tactic'] {
+  background-color: white;
+  color: black;
+  border: 1px solid black;
+}
+.tippy-box[data-theme~='tactic'][data-placement^='top'] > .tippy-arrow::before {
+  border-top-color: white;
+}
+.tippy-box[data-theme~='tactic'][data-placement^='bottom'] > .tippy-arrow::before {
+  border-bottom-color: white;
+}
+.tippy-box[data-theme~='tactic'][data-placement^='left'] > .tippy-arrow::before {
+  border-left-color: white;
+}
+.tippy-box[data-theme~='tactic'][data-placement^='right'] > .tippy-arrow::before {
+  border-right-color: white;
+}
+
+.extra-doc-links {
+  list-style-type: none;
+  margin-left: 0;
+  padding: 0;
+}
+
+.extra-doc-links > li {
+  display: inline-block;
+}
+
+.extra-doc-links > li:not(:last-child)::after {
+  content: '|';
+  display: inline-block;
+  margin: 0 0.25em;
+}
+
+.verso-message .trace > summary::marker {
+  color: var(--verso-text-color);
+}
+
+.verso-message .trace-children {
+  margin: 0;
+  padding: 0;
+}
+
+.verso-message .trace-children > li {
+  list-style-type: none;
+  margin-left: 1.5em;
+}
+
+.verso-message .trace-children > li:not(:has(.trace)) {
+  margin-left: 0;
+}
+
+.verso-message .trace-class {
+  color: color-mix(in srgb, currentColor 70%, transparent);
+  font-weight: bold;
+  margin: 0;
+  padding: 0;
+}
+
+.verso-message .text {
+  white-space: pre-wrap;
+}
+
+</style><script>
+      
+window.onload = () => {
+
+    // Don't show hovers inside of closed tactic states
+    function blockedByTactic(elem) {
+      let parent = elem.parentNode;
+      while (parent && "classList" in parent) {
+        if (parent.classList.contains("tactic")) {
+          const toggle = parent.querySelector("input.tactic-toggle");
+          if (toggle) {
+            return !toggle.checked;
+          }
+        }
+        parent = parent.parentNode;
+      }
+      return false;
+    }
+
+    function blockedByTippy(elem) {
+      // Don't show a new hover until the old ones are all closed.
+      // Scoped to the nearest "top-level block" to avoid being O(n) in the size of the document.
+      var block = elem;
+      const topLevel = new Set(["section", "body", "html", "nav", "header"]);
+      while (block.parentNode && !topLevel.has(block.parentNode.nodeName.toLowerCase())) {
+        block = block.parentNode;
+      }
+      for (const child of block.querySelectorAll(".token, .has-info")) {
+        if (child._tippy && child._tippy.state.isVisible) { return true };
+      }
+      return false;
+    }
+
+    for (const c of document.querySelectorAll(".hl.lean .token")) {
+        if (c.dataset.binding != "") {
+            c.addEventListener("mouseover", (event) => {
+                if (blockedByTactic(c)) {return;}
+                const context = c.closest(".hl.lean").dataset.leanContext;
+                for (const example of document.querySelectorAll(".hl.lean")) {
+                    if (example.dataset.leanContext == context) {
+                        for (const tok of example.querySelectorAll(".token")) {
+                            if (c.dataset.binding == tok.dataset.binding) {
+                                tok.classList.add("binding-hl");
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        c.addEventListener("mouseout", (event) => {
+            for (const tok of document.querySelectorAll(".hl.lean .token")) {
+                tok.classList.remove("binding-hl");
+            }
+        });
+    }
+    /* Render docstrings */
+    if ('undefined' !== typeof marked) {
+        for (const d of document.querySelectorAll("code.docstring, pre.docstring")) {
+            const str = d.innerText;
+            const html = marked.parse(str);
+            const rendered = document.createElement("div");
+            rendered.classList.add("docstring");
+            rendered.innerHTML = html;
+            d.parentNode.replaceChild(rendered, d);
+        }
+    }
+    // Add hovers
+    let siteRoot = typeof __versoSiteRoot !== 'undefined' ? __versoSiteRoot : "/";
+    let docsJson = siteRoot + "-verso-docs.json";
+    fetch(docsJson).then((resp) => resp.json()).then((versoDocData) => {
+
+      function hideParentTooltips(element) {
+        let parent = element.parentElement;
+        while (parent) {
+          const tippyInstance = parent._tippy;
+          if (tippyInstance) {
+            tippyInstance.hide();
+          }
+          parent = parent.parentElement;
+        }
+      }
+
+
+
+      const defaultTippyProps = {
+        /* DEBUG -- remove the space: * /
+        onHide(any) { return false; },
+        trigger: "click",
+        // */
+        /* theme: "lean", */
+        maxWidth: "none",
+        appendTo: () => document.body,
+        interactive: true,
+        delay: [100, null],
+        /* ignoreAttributes: true, */
+        followCursor: 'initial',
+        onShow(inst) {
+          if (inst.reference.className == 'tactic') {
+
+            const toggle = inst.reference.querySelector("input.tactic-toggle");
+            if (toggle && toggle.checked) {
+              return false;
+            }
+            hideParentTooltips(inst.reference);
+            //if (blockedByTippy(inst.reference)) { return false; }
+
+          } else if (inst.reference.querySelector(".hover-info") || "versoHover" in inst.reference.dataset) {
+            if (blockedByTactic(inst.reference)) { return false };
+            if (blockedByTippy(inst.reference)) { return false; }
+          } else { // Nothing to show here!
+            return false;
+          }
+        },
+        content (tgt) {
+          const content = document.createElement("span");
+          if (tgt.className == 'tactic') {
+            const state = tgt.querySelector(".tactic-state").cloneNode(true);
+            state.style.display = "block";
+            content.appendChild(state);
+            content.style.display = "block";
+            content.className = "hl lean popup";
+          } else {
+            content.className = "hl lean";
+            content.style.display = "block";
+            content.style.maxHeight = "300px";
+            content.style.overflowY = "auto";
+            content.style.overflowX = "hidden";
+            const hoverId = tgt.dataset.versoHover;
+            const hoverInfo = tgt.querySelector(".hover-info");
+            if (hoverId) { // Docstrings from the table
+              // TODO stop doing an implicit conversion from string to number here
+              let data = versoDocData[hoverId];
+              if (data) {
+                const info = document.createElement("span");
+                info.className = "hover-info";
+                info.style.display = "block";
+                info.innerHTML = data;
+                content.appendChild(info);
+                /* Render docstrings - TODO server-side */
+                if ('undefined' !== typeof marked) {
+                    for (const d of content.querySelectorAll("code.docstring, pre.docstring")) {
+                        const str = d.innerText;
+                        const html = marked.parse(str);
+                        const rendered = document.createElement("div");
+                        rendered.classList.add("docstring");
+                        rendered.innerHTML = html;
+                        d.parentNode.replaceChild(rendered, d);
+                    }
+                }
+              } else {
+                content.innerHTML = "Failed to load doc ID: " + hoverId;
+              }
+            } else if (hoverInfo) { // The inline info, still used for compiler messages
+              content.appendChild(hoverInfo.cloneNode(true));
+            }
+            const extraLinks = tgt.parentElement.dataset['versoLinks'];
+            if (extraLinks) {
+              try {
+                const extras = JSON.parse(extraLinks);
+                const links = document.createElement('ul');
+                links.className = 'extra-doc-links';
+                extras.forEach((l) => {
+                  const li = document.createElement('li');
+                  li.innerHTML = "<a href=\"" + l['href'] + "\" title=\"" + l.long + "\">" + l.short + "</a>";
+                  links.appendChild(li);
+                });
+                content.appendChild(links);
+              } catch (error) {
+                console.error(error);
+              }
+            }
+          }
+          return content;
+        }
+      };
+
+
+      document.querySelectorAll('.hl.lean .const.token, .hl.lean .keyword.token, .hl.lean .literal.token, .hl.lean .option.token, .hl.lean .var.token, .hl.lean .typed.token, .hl.lean .level-var, .hl.lean .level-const, .hl.lean .level-op, .hl.lean .sort').forEach(element => {
+        element.setAttribute('data-tippy-theme', 'lean');
+      });
+      document.querySelectorAll('.hl.lean .has-info.warning').forEach(element => {
+        element.setAttribute('data-tippy-theme', 'warning message');
+      });
+      document.querySelectorAll('.hl.lean .has-info.information').forEach(element => {
+        element.setAttribute('data-tippy-theme', 'info message');
+      });
+      document.querySelectorAll('.hl.lean .has-info.error').forEach(element => {
+        element.setAttribute('data-tippy-theme', 'error message');
+      });
+      document.querySelectorAll('.hl.lean .tactic').forEach(element => {
+        element.setAttribute('data-tippy-theme', 'tactic');
+      });
+      let insts = tippy('.hl.lean .const.token, .hl.lean .keyword.token, .hl.lean .literal.token, .hl.lean .option.token, .hl.lean .var.token, .hl.lean .typed.token, .hl.lean .has-info, .hl.lean .tactic, .hl.lean .level-var, .hl.lean .level-const, .hl.lean .level-op, .hl.lean .sort', defaultTippyProps);
+  });
+}
+</script>
+    <script src="-verso-search/search-highlight.js" defer="defer"></script>
+    </head>
+  <body>
+    <header>
+      <div class="header-logo-wrapper"></div>
+      <div class="header-title-wrapper">
+        <a href="" class="header-title"><h1>
+            PSBP Documentation</h1>
+          </a></div>
+      </header>
+    <label for="toggle-toc" id="toggle-toc-click"><span class="line line1"></span><span class="line line2"></span><span class="line line3"></span></label><div class="with-toc">
+      <div class="toc-backdrop" onclick="document.getElementById('toggle-toc-click')?.click()"></div>
+      <nav id="toc">
+        <input type="checkbox" id="toggle-toc"><div class="first">
+          <a href="" class="toc-title"><h1>
+              PSBP Documentation</h1>
+            </a><div class="split-tocs">
+            <div class="split-toc book">
+              <div class="title">
+                <label for="--verso-manual-toc-----bookRoot" class="toggle-split-toc"><input type="checkbox" class="toggle-split-toc" id="--verso-manual-toc-----bookRoot" checked="checked"></label><span class="">Table of Contents</span></div>
+              <table><tr class="numbered"><td class="num">1.</td><td><a href="About/#PSBP-Documentation--About">About</a></td></tr><tr class="numbered"><td class="num">2.</td><td><a href="Naming-conventions/#PSBP-Documentation--Naming-conventions">Naming conventions</a></td></tr><tr class="current numbered"><td class="num">3.</td><td><a href="Programs-versus-Computations/#PSBP-Documentation--Programs-versus-Computations">Programs versus Computations</a></td></tr><tr class="numbered"><td class="num">4.</td><td><a href="The--PSBP--library-type-classes/#PSBP-Documentation--The--PSBP--library-type-classes">The <code>PSBP</code> library type classes</a></td></tr><tr class="numbered"><td class="num">5.</td><td><a href="fibonacci--and--factorial/#PSBP-Documentation--fibonacci--and--factorial"><code>fibonacci</code> and <code>factorial</code></a></td></tr><tr class="numbered"><td class="num">6.</td><td><a href="Laws/#PSBP-Documentation--Laws">Laws</a></td></tr><tr class="numbered"><td class="num">7.</td><td><a href="Computation-Valued-Functions/#PSBP-Documentation--Computation-Valued-Functions">Computation Valued Functions</a></td></tr><tr class="numbered"><td class="num">8.</td><td><a href="Theorems/#PSBP-Documentation--Theorems">Theorems</a></td></tr><tr class="numbered"><td class="num">9.</td><td><a href="Creational--theorems/#PSBP-Documentation--Creational--theorems"><code>Creational</code> theorems</a></td></tr><tr class="numbered"><td class="num">10.</td><td><a href="ReactiveProgram/#PSBP-Documentation--ReactiveProgram"><code>ReactiveProgram</code></a></td></tr><tr class="numbered"><td class="num">11.</td><td><a href="Positional-Programming/#PSBP-Documentation--Positional-Programming">Positional Programming</a></td></tr><tr class="numbered"><td class="num">12.</td><td><a href="Programming-With-State/#PSBP-Documentation--Programming-With-State">Programming With State</a></td></tr><tr class="numbered"><td class="num">13.</td><td><a href="Programming-With-Failure/#PSBP-Documentation--Programming-With-Failure">Programming With Failure</a></td></tr></table></div>
+            <div class="split-toc">
+              <div class="title">
+                <span class="no-toggle"></span><span class="number">3.</span> <span class="current"><a href="Programs-versus-Computations/#PSBP-Documentation--Programs-versus-Computations">Programs versus Computations</a></span></div>
+              </div>
+            </div>
+          </div>
+        <div class="last"></div>
+        </nav>
+      <main><div class="content-wrapper">
+          <nav class="prev-next-buttons">
+            <a class="local-button active" href="Naming-conventions/#PSBP-Documentation--Naming-conventions" rel="prev" title="2. Naming conventions"><span class="arrow">←</span><span class="where">2. Naming conventions</span></a><a class="local-button active" href="The--PSBP--library-type-classes/#PSBP-Documentation--The--PSBP--library-type-classes" rel="next" title="4. The PSBP library type classes"><span class="where">4. The PSBP library type classes</span><span class="arrow">→</span></a></nav>
+          <section>
+            <h1>
+              3. Programs versus Computations</h1>
+            <p>
+              The standard <code>Lean</code> library already enables Computation Specification Based Programming.</p>
+            <p>
+              So why promoting Program Specification Based Programming in the first place?</p>
+            <p>
+              In short, informally, it is all a matter of taste
+(you may wish to give up reading this document).</p>
+            <p>
+              In short, formally, because of progressive insight into what programming, writing code, is all about.</p>
+            <p>
+              Let's explain this in terms of the history about my progressive insight
+(you may wish to ignore what follows, not being interested in my personal history).</p>
+            <p>
+              I am a retired mathematician.</p>
+            <p>
+              Mathematics is generally agreed upon to be useful to understand the reality we are all part of. For example to
+understand problem domains some of us are, professionaly, confronted with.</p>
+            <p>
+              Bridge building engineers may benefit form studying appropriate mathematics to understand what bridges are all about.
+Vehicle building engineers may benefit form studying appropriate mathematics to understand what vehicles are all about.
+Likewise, programming engineers (programmers) may benefit form studying appropriate mathematics to understand what
+programs are all about.</p>
+            <p>
+              Separating specifications from implementations is generally agreed upon to be useful to understand problem domains.</p>
+            <p>
+              A bridge specification states, for example, that it must be able to carry the weight of a number of vehicles. How it is
+able to carry that weight is an implementation concern. Maybe one bridge is more pleasing to look at as another one. A
+vehicle specification states, for example, that it must be able to transport a number of passengers. How it is able to
+transport that number of passengers is an implementation concern. Maybe one car is more comfortable than another one. A
+program specification states, for example, that a program must be able to create composite data and to perform
+conditional logic. How it is able to create composite data and to perform conditional logic is an implementation
+concern. Maybe one program is more CPU (or GPU or NPU) effecient, or less RAM consuming than another one.</p>
+            <p>
+              Note that I wrote bridge, resp. car, resp. program as an abbreviation of materialization corresponding to an implementation
+of the bridge specification, resp. materialization corresponding to an implementation of the car specification, resp.
+materialization corresponding to an implementation of the program specification.</p>
+            <p>
+              I have always been interested in mathematics, so I followed the typical mathematics oriented education path from
+secondary school all the way to obtaining a PhD in mathematics. Now I realize that obtaining a PhD (in mathematics) is
+just a beginning. It shows that you are able to use 20% imagination and 80% transpiration to be creative in a particular
+area (of mathematics).</p>
+            <p>
+              I did, among others, mathematics research on
+<a href="https://www.numdam.org/article/CM_1986__57_1_3_0.pdf">Non-archimedean induced representations of compact zerodimensional groups</a>.
+Not that it matters much for the content of this document. What does matter is that I soon realized that, those days, in
+Belgium, mathematics could mainly be done as a backyard ritual, so, in order to earn money for a living, I decided to
+become a programmer. being adicted to mathematics research, I also decided to do computer science research as a late at
+night hobby (typically starting at 9PM).</p>
+            <p>
+              I studied function level programming systems, supported by the pointfree, effectfree functional programming language
+<a href="https://en.wikipedia.org/wiki/FP_%28programming_language%29"><code>FP</code></a>.</p>
+            <p>
+              I published a paper
+<a href="https://link.springer.com/article/10.1007/BF00268076">Acceptable functional programming systems</a>
+about a pointfree effectfree functional programming library. I wrote the paper together with my twin brother Marc, who
+is also a mathematician. The library was written using the
+<a href="https://en.wikipedia.org/wiki/Pascal_%28programming_language%29"><code>Pascal</code></a> programming language.</p>
+            <p>
+              The first functional programming language I used extensively was
+<a href="https://www.cs.kent.ac.uk/people/staff/dat/Miranda/"><code>Miranda</code></a>.
+<code>Miranda</code> turned out to be a perfect language to learn (not to say become addicted to) functional programming.</p>
+            <p>
+              The next functional programming language I used extensively was <code>Gofer</code>, later evolving to
+<a href="https://www.haskell.org/Hugs/"><code>Hugs</code></a>.
+<code>Gofer</code> was the first functional programming language supporting type constructor classes. They are appropriate to write
+the computing related specifications of effectful pointful functional programming libraries. The mathematical
+foundations of those specifications are <a href="https://en.wikipedia.org/wiki/Monad_%28functional_programming%29">monads</a>.</p>
+            <p>
+              I published the following papers</p>
+            <ol start="1">
+              <li>
+                <p>
+                  <a href="https://web.cecs.pdx.edu/~mpj/pubs/RR-1004.pdf">Composing monads</a>,</p>
+                </li>
+              <li>
+                <p>
+                  <a href="https://link.springer.com/chapter/10.1007/978-1-4471-3573-9_3">On the expressive power of constructor classes</a>,</p>
+                </li>
+              <li>
+                <p>
+                  <a href="https://www.cs.tufts.edu/~nr/cs257/archive/doaitse-swierstra/error-correcting.pdf">Deterministic crror-correcting combinator parsers</a>, and</p>
+                </li>
+              <li>
+                <p>
+                  <a href="https://citeseerx.ist.psu.edu/document?repid=rep1&amp;type=pdf&amp;doi=1cdebf7b88435a38156f62df1a7189b6d8ca3fe3">Using catamorphisms, subtypes and monad transformers for writing modular functional interpeters</a>.</p>
+                </li>
+              </ol>
+            <p>
+              The first paper was written, as a late night hobby, together with Mark P. Jones, the author of <code>Gofer</code>. What is
+special about that paper is that we had never physically met each other. Those were the early days of the internet. We
+wrote the paper (and the code that came with it) together by sending emails with attachments to each other. In fact, it
+turned out to be an efficient way to work together. While one of us was sleeping (in Europe resp. the USA) the other one
+was working (in the USA resp. Europe). The paper also contained some equational proofs. Those days, they were simply
+encoded as lists of expressions representing equational proof steps. <code>Gofer</code> did not have a formal proof correctness
+reviewing mechanism like Lean has, but, type correctness provided at least some formal proof correctness confidence.</p>
+            <p>
+              The other papers were written when I was working, for two years, at the University of Utrecht. That was a unique
+experience for me for which I am, forever, greatful to Doaitse Swierstrsa. Erik Meijer, also working at the University
+of Utrecht, invited me for a lecture, as such introducing me to Doaitse. Apart from being an outstanding computer
+scientist, Doaitse was the best people manager I have ever worked for. Erik does not need any introduction. He became
+a living legend. Also Graham Hutton worked at the University of Utrecht when I was working there. I was in good company.</p>
+            <p>
+              The second paper was written together with Erik Meijer and was presented at a conference organized by the Glasgow
+University, the center of Functional Programming in the UK (Philip Wadler and Simon Peyton Jones worked there).</p>
+            <p>
+              The third paper was written together with Doaitse Swierstra. It turned out to be a motivation for two type
+constructor classes,
+<a href="https://link.springer.com/chapter/10.1007/11546382_2">arrows</a> and
+<a href="https://www.researchgate.net/publication/215446169_Applicative_Programming_with_Effects">applicatives</a>,
+based upon mathematical foundations: Arrow based libraries are pointfree effectful functional programming libraries.
+Applicative based libraries are pointful effectful functional programming libraries. The relationship between them was
+explored in
+<a href="https://homepages.inf.ed.ac.uk/wadler/papers/arrows-and-idioms/arrows-and-idioms.pdf">Arrows and applicatives</a></p>
+            <p>
+              The fourth paper was based on
+<a href="https://dl.acm.org/doi/pdf/10.1145/199448.199528">Monad transformers and modular interpreters</a>.
+I added catamorphisms and subtypes to make interpreter alternatives reusable. The paper has never been published.
+Anyway, somehow, surprisingly, the paper turned out to be available online and it has been cited several times.</p>
+            <p>
+              All this brings me to the progressive insight that motivates me to do this Lean <code>PSBP</code> project.</p>
+            <p>
+              What are the most appropriate mathematical foundations and corresponding type classes for effectful functional
+programming? The more powerful they are the less implementation flexibility they have. For example monadic parsers
+can parse context sensitive grammars, while applicative parsers cannot parse context sensitive grammars, but,
+applicative parsers allow for more flexible error handling than monadic parsers.</p>
+            <p>
+              Programming is also about elegance and programming libraries are also about ease of use. I.m.h.o. pointfree programming
+is more elegant than pointful programming and pointfree programming libraries are easier of use than pointful
+programming libraries.</p>
+            <p>
+              Of course this is a matter of taste, but let me motivate my taste ... .</p>
+            <p>
+              The <code>Applicative</code> specification and the <code>Monad</code> specification specify computation capabilities. Think of computations as
+effectful expressions. They are operational artifacts. They do not really have a meaning in the mathematical sense and
+cannot be given a meaningful name. How, for example, would you name expression <code>x * x</code> in <code>λ x =&gt; x * x</code> ?
+Just like expressions are evaluated to yield a value, computations, by somehow executing them, yield a value, but,
+somehow executing computations may also perform side effects along the way. The "somehow" in the previous sentence is
+important, because it depends on the materialization corresponding to instances of the type constructor classes in
+terms of whose members the computations (recall, more precisely, computation specificatons) have been written.</p>
+            <p>
+              The program specification of this document is similar to, but more powerful than, the arrow specification. Think of
+programs as arrows with choice.</p>
+            <p>
+              The program specification of this document specifies, not surprisingly, program capabilities. Think of programs as
+effectful functions. They are denotational artifacts. They do have a meaning in the mathematical sense and can be given
+a meaningful name. For example <code>λ x =&gt; x * x</code> can be given a the meaningful name <code>square</code>. Of course functions and
+programs can also be looked at as operational artifacts. Just like functions, programs, by somehow running
+them, transform an initial value to a final value, but, somehow running them may perform side effects along the way. The
+"somehow" in the previous sentence is important, because it depends on the materialization corresponding to instances of
+the type constructor classes in terms of whose members the programs (recall, more precisely, program specificaton) have
+been written.</p>
+            <p>
+              By the way, a value can be a basic-value or a composite-value, repesented as a (nested) tuple. As such
+values are also components of a component system.</p>
+            <p>
+              Why going for pointfree programs instead of pointful applicatives or pointful monads?
+I.m.h.o. it is more natural to think denotationally, about "what", than to think operationally, about "how".</p>
+            <p>
+              Let's try to illustrate this with some <code>Lean</code> code.</p>
+            <p>
+              The computing related type class <code>Bind</code> has a member</p>
+            <pre>bind :
+  {α β : Type} →
+  computation α → (α → computation β) → computation β
+</pre><p>
+              with an associativity law (<code>&gt;&gt;=</code> is infix notation for <code>bind</code>)</p>
+            <pre>bind_assoc
+  (cα : computation α)
+  (αfcβ : α → computation β)
+  (βfcγ : β → computation γ) :
+    cα &gt;&gt;= αfcβ &gt;&gt;= βfcγ = cα &gt;&gt;=
+      λ α =&gt; αfcβ α &gt;&gt;= βfcγ
+</pre><p>
+              The programming related type class <code>Sequential</code> has a member</p>
+            <pre>andThen
+  {α β γ : Type} :
+  program α β → program β γ → program α γ
+</pre><p>
+              with an associativity law (<code>&gt;=&gt;</code> is infix notation for <code>andThen</code>)</p>
+            <pre>andThen_assoc
+  (αpβ : program α β)
+  (βpγ : program β γ)
+  (γpδ : program γ δ) :
+  (αpβ &gt;=&gt; βpγ) &gt;=&gt; γpδ =
+    αpβ &gt;=&gt; (βpγ &gt;=&gt; γpδ)
+</pre><p>
+              Let's first consider syntax.</p>
+            <p>
+              I can more easily remember the definition of <code>andThen_assoc</code> than the definition of <code>bind_assoc</code>.</p>
+            <p>
+              What about you?</p>
+            <p>
+              Let's next consider semantics.</p>
+            <p>
+              I can more easily explain <code>andThen</code> and <code>andThen_assoc</code> than <code>bind</code> and <code>bind_assoc</code>. I'll give it a try.</p>
+            <p>
+              What about you? Give it a try.</p>
+            <p>
+              Let's first deal with <code>Sequential</code>.</p>
+            <p>
+              I think of a function as transforming an initial value yielding a final value (transforming an argument to a result).</p>
+            <p>
+              Likewise, I think of a program as transforming an initial value yielding a final value (transforming an argument to a
+result (potentially performing side effects along the way)).</p>
+            <p>
+              Let's ignore side effects for now (you may wish to explain what happens with them).</p>
+            <p>
+              <code>andThen</code> can be explained as:</p>
+            <p>
+              transforming an initial value of type <code>α</code>, using a program of type <code>program α β</code>, yielding an intermediate value of type
+<code>β</code>, and then transforming that intermediate value, using a program of type <code>program β γ</code>, yielding a final value of
+type <code>γ</code>.</p>
+            <p>
+              <code>andThen_assoc</code> can be explained as:</p>
+            <p>
+              first transforming an initial value of type <code>α</code>, using <code>αpβ &gt;=&gt; βpγ</code>, yielding an intermediate value of type <code>γ</code>, and
+then transforming that intermediate value, using <code>γpδ</code>, yields the same final value as first transforming the initia
+value of type <code>α</code>, using <code>αpβ</code>, to an intermediate value of type <code>β</code>, and then transforming that intermediate value,
+using <code>βpγ &gt;=&gt; γpδ</code>.</p>
+            <p>
+              Let's second deal with <code>Bind</code>.</p>
+            <p>
+              I think of a evaluating an expression as yielding a value.</p>
+            <p>
+              Likewise, I think of a executing a computation as yielding a value (potentially performing side effects along the way).</p>
+            <p>
+              Let's ignore side effects for now  (you may wish to explain what happens with them).</p>
+            <p>
+              <code>bind</code> can be explained as:</p>
+            <p>
+              executing an inner computation of type <code>computation α</code> yielding an intermediate value of type <code>α</code>, and then binding that
+intermediate value to an outer computation valued function of type <code>α → computation β</code>, yields an outer computation of
+type <code>computation β</code> (that when executing it yields a value of type <code>β</code>)</p>
+            <p>
+              or</p>
+            <p>
+              executing an inner computation of type <code>computation α</code> yielding an intermediate value of type <code>α</code>, and then transforming
+that intermediate value using an outer computation valued function of type <code>α → computation β</code>, yields an outer
+computation value of type <code>computation β</code> (that when executing it yields a value of type <code>β</code>)</p>
+            <p>
+              <code>bind_assoc</code> can be explained as:</p>
+            <p>
+              executing an inner computation of <code>cα</code> yielding a first intermediate value, and then transforming that intermediate
+value using an intermediate computation valued function <code>αfcβ</code>, yielding an intermediate computation value that, when
+executing it, yields a second intermediate value, and then transforming that intermediate value using a final
+computation valued function <code>βfcγ</code> yields the same final outer computation value as executing the inner computation of
+<code>cα</code> yielding a first intermediate value, and then transforming that intermediate value using the computation valued
+function that first transforms that first intermediate value using the intermediate computation valued function <code>αfcβ</code>,
+yielding an intermediate computation value that, when executing it, yields a second intermediate value, and then
+transforming that intermediate value using a final computation valued function <code>βfcγ</code>.</p>
+            <p>
+              As far as components of a component system is concerned, I also like programs more than computations.</p>
+            <p>
+              Let's have a closer look at the associativity law code fragments</p>
+            <pre>(αpβ &gt;=&gt; βpγ) &gt;=&gt; γpδ =
+  αpβ &gt;=&gt; (βpγ &gt;=&gt; γpδ)
+</pre><p>
+              and</p>
+            <pre>cα &gt;&gt;= αfcβ &gt;&gt;= βfcγ =
+  cα &gt;&gt;= λ α =&gt; αfcβ α &gt;&gt;= βfcγ
+</pre><p>
+              Programs are closed components, while computations are open components. Computation <code>cα</code> needs to be opened to access
+the value <code>α</code> yielded by executing it, so that it can be transformed using computation valued function <code>αfcβ</code>.
+Programming with computations is pointful programming.</p>
+            <p>
+              Programs do not need to be opened. Programming with programs is pointfree programming. Think of using them as playing
+with Lego ariifacts.</p>
+            <p>
+              I.m.h.o, it is a more elegant and easier to program pointfree than to program pointful. Likewise, i.m.h.o., it is more
+elegant and easier to reason in terms of pointfree laws than to reason in terms of pointful laws. Of course, this is a
+matter of taste. Nevertheless hope to convince you that pointfree is more better than pointful.</p>
+            <p>
+              It is possible, and sometimes more elegant, use programs positionally. Positional programming is similar to pointful
+programming. It is is useful for writing sequential recipe-like programs, where, starting from an initial value
+(often a composite-value), intermediate values (mostly basic-values) are created, and, together with the initial value,
+as a compositional value are passed to the next step of the recipe-like program, until a final value is yielded. The
+initial value and intermediate values are accessed positionally. The creation of the intermediate values can involve
+general programs. A sequential recipe-like program glues programs together, similar to an operating system scripting
+language gluing operating system executables together.</p>
+            </section>
+          <nav class="prev-next-buttons">
+            <a class="local-button active" href="Naming-conventions/#PSBP-Documentation--Naming-conventions" rel="prev" title="2. Naming conventions"><span class="arrow">←</span><span class="where">2. Naming conventions</span></a><a class="local-button active" href="The--PSBP--library-type-classes/#PSBP-Documentation--The--PSBP--library-type-classes" rel="next" title="4. The PSBP library type classes"><span class="where">4. The PSBP library type classes</span><span class="arrow">→</span></a></nav>
+          </div>
+        </main></div>
+    </body>
+  </html>
+
